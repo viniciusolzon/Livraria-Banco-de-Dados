@@ -1,9 +1,6 @@
 # CRUD
-
-### Vinicius Freitas
-### Victor Mororó
-### Projeto da disciplina Banco de Dados 1
-### O objetivo é criar um sistema CRUD, em que será possível:
+### Projeto da disciplina Banco de Dados 1 realizado por Vinicius Freitas e Victor Mororó
+### O objetivo é criar um sistema CRUD em que será possível:
 1. Inserir
 2. Alterar
 3. Pesquisar por nome
