@@ -13,8 +13,11 @@ um dos temas sugeridos. Com as seguintes opções:
     4. Remover
     5. Listar todos
     6. Exibir um.
+
 2. Faça a modelagem das classes que serão utilizadas no sistema utilizando diagrama UML de
-classe.
+classe. (isso aqui acho que dá pra ser feito usando o LucidChart:
+https://lucid.app/lucidchart/80c28456-014f-4491-8f6c-278b56189d2c/edit?invitationId=inv_045d64ad-f1d8-4f67-9b95-83db6ba2ea0f&page=HWEp-vi-RSFO#
+)
 
 3. Utilize uma classe que vai gerenciar as operações CRUD.
 
