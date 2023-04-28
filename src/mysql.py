@@ -1,10 +1,5 @@
 # esse arquivo aqui é um exemplo de python conectando com MySQL
 
-# CREATE
-# READ
-# UPDATE
-# DELETE
-
 # import mysql.connector
 
 # conexao = mysql.connector.connect(
