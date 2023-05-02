@@ -79,17 +79,19 @@ def main():
     person.insert("Vinicius", 20, "M")
     person.insert("Victor Mororo", 21, "M")
     person.insert("Gabriel Freitas", 24, "M")
-    print(person.query("SELECT * FROM person"))
+    for row in person.query("SELECT * FROM person"):
+        print(row)
+    #print(person.query("SELECT * FROM person"))
 
     # print(person.delete(2)) # deleta o objeto de id = 2
     # print(person.query("SELECT * FROM person"))
 
-    person.update(1, "Freitas", 21, "M")
-    print(person.query("SELECT * FROM person"))
+    #person.update(1, "Freitas", 21, "M")
+    #print(person.query("SELECT * FROM person"))
 
     #print(person.read(1, search_type = "id"))# Busca por id
     #print(person.read("Freitas")) # Busca por nome
-    print(person.read("%Mororo")) # Busca a partir do nome
+    #print(person.read("%Mororo")) # Busca a partir do nome
 
 
 if __name__ == "__main__":
