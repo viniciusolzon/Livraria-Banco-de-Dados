@@ -2,19 +2,19 @@
 import sys
 sys.path.insert(0, '../tables')
 
-from person import PersonTable
+from usuario import PersonTable
 
 tables = {}
 
-tables['person'] = PersonTable()
+tables['usuario'] = PersonTable()
 
 
-tables['person'].insert("Vinicius Freitas", 20)
-tables['person'].insert("Victor Mororó", 21)
-tables['person'].insert("Marcelo", 21)
-tables['person'].insert("Rafael Sobral", 23)
-tables['person'].insert("Juliana Dantas", 21)
-tables['person'].insert("Anderson Coutinho", 24)
-tables['person'].insert("Carlos Vinicius", 23)
-tables['person'].insert("Leandro", 21)
+tables['usuario'].insert("Vinicius Freitas", 20)
+tables['usuario'].insert("Victor Mororó", 21)
+tables['usuario'].insert("Marcelo", 21)
+tables['usuario'].insert("Rafael Sobral", 23)
+tables['usuario'].insert("Juliana Dantas", 21)
+tables['usuario'].insert("Anderson Coutinho", 24)
+tables['usuario'].insert("Carlos Vinicius", 23)
+tables['usuario'].insert("Leandro", 21)
 

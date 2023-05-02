@@ -2,15 +2,15 @@
 # import sys
 # sys.path.insert(0, '../tables')
 
-# from person import PersonTable
+# from usuario import PersonTable
  
 from initializer import tables
 
 def main():
-    for row in tables['person'].query("SELECT * FROM person"):
+    for row in tables['usuario'].query("SELECT * FROM usuario"):
         print(row)
-
-
+    
+    
 
 if __name__ == "__main__":
     main()
