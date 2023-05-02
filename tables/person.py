@@ -7,17 +7,20 @@ class PersonTable(Connection):
         Connection.__init__(self)
         # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
         self.execute("DROP TABLE IF EXISTS person")
-        self.execute("DROP SEQUENCE IF EXISTS person_id_seq")
-        self.execute("CREATE SEQUENCE person_id_seq INCREMENT 1;")
+        #self.execute("DROP SEQUENCE IF EXISTS person_id_seq")
+        #self.execute("CREATE SEQUENCE person_id_seq INCREMENT 1;")
         #Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS person(
-            id INT PRIMARY KEY NOT NULL DEFAULT nextval('person_id_seq'::regclass),
+            id SERIAL PRIMARY KEY,
             name VARCHAR(255),
             age INT,
             gender CHAR
         );
         """
+        # Antes o id tava assim: id INT PRIMARY KEY NOT NULL DEFAULT nextval('person_id_seq'::regclass),
+        
+        
         self.execute(sql)
 
     #READ/Search
@@ -75,6 +78,7 @@ def main():
     person = PersonTable()
     person.insert("Vinicius", 20, "M")
     person.insert("Victor Mororo", 21, "M")
+    person.insert("Gabriel Freitas", 24, "M")
     print(person.query("SELECT * FROM person"))
 
     # print(person.delete(2)) # deleta o objeto de id = 2
