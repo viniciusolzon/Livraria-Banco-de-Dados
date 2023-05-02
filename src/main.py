@@ -1,19 +1,15 @@
-import sys
 # adding tables folder to the system path
-sys.path.insert(1, '../tables')
+# import sys
+# sys.path.insert(0, '../tables')
 
-from person import PersonTable
+# from person import PersonTable
  
+from initializer import tables
 
 def main():
-    tables = {}
+    for row in tables['person'].query("SELECT * FROM person"):
+        print(row)
 
-    tables['person'] = PersonTable()
-
-    tables['person'].insert("Vinicius", 20, "M")
-    tables['person'].insert("Victor Mororo", 21, "M")
-    
-    print(tables['person'].query("SELECT * FROM person"))
 
 
 if __name__ == "__main__":

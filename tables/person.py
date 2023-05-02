@@ -14,8 +14,7 @@ class PersonTable(Connection):
         CREATE TABLE IF NOT EXISTS person(
             id SERIAL PRIMARY KEY,
             name VARCHAR(255),
-            age INT,
-            gender CHAR
+            age INT
         );
         """
         # Antes o id tava assim: id INT PRIMARY KEY NOT NULL DEFAULT nextval('person_id_seq'::regclass),
@@ -66,7 +65,7 @@ class PersonTable(Connection):
     # INSERT
     def insert(self, *args):
         try:
-            sql = f"INSERT INTO person (name, age, gender) VALUES (%s, %s, %s)"
+            sql = f"INSERT INTO person (name, age) VALUES (%s, %s)"
             self.execute(sql, args)
             self.commit()
         except Exception as error:
@@ -74,25 +73,27 @@ class PersonTable(Connection):
 
 
 # Testing
-def main():
-    person = PersonTable()
-    person.insert("Vinicius", 20, "M")
-    person.insert("Victor Mororo", 21, "M")
-    person.insert("Gabriel Freitas", 24, "M")
-    for row in person.query("SELECT * FROM person"):
-        print(row)
-    #print(person.query("SELECT * FROM person"))
+# def main():
+#     person = PersonTable()
+#     person.insert("Vinicius", 20)
+#     person.insert("Victor Mororo", 21)
+#     person.insert("Gabriel Freitas", 24)
+    
+#     # for row in person.query("SELECT * FROM person"):
+#     #     print(row)
+        
+#     #print(person.query("SELECT * FROM person"))
 
-    # print(person.delete(2)) # deleta o objeto de id = 2
-    # print(person.query("SELECT * FROM person"))
+#     # print(person.delete(2)) # deleta o objeto de id = 2
+#     # print(person.query("SELECT * FROM person"))
 
-    #person.update(1, "Freitas", 21, "M")
-    #print(person.query("SELECT * FROM person"))
+#     #person.update(1, "Freitas", 21)
+#     #print(person.query("SELECT * FROM person"))
 
-    #print(person.read(1, search_type = "id"))# Busca por id
-    #print(person.read("Freitas")) # Busca por nome
-    #print(person.read("%Mororo")) # Busca a partir do nome
+#     #print(person.read(1, search_type = "id"))# Busca por id
+#     #print(person.read("Freitas")) # Busca por nome
+#     #print(person.read("%Mororo")) # Busca a partir do nome
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
