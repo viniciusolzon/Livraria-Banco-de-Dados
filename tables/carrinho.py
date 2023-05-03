@@ -13,7 +13,7 @@
 #             id SERIAL PRIMARY KEY,
 #             valor_total FLOAT,
 #             id_livro INT,
-#             FOREIGN KEY (id_cliente) REFERENCES usuario (id)
+#             FOREIGN KEY (id_cliente) REFERENCES cliente (id)
 #         );
 #         """
 #         self.execute(sql)

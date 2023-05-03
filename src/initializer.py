@@ -2,27 +2,27 @@
 import sys
 sys.path.insert(0, '../tables')
 
-from usuario import UsuarioTable
+from cliente import ClienteTable
 from livro import LivroTable
 # from pedido import PedidoTable
 # from carrinho import CarrinhoTable
 
 tables = {}
 
-tables['usuario'] = UsuarioTable()
+tables['cliente'] = ClienteTable()
 tables['livro'] = LivroTable()
 # tables['pedido'] = PedidoTable()
 # tables['carrinho'] = Carrinhotable()
 
 
-# Preenchendo a tabela de usuarios
-tables['usuario'].insert("Vinicius Freitas", "vinicius@123.fake.com")
-tables['usuario'].insert("Victor Mororo", "victor@123.fake.com")
-tables['usuario'].insert("Rafael Sobral", "rafael@123.fake.com")
-tables['usuario'].insert("Juliana Dantas", "juliana@123.fake.com")
-tables['usuario'].insert("Anderson Coutinho", "anderson@123.fake.com")
-tables['usuario'].insert("Carlos Vinicius", "carlos@123.fake.com")
-tables['usuario'].insert("Leandro", "leandro@123.fake.com")
+# Preenchendo a tabela de cliente
+tables['cliente'].insert("Vinicius Freitas", "vinicius@123.fake.com")
+tables['cliente'].insert("Victor Mororo", "victor@123.fake.com")
+tables['cliente'].insert("Rafael Sobral", "rafael@123.fake.com")
+tables['cliente'].insert("Juliana Dantas", "juliana@123.fake.com")
+tables['cliente'].insert("Anderson Coutinho", "anderson@123.fake.com")
+tables['cliente'].insert("Carlos Vinicius", "carlos@123.fake.com")
+tables['cliente'].insert("Leandro", "leandro@123.fake.com")
 
 
 # Preenchendo a tabela de livros
@@ -33,8 +33,8 @@ tables['livro'].insert(79.99, "Senhor das moscas", "Romance", "William Golding",
 tables['livro'].insert(31.99, "O Pequeno Principe", "Folclore", "Antoine de Saint-Exupéry", 1943)
 
 
-# Preenchendo a tabela de usuarios
+# Preenchendo a tabela de pedidos
 
 
 
-# Preenchendo a tabela de usuarios
+# Preenchendo a tabela de carrinho

@@ -10,7 +10,7 @@ class LivroTable(Connection):
         # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS livro(
-            id SERIAL PRIMARY KEY,
+            id_livro SERIAL PRIMARY KEY,
             preco FLOAT,
             titulo VARCHAR(255),
             genero VARCHAR(255),

@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 
 def get_users():
-    for row in tables['usuario'].read_all():
+    for row in tables['cliente'].read_all():
         print(row)
     print()
 

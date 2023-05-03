@@ -10,10 +10,10 @@ class PedidoTable(Connection):
         # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS pedido(
-            id SERIAL PRIMARY KEY,
+            id_pedido SERIAL PRIMARY KEY,
             custo_total FLOAT,
             id_cliente INT,
-            FOREIGN KEY (id_cliente) REFERENCES usuario (id)
+            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente)
         );
         """
         self.execute(sql)
