@@ -14,16 +14,16 @@ class LivroTable(Connection):
             titulo VARCHAR(255),
             genero VARCHAR(255),
             autor VARCHAR(255),
-            ano_publicacao INT;
+            ano_publicacao INT
         );
         """
         self.execute(sql)
 
     #READ/Search
-    def read(self, *args, search_type="id"): # A busca padrão é pelo nome
+    def read(self, *args, search_type="id"): # A busca padrão é pelo id
         try:
             sql = "SELECT * FROM livro WHERE id = %s"
-            # Porém o usuário tbm pode querer pesquisar pelo id
+            # Porém o usuário tbm pode querer pesquisar pelo nome
             if search_type == "titulo":
                 sql = "SELECT * FROM livro WHERE titulo = %s"
             data = self.query(sql, args)

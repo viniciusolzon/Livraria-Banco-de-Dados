@@ -12,16 +12,16 @@ class UsuarioTable(Connection):
         CREATE TABLE IF NOT EXISTS usuario(
             id SERIAL PRIMARY KEY,
             name VARCHAR(255),
-            email TEXT;
+            email TEXT
         );
         """
         self.execute(sql)
 
     #READ/Search
-    def read(self, *args, search_type="id"): # A busca padrão é pelo nome
+    def read(self, *args, search_type="id"): # A busca padrão é pelo id
         try:
             sql = "SELECT * FROM usuario WHERE id = %s"
-            # Porém o usuário tbm pode querer pesquisar pelo id
+            # Porém o usuário tbm pode querer pesquisar pelo nome
             if search_type == "nome":
                 sql = "SELECT * FROM usuario WHERE nome = %s"
             data = self.query(sql, args)
