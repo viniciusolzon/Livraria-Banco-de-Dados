@@ -22,7 +22,7 @@ def main():
     # Connect to PostgreSQL server
     dbConnection    = alchemyEngine.connect()
     # Create a dataframe
-    dataFrame = pd.read_sql_query("SELECT * FROM usuario;", dbConnection)
+    dataFrame = pd.read_sql_query("SELECT * FROM livro;", dbConnection)
 
     print(dataFrame.head(10))
     

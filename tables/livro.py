@@ -11,6 +11,7 @@ class LivroTable(Connection):
         sql = """
         CREATE TABLE IF NOT EXISTS livro(
             id SERIAL PRIMARY KEY,
+            preco FLOAT,
             titulo VARCHAR(255),
             genero VARCHAR(255),
             autor VARCHAR(255),
@@ -46,7 +47,7 @@ class LivroTable(Connection):
     # UPDATE
     def update(self, id, *args):
         try:
-            sql = f"UPDATE livro SET titulo = %s, genero = %s, autor = %s, ano_publicacao = %s WHERE id = {id}"
+            sql = f"UPDATE livro SET preco = %s, titulo = %s, genero = %s, autor = %s, ano_publicacao = %s WHERE id = {id}"
             self.execute(sql, args)
             self.commit()
             print("Record updated")
@@ -71,7 +72,7 @@ class LivroTable(Connection):
     # INSERT
     def insert(self, *args):
         try:
-            sql = f"INSERT INTO livro (titulo, genero, autor, ano_publicacao) VALUES (%s, %s, %s, %s)"
+            sql = f"INSERT INTO livro (preco, titulo, genero, autor, ano_publicacao) VALUES (%s, %s, %s, %s, %s)"
             self.execute(sql, args)
             self.commit()
         except Exception as error:

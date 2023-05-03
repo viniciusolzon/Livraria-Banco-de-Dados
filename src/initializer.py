@@ -26,11 +26,11 @@ tables['usuario'].insert("Leandro", "leandro@123.fake.com")
 
 
 # Preenchendo a tabela de livros
-tables['livro'].insert("Codigo Limpo", "Estudo Cientifico", "Robert Cecil Martin", 2008)
-tables['livro'].insert("Romeu e Julieta", "Tragédia", "William Shakespeare", 1595)
-tables['livro'].insert("Contos De Voltaire", "Contos", "Voltaire", 1972)
-tables['livro'].insert("Senhor das moscas", "Romance", "William Golding", 1954)
-tables['livro'].insert("O Pequeno Principe", "Folclore", "Antoine de Saint-Exupéry", 1943)
+tables['livro'].insert(69.99, "Codigo Limpo", "Estudo Cientifico", "Robert Cecil Martin", 2008)
+tables['livro'].insert(59.99, "Romeu e Julieta", "Tragédia", "William Shakespeare", 1595)
+tables['livro'].insert(84.99, "Contos De Voltaire", "Contos", "Voltaire", 1972)
+tables['livro'].insert(79.99, "Senhor das moscas", "Romance", "William Golding", 1954)
+tables['livro'].insert(31.99, "O Pequeno Principe", "Folclore", "Antoine de Saint-Exupéry", 1943)
 
 
 # Preenchendo a tabela de usuarios
