@@ -2,19 +2,27 @@
 import sys
 sys.path.insert(0, '../tables')
 
-from usuario import PersonTable
+from usuario import UsuarioTable
+from livro import LivroTable
 
 tables = {}
 
-tables['usuario'] = PersonTable()
+tables['usuario'] = UsuarioTable()
+tables['livro'] = LivroTable()
+
+# Preenchendo a tablea de usuarios
+tables['usuario'].insert("Vinicius Freitas", "vinicius@123.fake.com")
+tables['usuario'].insert("Victor Mororó", "victor@123.fake.com")
+tables['usuario'].insert("Rafael Sobral", "rafael@123.fake.com")
+tables['usuario'].insert("Juliana Dantas", "juliana@123.fake.com")
+tables['usuario'].insert("Anderson Coutinho", "anderson@123.fake.com")
+tables['usuario'].insert("Carlos Vinicius", "carlos@123.fake.com")
+tables['usuario'].insert("Leandro", "leandro@123.fake.com")
 
 
-tables['usuario'].insert("Vinicius Freitas", 20)
-tables['usuario'].insert("Victor Mororó", 21)
-tables['usuario'].insert("Marcelo", 21)
-tables['usuario'].insert("Rafael Sobral", 23)
-tables['usuario'].insert("Juliana Dantas", 21)
-tables['usuario'].insert("Anderson Coutinho", 24)
-tables['usuario'].insert("Carlos Vinicius", 23)
-tables['usuario'].insert("Leandro", 21)
-
+# Preenchendo a tablea de livros
+tables['livro'].insert("Codigo Limpo", "Estudo Cientifico", "Robert Cecil Martin", 2008)
+tables['livro'].insert("Romeu e Julieta", "Tragédia", "William Shakespeare", 1595)
+tables['livro'].insert("Contos De Voltaire", "Contos", "Voltaire", 1972)
+tables['livro'].insert("Senhor das moscas", "Romance", "William Golding", 1954)
+tables['livro'].insert("O Pequeno Principe", "Folclore", "Antoine de Saint-Exupéry", 1943)
