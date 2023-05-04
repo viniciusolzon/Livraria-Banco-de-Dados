@@ -12,6 +12,8 @@ class ClienteTable(Connection):
         CREATE TABLE IF NOT EXISTS cliente(
             id_cliente SERIAL PRIMARY KEY,
             name VARCHAR(255),
+            username VARCHAR(255),
+            password VARCHAR(255),
             email TEXT
         );
         """
@@ -74,7 +76,7 @@ class ClienteTable(Connection):
     # INSERT
     def insert(self, *args):
         try:
-            sql = f"INSERT INTO cliente (name, email) VALUES (%s, %s)"
+            sql = f"INSERT INTO cliente (name, username, password, email) VALUES (%s, %s, %s, %s)"
             self.execute(sql, args)
             self.commit()
         except Exception as error:
