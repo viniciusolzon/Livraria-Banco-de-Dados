@@ -1,19 +1,16 @@
 from initializer import tables
-import pandas as pd
-
 from sqlalchemy import create_engine
-
-
-def get_users():
-    for row in tables['cliente'].read_all():
-        print(row)
-    print()
+import pandas as pd
 
 def get_books():
     for row in tables['livro'].read_all():
         print(row)
     print()
 
+def get_users():
+    for row in tables['cliente'].read_all():
+        print(row)
+    print()
 
 def main():
 
@@ -28,7 +25,6 @@ def main():
     
     # get_books()
     # get_users()
-
 
 
 if __name__ == "__main__":
