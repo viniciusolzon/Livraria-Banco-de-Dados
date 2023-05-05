@@ -6,7 +6,7 @@ class ClienteTable(Connection):
     def __init__(self):
         Connection.__init__(self)
         # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
-        # self.execute("DROP TABLE IF EXISTS cliente")
+        self.execute("DROP TABLE IF EXISTS cliente")
         # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS cliente(

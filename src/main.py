@@ -40,10 +40,12 @@ def Login():
     print("""\n\t#####################
 \t### Tela de Login ###
 \t#####################""")
+          
     username = input("\n\tNome de usuário: ")
     if(checkUsername(username)):
         print("\nUsuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+        
     pswd = input("\tSenha: ")
     if(not checkPassword(username, pswd)):
         print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
@@ -55,23 +57,27 @@ def Register():
     print("""\n\t########################
 \t### Tela de Cadastro ###
 \t########################""")
+          
     name = input("\n\tNome completo: ")
     # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
+
     email = input("\tEmail: ")
     if(not checkEmail(email)):
         print("\nO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+
     username = input("\tNome de usuário: ")
     if(not checkUsername(username)):
         print("\nEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+
     pswd = input("\tSenha: ")
     pswd_verification = input("\tVerificação da senha: ")
     while pswd != pswd_verification:
         print("\n\tAs senhas digitadas não coincidem, por favor tente novamente:")
         pswd = input("\tSenha: ")
         pswd_verification = input("\tVerificação da senha: ")
-    # checa
+
     registered(name, username, email, pswd)
 
 def bookSearch():
@@ -80,7 +86,7 @@ def bookSearch():
         pesquisa = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)n* Pesquisa por gênero (G)\n\n-> ")
 
 def quitLibrary():
-    print("\nObrigado por visitar a livraria do Mororó!")
+    print("\n\tObrigado por visitar a livraria Tuko!\n")
 
 def main_menu():
     choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n* Sair do sistema (Q)\n-> ")
@@ -130,7 +136,7 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    print("""########################################################
-###### Olá seja bem vindo a livraria do Mororó! ########
-########################################################\n""")
+    print("""\n\t########################################################
+\t######## Olá seja bem vindo a livraria Tuko! ###########
+\t########################################################\n""")
     main_menu()

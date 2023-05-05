@@ -5,23 +5,12 @@ sys.path.insert(0, '../tables')
 from cliente import ClienteTable
 from livro import LivroTable
 # from venda import VendaTable
-# from biblioteca import BibliotecaTable
 
 tables = {}
 
-tables['cliente'] = ClienteTable()
 tables['livro'] = LivroTable()
+tables['cliente'] = ClienteTable()
 # tables['venda'] = VendaTable()
-
-
-# Preenchendo a tabela de cliente
-# tables['cliente'].insert("Vinicius Freitas", "viniciusolzon", "1234", "vinicius@fake.com")
-# tables['cliente'].insert("Victor Mororo", "mororo", "4321", "victor@fake.com")
-# tables['cliente'].insert("Rafael Sobral", "rafael@fake.com")
-# tables['cliente'].insert("Juliana Dantas", "juliana@fake.com")
-# tables['cliente'].insert("Anderson Coutinho", "anderson@fake.com")
-# tables['cliente'].insert("Carlos Vinicius", "carlos@fake.com")
-# tables['cliente'].insert("Leandro", "leandro@fake.com")
 
 
 # Preenchendo a tabela de livros
@@ -33,6 +22,10 @@ tables['livro'].insert(31.99, "O Pequeno Príncipe", "Folclore", "Antoine de Sai
 tables['livro'].insert(27.99, "O Cortiço", "Romance", "Aluísio Azevedo", 1890)
 
 
-# Preenchendo a tabela de pedidos
+# Preenchendo a tabela de cliente
+tables['cliente'].insert("Vinicius Freitas", "viniciusolzon", "1234", "vinicius@fake.com")
+tables['cliente'].insert("Victor Mororo", "mororo", "4321", "victor@fake.com")
+
+# Preenchendo a tabela de vendas
 
 
