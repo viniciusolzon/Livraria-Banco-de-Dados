@@ -16,7 +16,7 @@ tables['livro'] = LivroTable()
 
 # Preenchendo a tabela de cliente
 # tables['cliente'].insert("Vinicius Freitas", "viniciusolzon", "1234", "vinicius@fake.com")
-# tables['cliente'].insert("Victor Mororo", "mororo", "1234", "victor@fake.com")
+# tables['cliente'].insert("Victor Mororo", "mororo", "4321", "victor@fake.com")
 # tables['cliente'].insert("Rafael Sobral", "rafael@fake.com")
 # tables['cliente'].insert("Juliana Dantas", "juliana@fake.com")
 # tables['cliente'].insert("Anderson Coutinho", "anderson@fake.com")

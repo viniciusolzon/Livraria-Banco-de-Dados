@@ -30,7 +30,7 @@ class ClienteTable(Connection):
             elif search_type ==  "username":
                 sql = "SELECT * FROM cliente WHERE username = %s"
             elif search_type ==  "password":
-                sql = "SELECT * FROM cliente WHERE password = %s"
+                sql = "SELECT password FROM cliente WHERE username = %s"
             else:
                 sql = "SELECT * FROM cliente WHERE id_cliente = %s"
 

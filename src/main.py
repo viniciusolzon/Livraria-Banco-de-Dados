@@ -22,12 +22,12 @@ def checkUsername(username):
     # se não, ele vai pra próxima etapa de registro
     return True
 
-def checkPassword(pswd):
+def checkPassword(username, pswd):
     # checa se a senha do usuário coincide com a senha registrada desse usuaŕio na tabela "cliente"
-    if tables['cliente'].read(pswd, search_type = "password"):
-        return False
+    if tables['cliente'].read(username, search_type = "password")[0][0] == pswd:
+        return True
     # se digitada corretamente, libera o login
-    return True
+    return False
 
 def loggedIn(username):
     print(f"\n\tBem vindo de volta {username}!\n")
@@ -45,8 +45,8 @@ def Login():
         print("\nUsuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
     pswd = input("\tSenha: ")
-    if(checkPassword(pswd)):
-        print("\nA senha inserida não coincide com o usuário cadastrado, voltando ao menu principal...\n")
+    if(not checkPassword(username, pswd)):
+        print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
         main_menu()
 
     loggedIn(username)
@@ -79,9 +79,12 @@ def bookSearch():
     while(pesquisa.upper() != "T" and pesquisa.upper() != "A" and pesquisa.upper() != "P"):
         pesquisa = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)n* Pesquisa por gênero (G)\n\n-> ")
 
+def quitLibrary():
+    print("\nObrigado por visitar a livraria do Mororó!")
+
 def main_menu():
-    choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n-> ")
-    while(choice.upper() != "L" and choice.upper() != "C" and choice.upper() != "P"):
+    choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n* Sair do sistema (Q)\n-> ")
+    while(choice.upper() != "L" and choice.upper() != "C" and choice.upper() != "P" and choice.upper() != "Q"):
         choice = input("\nDesculpe, tente novamente...\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n\n-> ")
     if choice.upper() == "L":
         Login()
@@ -89,7 +92,9 @@ def main_menu():
         Register()
     elif choice.upper() == "P":
         bookSearch()
-
+    elif choice.upper() == "Q":
+        quitLibrary()
+    
 
 
 
