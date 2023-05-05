@@ -27,8 +27,6 @@ class VendaTable(Connection):
                 sql = "SELECT * FROM venda WHERE nome = %s"
             data = self.query(sql, args)
             if data:
-                for row in data:
-                    print
                 return data
             return "Record not found in VendaTable"
                 

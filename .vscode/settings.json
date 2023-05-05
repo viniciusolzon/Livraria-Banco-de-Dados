@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./tables"
+    ],
+    "python.analysis.typeCheckingMode": "basic"
+}

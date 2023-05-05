@@ -23,14 +23,21 @@ class LivroTable(Connection):
     #READ/Search
     def read(self, *args, search_type="id"): # A busca padrão é pelo id
         try:
-            sql = "SELECT * FROM livro WHERE id = %s"
-            # Porém o usuário tbm pode querer pesquisar pelo nome
+            # Outros tipos de pesquisa
             if search_type == "titulo":
                 sql = "SELECT * FROM livro WHERE titulo = %s"
+            elif search_type == "ano_publicacao":
+                sql = "SELECT * FROM livro WHERE ano_publicacao = %s"
+            elif search_type == "genero":
+                sql = "SELECT * FROM livro WHERE genero = %s"
+            elif search_type == "autor":
+                sql = "SELECT * FROM livro WHERE autor = %s"
+            else:
+                sql = "SELECT * FROM livro WHERE id_livro = %s"
             data = self.query(sql, args)
             if data:
                 return data
-            return "Record not found in LivroTable"
+            return False # "Record not found in LivroTable"
         except Exception as error:
             print("Record not found in LivroTable", error)
 
@@ -40,7 +47,7 @@ class LivroTable(Connection):
             data = self.query(sql)
             if data:
                 return data
-            return "Record not found in LivroTable"
+            return False # "Record not found in LivroTable"
         except Exception as error:
             print("Record not found in LivroTable", error)
 
@@ -65,7 +72,7 @@ class LivroTable(Connection):
             sql_delete = f"DELETE FROM livro WHERE id = {id}"
             self.execute(sql_delete)
             self.commit()
-            return "Record deleted"
+            return True # "Record deleted"
         except Exception as error:
             print("Error deleting record", error)
     

@@ -6,7 +6,7 @@ class ClienteTable(Connection):
     def __init__(self):
         Connection.__init__(self)
         # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
-        self.execute("DROP TABLE IF EXISTS cliente")
+        # self.execute("DROP TABLE IF EXISTS cliente")
         # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS cliente(
@@ -14,7 +14,7 @@ class ClienteTable(Connection):
             name VARCHAR(255),
             username VARCHAR(255),
             password VARCHAR(255),
-            email TEXT
+            email VARCHAR(255)
         );
         """
         self.execute(sql)
@@ -22,16 +22,22 @@ class ClienteTable(Connection):
     #READ/Search
     def read(self, *args, search_type="id"): # A busca padrão é pelo id
         try:
-            sql = "SELECT * FROM cliente WHERE id = %s"
-            # Porém o usuário tbm pode querer pesquisar pelo nome
-            if search_type == "nome":
-                sql = "SELECT * FROM cliente WHERE nome = %s"
+            # Outros tipos de pesquisa
+            if search_type == "name":
+                sql = "SELECT * FROM cliente WHERE name = %s"
+            elif search_type == "email":
+                sql = "SELECT * FROM cliente WHERE email = %s"
+            elif search_type ==  "username":
+                sql = "SELECT * FROM cliente WHERE username = %s"
+            elif search_type ==  "password":
+                sql = "SELECT * FROM cliente WHERE password = %s"
+            else:
+                sql = "SELECT * FROM cliente WHERE id_cliente = %s"
+
             data = self.query(sql, args)
             if data:
-                for row in data:
-                    print
                 return data
-            return "Record not found in ClienteTable"
+            return False # "Record not found in ClienteTable"
                 
         except Exception as error:
             print("Record not found in ClienteTable", error)
@@ -42,7 +48,7 @@ class ClienteTable(Connection):
             data = self.query(sql)
             if data:
                 return data
-            return "Record not found in ClienteTable"
+            return False # "Record not found in ClienteTable"
         except Exception as error:
             print("Record not found in ClienteTable", error)
 
@@ -64,12 +70,12 @@ class ClienteTable(Connection):
             # Busca no banco de dados pra ver se existe
             sql_search = f"SELECT * FROM cliente WHERE id = {id}"
             if not self.query(sql_search):
-                return "Record not found on database"
+                return False # "Record not found on database"
             # Deleta
             sql_delete = f"DELETE FROM cliente WHERE id = {id}"
             self.execute(sql_delete)
             self.commit()
-            return "Record deleted"
+            return False # "Record deleted"
         except Exception as error:
             print("Error deleting record", error)
     
