@@ -6,7 +6,7 @@ class VendaTable(Connection):
     def __init__(self):
         Connection.__init__(self)
         # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
-        self.execute("DROP TABLE IF EXISTS venda")
+        # self.execute("DROP TABLE IF EXISTS venda")
         # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS venda(
@@ -17,6 +17,7 @@ class VendaTable(Connection):
         );
         """
         self.execute(sql)
+        self.commit()
 
     #READ/Search
     def read(self, *args, search_type="id"): # A busca padrão é pelo id

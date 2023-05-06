@@ -31,10 +31,13 @@ def checkPassword(username, pswd):
 
 def loggedIn(username):
     print(f"\n\tBem vindo de volta {username}!\n")
+    quit()
 
 def registered(name, username, email, password):
     tables['cliente'].insert(name, username, password, email)
     print("\n\tRegistro feito com sucesso!\n")
+    main_menu()
+    quit()
 
 def Login():
     print("""\n\t#####################
@@ -43,10 +46,10 @@ def Login():
           
     username = input("\n\tNome de usuário: ")
     if(checkUsername(username)):
-        print("\nUsuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
+        print("\nEsse nome de usuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
         quit()
-        
+
     pswd = input("\tSenha: ")
     if(not checkPassword(username, pswd)):
         print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
@@ -122,27 +125,28 @@ def get_users():
         print(row)
     print()
 
-def main():
-    # Create an engine instance
-    alchemyEngine   = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432')
-    # Connect to PostgreSQL server
-    dbConnection    = alchemyEngine.connect()
-    # Create a dataframe
-    clienteDF = pd.read_sql_query("SELECT * FROM cliente;", dbConnection)
-    livroDF = pd.read_sql_query("SELECT * FROM livro;", dbConnection)
+# def main():
+#     # Create an engine instance
+#     alchemyEngine   = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432')
+#     # Connect to PostgreSQL server
+#     dbConnection    = alchemyEngine.connect()
+#     # Create a dataframe
+#     clienteDF = pd.read_sql_query("SELECT * FROM cliente;", dbConnection)
+#     livroDF = pd.read_sql_query("SELECT * FROM livro;", dbConnection)
 
-    print(clienteDF.head())
-    print(livroDF.head())
+#     print(clienteDF.head())
+#     print(livroDF.head())
     
-    # get_books()
-    # get_users()
+#     get_books()
+#     get_users()
 # Testando o uso de dataFrames^^^^^^^^^^^^^
 
-
-
-if __name__ == "__main__":
-    # main()
+def main():
     print("""\n\t########################################################
 \t######## Olá seja bem vindo a livraria Tuko! ###########
 \t########################################################\n""")
     main_menu()
+
+if __name__ == "__main__":
+    main()
+
