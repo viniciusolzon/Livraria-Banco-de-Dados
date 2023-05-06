@@ -45,11 +45,13 @@ def Login():
     if(checkUsername(username)):
         print("\nUsuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+        quit()
         
     pswd = input("\tSenha: ")
     if(not checkPassword(username, pswd)):
         print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
         main_menu()
+        quit()
 
     loggedIn(username)
 
@@ -65,11 +67,14 @@ def Register():
     if(not checkEmail(email)):
         print("\nO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+        quit()
+
 
     username = input("\tNome de usuário: ")
     if(not checkUsername(username)):
         print("\nEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
+        quit()
 
     pswd = input("\tSenha: ")
     pswd_verification = input("\tVerificação da senha: ")
@@ -81,12 +86,13 @@ def Register():
     registered(name, username, email, pswd)
 
 def bookSearch():
-    pesquisa = input("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n* Pesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n-> ")
-    while(pesquisa.upper() != "T" and pesquisa.upper() != "A" and pesquisa.upper() != "P"):
-        pesquisa = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)n* Pesquisa por gênero (G)\n\n-> ")
+    pesquisa = input("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n* Pesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n* Pesquisa por gênero (G)\n\n-> ")
+    while(pesquisa.upper() != "T" and pesquisa.upper() != "A" and pesquisa.upper() != "P" and pesquisa.upper() != "G"):
+        pesquisa = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n* Pesquisa por gênero (G)\n\n-> ")
 
 def quitLibrary():
     print("\n\tObrigado por visitar a livraria Tuko!\n")
+    quit()
 
 def main_menu():
     choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n* Sair do sistema (Q)\n-> ")
