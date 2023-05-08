@@ -1,5 +1,4 @@
 class fmtSQL:
-
     def __init__(self, cmd=''):
         # crnt cmd
         self.__cmd = str(cmd)
