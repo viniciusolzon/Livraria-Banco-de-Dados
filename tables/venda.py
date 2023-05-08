@@ -90,7 +90,7 @@ class VendaTable(Connection):
                 return "Record not found on database"
             # Deleta
             #sql_delete = f"DELETE FROM venda WHERE id = {id}"
-            sql_search = fmtSQL().DELETE() \
+            sql_delete = fmtSQL().DELETE() \
                             .append(sql)
                             
             self.execute(sql_delete)
