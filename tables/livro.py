@@ -99,7 +99,7 @@ class LivroTable(Connection):
                 return "Record not found on database"
             # Deleta
             #sql_delete = f"DELETE FROM livro WHERE id = {id}"
-            sql_search = fmtSQL() \
+            sql_delete = fmtSQL() \
                         .DELETE() \
                         .FROM('livro') \
                         .WHERE(f'id = {id}')
