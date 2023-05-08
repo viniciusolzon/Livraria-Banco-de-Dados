@@ -38,5 +38,5 @@ class Connection():
 
     # executa o comando SQL e dá o fetchall pra pegar os resultados desse comando
     def query(self, sql, params=None):
-        self.cur.execute(sql, params or ())
+        self.cur.execute(str(sql), params or ())
         return self.fetchall()
