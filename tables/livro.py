@@ -23,10 +23,10 @@ class LivroTable(Connection):
         self.commit()
 
     #READ/Search
-    def read(self, *args, search_type="id"): # A busca padrão é pelo id
+    def read(self, *args, select = '*', search_type="id"): # A busca padrão é pelo id
         try:
             sql = fmtSQL() \
-                    .SELECT() \
+                    .SELECT(select) \
                     .FROM('livro')
 
             # Outros tipos de pesquisa
@@ -52,11 +52,11 @@ class LivroTable(Connection):
         except Exception as error:
             print("Record not found in LivroTable", error)
 
-    def read_all(self):
+    def read_all(self, search_type):
         try:
             #sql = "SELECT * FROM livro;"
             sql = fmtSQL() \
-                    .SELECT() \
+                    .SELECT("DISTINCT " + search_type) \
                     .FROM('livro')
 
             data = self.query(sql)

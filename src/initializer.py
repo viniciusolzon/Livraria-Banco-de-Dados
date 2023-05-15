@@ -4,13 +4,13 @@ sys.path.insert(0, '../tables')
 
 from cliente import ClienteTable
 from livro import LivroTable
-# from venda import VendaTable
+from venda import VendaTable
 
 tables = {}
 
 tables['livro'] = LivroTable()
 tables['cliente'] = ClienteTable()
-# tables['venda'] = VendaTable()
+tables['venda'] = VendaTable()
 
 
 # Preenchendo a tabela de livros
@@ -27,5 +27,3 @@ tables['cliente'] = ClienteTable()
 # tables['cliente'].insert("Victor Mororo", "mororo", "4321", "victor@fake.com")
 
 # Preenchendo a tabela de vendas
-
-

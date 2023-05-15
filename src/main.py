@@ -3,9 +3,11 @@ from sqlalchemy import create_engine
 import pandas as pd
 import os
 
+
 # Limpa o terminal
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def checkEmail(email):
     # checa se o email existe na tabela "cliente", se existe fala "O email inserido já possui cadastro na livraria"
@@ -22,6 +24,7 @@ def checkUsername(username):
     # se não, ele vai pra próxima etapa de registro
     return True
 
+
 def checkPassword(username, pswd):
     # checa se a senha do usuário coincide com a senha registrada desse usuaŕio na tabela "cliente"
     if tables['cliente'].read(username, search_type = "password")[0][0] == pswd:
@@ -29,15 +32,18 @@ def checkPassword(username, pswd):
     # se digitada corretamente, libera o login
     return False
 
+
 def loggedIn(username):
     print(f"\n\tBem vindo de volta {username}!\n")
     quit()
+
 
 def registered(name, username, email, password):
     tables['cliente'].insert(name, username, password, email)
     print("\n\tRegistro feito com sucesso!\n")
     main_menu()
     quit()
+
 
 def Login():
     print("""\n\t#####################
@@ -57,6 +63,7 @@ def Login():
         quit()
 
     loggedIn(username)
+
 
 def Register():
     print("""\n\t########################
@@ -88,14 +95,56 @@ def Register():
 
     registered(name, username, email, pswd)
 
+def compra(titulo):
+    print("Comprado")
+    pass
+
+
+def pesquisa(p):
+    if p.upper() == "T":
+        s = input("\nPor favor digite o título do livro desejado:\n-> ")
+        if(tables['livro'].read(s, search_type = 'titulo')):
+            c = input("\nLivro encontrado, deseja comprá-lo?\n* Sim (s)\n* Não (n)\n")
+            while(c.upper() != "S" and c.upper() != "N"):
+                c = input("\nDesculpe, tente novamente...\nLivro encontrado, deseja comprá-lo?\n* Sim (s)\n* Não (n)\n")
+            if(c.upper() == "S"):
+                compra(s)
+            else:
+                print("Compra cancelada")
+            
+        else:
+            print("\nLivro não encontrado")
+
+    elif p.upper() == "A":
+        s = input("\nPor favor digite o autor do livro desejado:\n-> ")
+        if(tables['livro'].read(s, select = 'titulo', search_type = 'autor')):
+            print(f"\nLivros escritos por {s}:")
+            for row in tables['livro'].read(s, select = 'titulo', search_type = 'autor'):
+                print("  - " + row[0])
+        else:
+            print("\nLivro não encontrado")
+    
+    else:
+        s = input("\nPor favor digite o gênero do livro desejado:\n-> ")
+        if(tables['livro'].read(s, select = 'titulo', search_type = 'genero')):
+            print(f"\nLivros com o gênero de {s}:")
+            for row in tables['livro'].read(s, select = 'titulo', search_type = 'genero'):
+                print("  - " + row[0])
+        else:
+            print("\nLivro não encontrado")
+
+
 def bookSearch():
-    pesquisa = input("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n* Pesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n* Pesquisa por gênero (G)\n\n-> ")
-    while(pesquisa.upper() != "T" and pesquisa.upper() != "A" and pesquisa.upper() != "P" and pesquisa.upper() != "G"):
-        pesquisa = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n* Pesquisa por gênero (G)\n\n-> ")
+    p = input("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n* Pesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por gênero (G)\n\n-> ")
+    while(p.upper() != "T" and p.upper() != "A" and p.upper() != "G"):
+        p = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por gênero (G)\n\n-> ")
+    pesquisa(p)
+
 
 def quitLibrary():
     print("\n\tObrigado por visitar a livraria Tuko!\n")
     quit()
+
 
 def main_menu():
     choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n* Sair do sistema (Q)\n-> ")
@@ -107,7 +156,7 @@ def main_menu():
         Register()
     elif choice.upper() == "P":
         bookSearch()
-    elif choice.upper() == "Q":
+    else:
         quitLibrary()
     
 
