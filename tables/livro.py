@@ -22,7 +22,7 @@ class LivroTable(Connection):
         self.execute(sql)
         self.commit()
 
-    #READ/Search
+    # READ/Search
     def read(self, *args, select = '*', search_type="id"): # A busca padrão é pelo id
         try:
             sql = fmtSQL() \
@@ -85,7 +85,7 @@ class LivroTable(Connection):
         except Exception as error:
             print("Error updating livro", error)
 
-    #DELETE
+    # DELETE
     def delete(self, id):
         try:
             # Busca no banco de dados pra ver se existe
@@ -93,7 +93,7 @@ class LivroTable(Connection):
             sql_search = fmtSQL() \
                         .SELECT() \
                         .FROM('livro') \
-                        .WHERE(f'id = {id}')
+                        .WHERE(f'id_livro = {id}')
 
             if not self.query(sql_search):
                 return "Record not found on database"
@@ -102,7 +102,7 @@ class LivroTable(Connection):
             sql_delete = fmtSQL() \
                         .DELETE() \
                         .FROM('livro') \
-                        .WHERE(f'id = {id}')
+                        .WHERE(f'id_livro = {id}')
 
             self.execute(sql_delete)
             self.commit()

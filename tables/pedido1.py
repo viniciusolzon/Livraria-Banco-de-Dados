@@ -2,112 +2,112 @@ from config import Connection
 from fmt_sql import fmtSQL
 
 # Herda de Connection pq vai utilizar os métodos de Connection
-class VendaTable(Connection):
+class PedidoTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
         # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
-        # self.execute("DROP TABLE IF EXISTS venda")
+        # self.execute("DROP TABLE IF EXISTS pedido")
         # Cria a tabela se ela ainda não existe
         sql = """
-        CREATE TABLE IF NOT EXISTS venda(
+        CREATE TABLE IF NOT EXISTS pedido(
             id_pedido SERIAL PRIMARY KEY,
-            custo_total FLOAT,
+            custo FLOAT,
             id_cliente INT,
-            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente)
+            id_livro INT,
+            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
+            FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
         );
         """
         self.execute(sql)
         self.commit()
 
     #READ/Search
-    def read(self, *args, search_type="id"): # A busca padrão é pelo id
+    def read(self, *args, select = '*', search_type="id"): # A busca padrão é pelo id
         try:
             sql = fmtSQL() \
-                    .SELECT() \
-                    .FROM('venda')
+                    .SELECT(select) \
+                    .FROM('pedido')
 
             if search_type == "id":
-                #sql = "SELECT * FROM venda WHERE id = %s"
-                sql.WHERE('id = %s')
-            # Porém o usuário tbm pode querer pesquisar pelo nome
-            elif search_type == "nome":
-                #sql = "SELECT * FROM venda WHERE nome = %s"
-                sql.WHERE('nome = %s')
+                sql.WHERE('id_pedido = %s')
+            elif search_type == "custo":
+                sql.WHERE('custo = %s')
             data = self.query(sql, args)
+            
             if data:
                 return data
-            return "Record not found in VendaTable"
+            
+            return "Record not found in PedidoTable"
                 
         except Exception as error:
-            print("Record not found in VendaTable", error)
+            print("Record not found in PedidoTable", error)
 
     def read_all(self):
         try:
-            #sql = "SELECT * FROM venda"
             sql = fmtSQL() \
                     .SELECT() \
-                    .FROM('venda')
+                    .FROM('pedido')
             data = self.query(sql)
+            
             if data:
                 return data
-            return "Record not found in VendaTable"
+            
+            return "Record not found in PedidoTable"
+        
         except Exception as error:
-            print("Record not found in VendaTable", error)
+            print("Record not found in PedidoTable", error)
 
     # UPDATE
-    def update(self, id, *args, update_type="nome"):
+    def update(self, id, *args, update_type="custo"):
         try:
-            #sql = f"UPDATE venda SET name = %s WHERE id = {id}"
             sql = fmtSQL() \
-                    .UPDATE('venda')
+                    .UPDATE('pedido')
 
-            if update_type == "nome":
+            if update_type == "custo":
                 sql.SET('name = %s')
             elif update_type == "email":
-                #sql = f"UPDATE venda SET email = %s WHERE id = {id}"
                 sql.SET('email = %s')
 
-            sql.WHERE(f'id = {id}')
+            sql.WHERE(f'id_pedido = {id}')
             self.execute(sql, args)
             self.commit()
             print("Record updated")
+            
         except Exception as error:
-            print("Error updating venda", error)
+            print("Error updating pedido", error)
 
     #DELETE
     def delete(self, id):
         try:
             sql = fmtSQL() \
-                    .FROM('venda') \
-                    .WHERE(f'id = {id}')
-            # Busca no banco de dados pra ver se existe
-            #sql_search = f"SELECT * FROM venda WHERE id = {id}"
+                    .FROM('pedido') \
+                    .WHERE(f'id_pedido = {id}')
             sql_search = fmtSQL().SELECT() \
                             .append(sql)
 
             if not self.query(sql_search):
                 return "Record not found on database"
-            # Deleta
-            #sql_delete = f"DELETE FROM venda WHERE id = {id}"
+
             sql_delete = fmtSQL().DELETE() \
                             .append(sql)
                             
             self.execute(sql_delete)
             self.commit()
+            
             return "Record deleted"
+        
         except Exception as error:
             print("Error deleting record", error)
     
     # INSERT
     def insert(self, *args):
         try:
-            #sql = f"INSERT INTO venda (name, email) VALUES (%s, %s)"
             sql = fmtSQL() \
-                    .INSERT_INTO('venda', '(name, email)') \
+                    .INSERT_INTO('pedido', '(name, email)') \
                     .VALUES('(%s, %s)')
             self.execute(sql, args)
             self.commit()
+            
         except Exception as error:
             print("Error inserting record", error)
-

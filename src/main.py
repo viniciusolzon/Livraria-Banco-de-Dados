@@ -79,7 +79,6 @@ def Register():
         main_menu()
         quit()
 
-
     username = input("\tNome de usuário: ")
     if(not checkUsername(username)):
         print("\nEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
@@ -94,6 +93,7 @@ def Register():
         pswd_verification = input("\tVerificação da senha: ")
 
     registered(name, username, email, pswd)
+
 
 def compra(titulo):
     print("Comprado")

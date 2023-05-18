@@ -12,9 +12,9 @@ class ClienteTable(Connection):
         sql = """
         CREATE TABLE IF NOT EXISTS cliente(
             id_cliente SERIAL PRIMARY KEY,
-            name VARCHAR(255),
-            username VARCHAR(255),
-            password VARCHAR(255),
+            nome VARCHAR(255),
+            usuario VARCHAR(255),
+            senha VARCHAR(255),
             email VARCHAR(255)
         );
         """
@@ -22,28 +22,28 @@ class ClienteTable(Connection):
         self.commit()
 
     #READ/Search
-    def read(self, *args, search_type="id"): # A busca padrão é pelo id
+    def read(self, *args, select = '*', search_type="id"): # A busca padrão é pelo id
         try:
             sql = fmtSQL() \
-                    .SELECT() \
+                    .SELECT(select) \
                     .FROM('cliente')
 
             # Outros tipos de pesquisa
-            if search_type == "name":
-                #sql = "SELECT * FROM cliente WHERE name = %s"
-                sql.WHERE('name = %s')
+            if search_type == "nome":
+                #sql = "SELECT * FROM cliente WHERE nome = %s"
+                sql.WHERE('nome = %s')
             elif search_type == "email":
                 #sql = "SELECT * FROM cliente WHERE email = %s"
                 sql.WHERE('email = %s')
-            elif search_type ==  "username":
-                #sql = "SELECT * FROM cliente WHERE username = %s"
-                sql.WHERE('username = %s')
-            elif search_type ==  "password":
-                #sql = "SELECT password FROM cliente WHERE username = %s"
+            elif search_type ==  "usuario":
+                #sql = "SELECT * FROM cliente WHERE usuario = %s"
+                sql.WHERE('usuario = %s')
+            elif search_type ==  "senha":
+                #sql = "SELECT senha FROM cliente WHERE usuario = %s"
                 sql = fmtSQL() \
-                        .SELECT('password') \
+                        .SELECT('senha') \
                         .FROM('cliente') \
-                        .WHERE('username = %s')
+                        .WHERE('usuario = %s')
             else:
                 #sql = "SELECT * FROM cliente WHERE id_cliente = %s"
                 sql.WHERE('id_cliente = %s')
@@ -73,12 +73,12 @@ class ClienteTable(Connection):
     # UPDATE
     def update(self, id, *args, update_type="nome"):
         try:
-            #sql = f"UPDATE cliente SET name = %s WHERE id = {id}"
+            #sql = f"UPDATE cliente SET nome = %s WHERE id = {id}"
             sql = fmtSQL() \
                     .UPDATE('cliente')
             if update_type == "nome":
-                sql.SET('name = %s') \
-                    .WHERE(f'id = {id}')
+                sql.SET('nome = %s') \
+                    .WHERE(f'id_cliente = {id}')
             elif update_type == "email":
                 sql.SET('email = %s') \
                     .WHERE(f'id = {id}')
@@ -98,7 +98,7 @@ class ClienteTable(Connection):
             sql_search = fmtSQL() \
                     .SELECT() \
                     .FROM('cliente') \
-                    .WHERE(f'id = {id}')
+                    .WHERE(f'id_cliente = {id}')
 
             if not self.query(sql_search):
                 return False # "Record not found on database"
@@ -107,7 +107,7 @@ class ClienteTable(Connection):
             sql_delete = fmtSQL() \
                     .DELETE() \
                     .FROM('cliente') \
-                    .WHERE(f'id = {id}')
+                    .WHERE(f'id_cliente = {id}')
 
             self.execute(sql_delete)
             self.commit()
@@ -118,9 +118,9 @@ class ClienteTable(Connection):
     # INSERT
     def insert(self, *args):
         try:
-            #sql = f"INSERT INTO cliente (name, username, password, email) VALUES (%s, %s, %s, %s)"
+            #sql = f"INSERT INTO cliente (nome, usuario, senha, email) VALUES (%s, %s, %s, %s)"
             sql = fmtSQL() \
-                    .INSERT_INTO('cliente', '(name, username, password, email)') \
+                    .INSERT_INTO('cliente', '(nome, usuario, senha, email)') \
                     .VALUES(f'(%s, %s, %s, %s)')
             self.execute(sql, args)
             self.commit()
