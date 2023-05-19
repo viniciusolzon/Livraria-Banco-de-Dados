@@ -1,10 +1,14 @@
 from config import Connection
+from fmt_sql import fmtSQL
 
 # Herda de Connection pq vai utilizar os métodos de Connection
 class ClienteTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
+        # Pra não ter que ficar toda hora indo no pgAdmin4 e deletando a tabela manualmente pra executar os comandos sem problema
+        # self.execute("DROP TABLE IF EXISTS cliente")
+        # Cria a tabela se ela ainda não existe
         sql = """
         CREATE TABLE IF NOT EXISTS cliente(
             id_cliente SERIAL PRIMARY KEY,
@@ -44,7 +48,7 @@ class ClienteTable(Connection):
                 #sql = "SELECT * FROM cliente WHERE id_cliente = %s"
                 sql.WHERE('id_cliente = %s')
 
-            data = self.query(sql, args)[0][0]
+            data = self.query(sql, args)
             if data:
                 return data
             return False # "Record not found in ClienteTable"
@@ -59,7 +63,7 @@ class ClienteTable(Connection):
                     .SELECT() \
                     .FROM('cliente')
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             return False # "Record not found in ClienteTable"

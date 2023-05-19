@@ -24,13 +24,13 @@ class PedidoTable(Connection):
             sql = 'SELECT id_pedido FROM pedido'
 
             if search_type == "custo":
-                sql = 'SELECT custo FROM pedido'
+                sql = 'SELECT custo FROM pedido WHERE id_cliente = "%s"'
             elif search_type == "id_cliente":
-                sql = 'SELECT id_cliente FROM pedido'
+                sql = 'SELECT id_cliente FROM pedido WHERE id_cliente = "%s'
             elif search_type == "id_livro":
-                sql = 'SELECT id_livro FROM pedido'
+                sql = 'SELECT id_livro FROM pedido WHERE id_cliente = "%s'
 
-            data = self.query(sql, args)
+            data = self.query(sql, args)[0][0]
             if data:
                 return data
             
@@ -43,7 +43,7 @@ class PedidoTable(Connection):
         try:
             sql = 'SELECT * FROM PEDIDO'
 
-            data = self.query(sql)
+            data = self.query(sql)[0][0]
             if data:
                 return data
             
