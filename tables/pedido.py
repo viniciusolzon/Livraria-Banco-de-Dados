@@ -21,16 +21,16 @@ class PedidoTable(Connection):
     #READ/Search
     def read(self, *args, select = '*', search_type="id"):
         try:
-            sql = fmtSQL() \
-                    .SELECT(select) \
-                    .FROM('pedido')
+            sql = 'SELECT id_pedido FROM pedido'
 
-            if search_type == "id":
-                sql.WHERE('id_pedido = %s')
-            elif search_type == "custo":
-                sql.WHERE('custo = %s')
+            if search_type == "custo":
+                sql = 'SELECT custo FROM pedido'
+            elif search_type == "id_cliente":
+                sql = 'SELECT id_cliente FROM pedido'
+            elif search_type == "id_livro":
+                sql = 'SELECT id_livro FROM pedido'
+
             data = self.query(sql, args)
-            
             if data:
                 return data
             
@@ -41,11 +41,9 @@ class PedidoTable(Connection):
 
     def read_all(self):
         try:
-            sql = fmtSQL() \
-                    .SELECT() \
-                    .FROM('pedido')
+            sql = 'SELECT * FROM PEDIDO'
+
             data = self.query(sql)
-            
             if data:
                 return data
             
@@ -55,55 +53,33 @@ class PedidoTable(Connection):
             print("Record not found in PedidoTable", error)
 
     # UPDATE
-    def update(self, id, *args, update_type="custo"):
+    def update(self, id, discount, search_type = 'id_pedido'):
         try:
-            sql = fmtSQL() \
-                    .UPDATE('pedido')
+            sql = f'UPDATE pedido SET custo = custo * {discount} WHERE id_pedido = {id}' # desconto em um pedido
+            
+            if search_type == 'id_cliente':        
+                sql = f'UPDATE pedido SET custo = custo * {discount} WHERE id_cliente = {id}' # desconto em todos pedidos do cliente
 
-            if update_type == "custo":
-                sql.SET('name = %s')
-            elif update_type == "email":
-                sql.SET('email = %s')
 
-            sql.WHERE(f'id_pedido = {id}')
-            self.execute(sql, args)
+            self.execute(sql)
             self.commit()
             print("Record updated")
             
         except Exception as error:
             print("Error updating pedido", error)
 
-    #DELETE
-    def delete(self, id):
+    # DELETE
+    def delete(self, *args):
         try:
-            sql = fmtSQL() \
-                    .FROM('pedido') \
-                    .WHERE(f'id_pedido = {id}')
-            sql_search = fmtSQL().SELECT() \
-                            .append(sql)
+            
+            sql_search = "SELECT * FROM pedido WHERE id_pedido = '%s'"
 
             if not self.query(sql_search):
                 return "Record not found on database"
-
-            sql_delete = fmtSQL().DELETE() \
-                            .append(sql)
-                            
-            self.execute(sql_delete)
+            
+            sql_delete = 'DELETE * FROM pedido WHERE id_pedido = "%s"'
+            self.execute(sql_delete, args)
             self.commit()
             
-            return "Record deleted"
-        
         except Exception as error:
             print("Error deleting record", error)
-    
-    # INSERT
-    def insert(self, *args):
-        try:
-            sql = fmtSQL() \
-                    .INSERT_INTO('pedido', '(name, email)') \
-                    .VALUES('(%s, %s)')
-            self.execute(sql, args)
-            self.commit()
-            
-        except Exception as error:
-            print("Error inserting record", error)

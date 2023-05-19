@@ -1,7 +1,7 @@
-from initializer import tables
-from sqlalchemy import create_engine
-import pandas as pd
 import os
+import pandas as pd
+from sqlalchemy import create_engine
+from initializer import tables
 
 
 # Limpa o terminal

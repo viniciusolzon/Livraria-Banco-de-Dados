@@ -5,14 +5,14 @@ sys.path.insert(0, '../tables')
 from cliente import ClienteTable
 from livro import LivroTable
 from pedido import PedidoTable
-# from estoque import EstoqueTable
+from estoque import EstoqueTable
 
 tables = {}
 
 tables['livro'] = LivroTable()
 tables['cliente'] = ClienteTable()
 tables['pedido'] = PedidoTable()
-# tables['estoque'] = EstoqueTable()
+tables['estoque'] = EstoqueTable()
 
 # Preenchendo a tabela de livros
 # tables['livro'].insert(69.99, "Codigo Limpo", "Estudo Cientifico", "Robert Cecil Martin", 2008)

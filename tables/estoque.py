@@ -8,19 +8,19 @@ class EstoqueTable(Connection):
         sql = """
         CREATE TABLE IF NOT EXISTS estoque(
             quantia INT,
-            titulo_livro,
-            FOREIGN KEY (titulo_livro) REFERENCES livro (titulo)
+            id_livro INT,
+            FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
         );
         """
         self.execute(sql)
         self.commit()
 
     # READ/Search
-    def read(self, *args, search_type = 'titulo'):
+    def read(self, *args):
         try:
-            sql = 'SELECT quantia FROM estoque WHERE titulo_livro = %s'
-            data = self.query(sql, args)
+            sql = 'SELECT quantia FROM estoque WHERE id_livro = %s'
 
+            data = self.query(sql, args)
             if data:
                 return data
             
@@ -32,8 +32,8 @@ class EstoqueTable(Connection):
     def read_all(self):
         try:
             sql = 'SELECT * FROM estoque'
+            
             data = self.query(sql)
-
             if data:
                 return data
 
@@ -46,12 +46,12 @@ class EstoqueTable(Connection):
     def insert(self, *args):
         try:
             
-            sql_search = "SELECT * FROM livro WHERE titulo = '%s'"
+            sql_search = "SELECT * FROM livro WHERE id_livro = '%s'"
 
             if not self.query(sql_search):
                 return "Record not found on database"
             
-            sql_update = 'UPDATE estoque SET quantia = quantia + 1 WHERE titulo = "%s"'
+            sql_update = 'UPDATE estoque SET quantia = quantia + 1 WHERE id_livro = "%s"'
             self.execute(sql_update, args)
             self.commit()
             
@@ -63,12 +63,12 @@ class EstoqueTable(Connection):
     def delete(self, *args):
         try:
             
-            sql_search = "SELECT * FROM livro WHERE titulo = '%s'"
+            sql_search = "SELECT * FROM livro WHERE id_livro = '%s'"
 
             if not self.query(sql_search):
                 return "Record not found on database"
             
-            sql_delete = 'UPDATE estoque SET quantia = quantia - 1 WHERE titulo = "%s"'
+            sql_delete = 'UPDATE estoque SET quantia = quantia - 1 WHERE id_livro = "%s"'
             self.execute(sql_delete, args)
             self.commit()
             
