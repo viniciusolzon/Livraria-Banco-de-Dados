@@ -1,12 +1,11 @@
-import os
-import pandas as pd
-from sqlalchemy import create_engine
-from initializer import tables
-
+# import os
+# import pandas as pd
+# from sqlalchemy import create_engine
+from tabelas.gerador import tables
 
 # Limpa o terminal
-def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
+# def clear_terminal():
+#     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def checkEmail(email):

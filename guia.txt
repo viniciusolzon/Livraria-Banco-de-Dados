@@ -22,6 +22,7 @@ https://lucid.app/lucidchart/80c28456-014f-4491-8f6c-278b56189d2c/edit?invitatio
 3. Utilize uma classe que vai gerenciar as operações CRUD.
 
 4. O objeto principal deve ter pelo menos 4 atributos.
+
 5. Usar bastante métodos.
 
 6. Gerar relatório com um resumo das informações. Ex: Relatório de vendas, relatório de

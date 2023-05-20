@@ -21,7 +21,7 @@ class Connection():
     def __enter__(self):
         return self
     
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def __exit__(self):
         self.conn.commit()
         self.cur.close()
         self.conn.close()
