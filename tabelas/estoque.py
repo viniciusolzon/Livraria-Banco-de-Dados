@@ -20,7 +20,7 @@ class EstoqueTable(Connection):
         try:
             sql = f'SELECT quantia FROM estoque WHERE id_livro = {id_livro}'
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             
@@ -32,7 +32,7 @@ class EstoqueTable(Connection):
         try:
             sql = 'SELECT * FROM estoque'
             
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
 

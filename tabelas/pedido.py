@@ -30,7 +30,7 @@ class PedidoTable(Connection):
             elif search_type == "custo":
                 sql = f'SELECT {select} FROM pedido WHERE custo = {custo}'
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             
@@ -42,7 +42,7 @@ class PedidoTable(Connection):
         try:
             sql = f'SELECT * FROM pedido WHERE id_pedido = {id_pedido}'
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             

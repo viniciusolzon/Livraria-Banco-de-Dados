@@ -18,7 +18,7 @@ class ClienteTable(Connection):
         self.commit()
 
     # READ/Search
-    def read(self, select,  id_cliente = 0, nome = '', usuario = '', email = '', search_type = 'nome'):
+    def read(self, select = '*', id_cliente = 0, nome = '', usuario = '', email = '', senha = '', search_type = 'nome'):
         try:
             sql = f"SELECT {select} FROM cliente WHERE nome = '{nome}'"
 
@@ -28,8 +28,10 @@ class ClienteTable(Connection):
                 sql = f"SELECT {select} FROM cliente WHERE usuario = '{usuario}'"
             elif search_type ==  "email":
                 sql = f"SELECT {select} FROM cliente WHERE email = '{email}'"
+            elif search_type ==  "senha":
+                sql = f"SELECT {select} FROM cliente WHERE senha = '{senha}'"
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             
@@ -41,7 +43,7 @@ class ClienteTable(Connection):
         try:
             sql = f"SELECT * FROM cliente WHERE id_cliente = {id_cliente}"
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             

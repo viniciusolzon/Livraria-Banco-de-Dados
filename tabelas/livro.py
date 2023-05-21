@@ -18,9 +18,10 @@ class LivroTable(Connection):
         self.commit()
 
     # READ/Search
-    def read(self, select,  id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
+    def read(self, select, id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
         try:
             sql = f"SELECT {select} FROM livro WHERE titulo = '{titulo}'"
+            # sql = f"SELECT titulo FROM livro WHERE titulo = 'Romeu e Julieta'"
 
             if search_type == "id":
                 sql = f"SELECT {select} FROM livro WHERE id_livro = {id_livro}"
@@ -31,7 +32,8 @@ class LivroTable(Connection):
             elif search_type == "preco":
                 sql = f"SELECT {select} FROM livro WHERE preco = {preco}"
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
+
             if data:
                 return data
             
@@ -43,7 +45,7 @@ class LivroTable(Connection):
         try:
             sql = f"SELECT * FROM livro WHERE id_livro = {id_livro}"
 
-            data = self.query(sql)[0][0]
+            data = self.query(sql)
             if data:
                 return data
             
