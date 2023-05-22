@@ -7,6 +7,21 @@ from tabelas.gerador import tables
 # def clear_terminal():
 #     os.system('cls' if os.name == 'nt' else 'clear')
 
+loggedIn = False
+
+def SimNao():
+    while True:
+        escolha = input(  
+                "* (S) Sim \n"
+                "* (N) Não \n"
+                "--> "
+                ).upper()
+
+        if escolha not in ["N", "S"]:
+            print("\nResposta inválida, tente novamente...")
+            continue
+        else:
+            return escolha
 
 def checkEmail(Email):
     # checa se o email existe na tabela "cliente", se existe fala "O email inserido já possui cadastro na livraria"
@@ -32,11 +47,6 @@ def checkPassword(Usuario, senha):
     return False
 
 
-def loggedIn(usuario):
-    print(f"\n\tBem vindo de volta {usuario}!\n")
-    quit()
-
-
 def registered(name, usuario, email, senha):
     tables['cliente'].insert(name, usuario, email, senha)
     print("\n\tRegistro feito com sucesso!\n")
@@ -51,45 +61,63 @@ def Login():
           
     usuario = input("\n\tNome de usuário: ")
     if (checkUsername(usuario)):
-        print("\nEsse nome de usuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
-        main_menu()
-        quit()
+        # print("\n\tEsse nome de usuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
+        print("\n\tEsse nome de usuário ainda não possui cadastro na livraria, deseja fazer o cadastro?\n")
+        deseja = SimNao()
+
+        if deseja == "S":
+            Register()
+        else:
+            print("Voltando ao menu principal...\n")
+            main_menu()
+            quit()
 
     senha = input("\tSenha: ")
     if (not checkPassword(usuario, senha)):
-        print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
-        main_menu()
-        quit()
+        print("\n\tA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
+        senha = input("\tSenha: ")
+        if (not checkPassword(usuario, senha)):
+            print("\n\tA senha inserida não coincide com o usuário cadastrado, voltando ao menu principal...\n")
+            main_menu()
+            quit()
 
-    loggedIn(usuario)
+    loggedIn = True
+    menuloggedIn(usuario)
+    quit()
 
 
 def Register():
-    print("\n\t########################"
-            "\t### Tela de Cadastro ###"
-            "\t########################")
+    print("\n\t######################"
+            "  ### Tela de Cadastro ###  "
+            "######################")
           
     name = input("\n\tNome completo: ")
     # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
 
     email = input("\tEmail: ")
     if(not checkEmail(email)):
-        print("\nO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
+        print("\n\tO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
         quit()
 
     usuario = input("\tNome de usuário: ")
     if(not checkUsername(usuario)):
-        print("\nEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
+        print("\n\tEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
         quit()
 
     senha = input("\tSenha: ")
     senha_verificacao = input("\tVerificação da senha: ")
-    while senha != senha_verificacao:
+    
+    if senha != senha_verificacao:
         print("\n\tAs senhas digitadas não coincidem, por favor tente novamente:")
         senha = input("\tSenha: ")
         senha_verificacao = input("\tVerificação da senha: ")
+        
+    if senha != senha_verificacao:
+        print("\n\tAs senhas digitadas não coincidem, voltando ao menu principal...\n")
+        main_menu()
+        quit()
 
     registered(name, usuario, email, senha)
 
@@ -114,32 +142,26 @@ def pesquisa(p):
         Titulo = key_word
         if (table_livro.read('titulo', titulo = Titulo, search_type = 'titulo')):
 
-            print("\nLivro encontrado, deseja comprá-lo?\n")
-            while True:
-                encontrou = input(  
-                        "* (S) Sim \n"
-                        "* (N) Não \n"
-                        "--> "
-                        ).upper()
-
-                if encontrou not in ["N", "S"]:
-                    print("\nResposta inválida, tente novamente...")
-                    continue
+            if loggedIn:
+                print("\nLivro encontrado, deseja comprá-lo?\n")
+                comprar = SimNao()
+                if comprar == "S":
+                    compra(Titulo)
                 else:
-                    break
-
-            if encontrou == "S":
-                compra(Titulo)
+                    print("\nCompra cancelada")
             else:
-                print("\nCompra cancelada")
-            
+                print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
+                deseja = SimNao()
+                if deseja == "S":
+                    Login()
+                
         else:
             print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'")
 
     elif p == "A":
         Autor = key_word
         #a ser testado
-        if (ret := table_livro.read('autor', autor = Autor, search_type = 'autor')):
+        if (ret := table_livro.read('titulo', autor = Autor, search_type = 'autor')):
 
             print(f"\nLivros escritos por {Autor}:")
             for row in ret:
@@ -152,8 +174,11 @@ def pesquisa(p):
         #a ser testado
         if (ret := table_livro.read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
             print(f"\nLivros publicados no ano de {anoPublicacao}:")
+            i = 0
             for row in ret:
-                print("  - " + row[0])
+                i+=1
+                print(f" {i} - {row[0]}")
+            
         else:
             print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}")
     
@@ -190,9 +215,8 @@ def quitLibrary():
     quit()
 
 
-def main_menu():
+def menu():
     menu_c = ["L", "C", "P", "Q"]
-
     print("O que deseja fazer?")
     while True:
         choice = input( 
@@ -211,7 +235,39 @@ def main_menu():
         else:
             break
 
-    
+    if choice   == "L":
+        Login()
+    elif choice == "C":
+        Register()
+    elif choice == "P":
+        bookSearch()
+    elif choice == "Q":
+        quitLibrary()
+    else:
+        print("Deu ruim")
+        exit(-666)
+
+
+def menuloggedIn(usuario):
+    print(f"\n\tBem vindo de volta {usuario}!\n")
+    menu_c = ["C", "P", "S", "Q"]
+    print("O que deseja fazer?")
+    while True:
+        choice = input( 
+                "* (C) Realizar compra\n"
+                "* (P) Ver todos seus pedidos\n"
+                "* (S) Sair da conta\n"
+                "* (Q) Sair do sistema\n"
+                "-> "
+                )
+
+        choice = choice.upper()
+
+        if choice not in  menu_c:
+            print("\nDesculpe, tente novamente...\n")
+            continue
+        else:
+            break
 
     if choice   == "L":
         Login()
@@ -224,22 +280,35 @@ def main_menu():
     else:
         print("Deu ruim")
         exit(-666)
-    
 
 
+def main_menu():
+    if loggedIn:
+        menuloggedIn()
+    else:
+        menu()
 
+
+def main():
+    print("\n\t########################################################\n"
+            "\t######## Olá seja bem vindo a livraria Tuko! ###########\n"
+            "\t########################################################\n")
+    main_menu()
+
+if __name__ == "__main__":
+    main()
 
 
 # Testando o uso de dataFrames^^^^^^^^^^^^^
-def get_books():
-    for row in tables['livro'].read_all():
-        print(row)
-    print()
+# def get_books():
+#     for row in tables['livro'].read_all():
+#         print(row)
+#     print()
 
-def get_users():
-    for row in tables['cliente'].read_all():
-        print(row)
-    print()
+# def get_users():
+#     for row in tables['cliente'].read_all():
+#         print(row)
+#     print()
 
 # def main():
 #     # Create an engine instance
@@ -256,13 +325,3 @@ def get_users():
 #     get_books()
 #     get_users()
 # Testando o uso de dataFrames^^^^^^^^^^^^^
-
-def main():
-    print("\n\t########################################################\n"
-            "\t######## Olá seja bem vindo a livraria Tuko! ###########\n"
-            "\t########################################################\n")
-    main_menu()
-
-if __name__ == "__main__":
-    main()
-
