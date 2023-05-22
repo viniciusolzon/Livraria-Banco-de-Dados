@@ -26,7 +26,7 @@ def checkUsername(Usuario):
 
 def checkPassword(Usuario, senha):
     # checa se a senha do usuário coincide com a senha registrada desse usuaŕio na tabela "cliente"
-    if tables['cliente'].read('senha', usuario = Usuario, search_type = "usuario") == senha:
+    if tables['cliente'].read('senha', usuario = Usuario, search_type = "usuario")[0][0] == senha:
         return True
     # se digitada corretamente, libera o login
     return False
@@ -95,7 +95,7 @@ def Register():
 
 
 def compra(titulo):
-    print("Comprado")
+    print("Livro comprado!")
     pass
 
 

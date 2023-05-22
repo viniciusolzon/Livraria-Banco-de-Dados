@@ -20,7 +20,7 @@ tables['estoque'] = EstoqueTable()
 
 
 # Preenchendo a tabela de cliente
-# tables['cliente'].insert("Vinicius Freitas", "viniciusolzon", "1234", "vinicius@fake.com")
-# tables['cliente'].insert("Victor Mororo", "mororo", "4321", "victor@fake.com")
+# tables['cliente'].insert("Vinicius Freitas", "viniciusolzon", "vinicius@fake.com", "1234")
+# tables['cliente'].insert("Victor Mororo", "mororo", "victor@fake.com", "4321")
 
 # Preenchendo a tabela de vendas
