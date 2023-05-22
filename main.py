@@ -45,18 +45,18 @@ def registered(name, usuario, email, senha):
 
 
 def Login():
-    print("""\n\t#####################
-\t### Tela de Login ###
-\t#####################""")
+    print("\n\t#####################"
+            "\t### Tela de Login ###"
+            "\t#####################")
           
     usuario = input("\n\tNome de usuário: ")
-    if(checkUsername(usuario)):
+    if (checkUsername(usuario)):
         print("\nEsse nome de usuário ainda não possui cadastro na livraria, voltando ao menu principal...\n")
         main_menu()
         quit()
 
     senha = input("\tSenha: ")
-    if(not checkPassword(usuario, senha)):
+    if (not checkPassword(usuario, senha)):
         print("\nA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
         main_menu()
         quit()
@@ -65,9 +65,9 @@ def Login():
 
 
 def Register():
-    print("""\n\t########################
-\t### Tela de Cadastro ###
-\t########################""")
+    print("\n\t########################"
+            "\t### Tela de Cadastro ###"
+            "\t########################")
           
     name = input("\n\tNome completo: ")
     # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
@@ -100,13 +100,35 @@ def compra(titulo):
 
 
 def pesquisa(p):
-    if p.upper() == "T":
-        Titulo = input("\nPor favor digite o título do livro desejado:\n-> ")
-        if(tables['livro'].read('titulo', titulo = Titulo, search_type = 'titulo')):
-            encontrou = input("\nLivro encontrado, deseja comprá-lo?\n* Sim (s)\n* Não (n)\n")
-            while(encontrou.upper() != "S" and encontrou.upper() != "N"):
-                encontrou = input("\nDesculpe, tente novamente...\nLivro encontrado, deseja comprá-lo?\n* Sim (s)\n* Não (n)\n")
-            if(encontrou.upper() == "S"):
+
+    search_type = {
+            "T" : "titulo",
+            "A" : "autor",
+            "P" : "ano de publicacao"
+            }[p]
+
+    key_word = input(f"\nPor favor digite o {search_type} do livro desejado:\n-> ")
+    table_livro = tables['livro']
+
+    if p == "T":
+        Titulo = key_word
+        if (table_livro.read('titulo', titulo = Titulo, search_type = 'titulo')):
+
+            print("\nLivro encontrado, deseja comprá-lo?\n")
+            while True:
+                encontrou = input(  
+                        "* (S) Sim \n"
+                        "* (N) Não \n"
+                        "--> "
+                        ).upper()
+
+                if encontrou not in ["N", "S"]:
+                    print("\nResposta inválida, tente novamente...")
+                    continue
+                else:
+                    break
+
+            if encontrou == "S":
                 compra(Titulo)
             else:
                 print("\nCompra cancelada")
@@ -114,20 +136,23 @@ def pesquisa(p):
         else:
             print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'")
 
-    elif p.upper() == "A":
-        Autor = input("\nPor favor digite o autor do livro desejado:\n-> ")
-        if(tables['livro'].read('autor', autor = Autor, search_type = 'autor')):
+    elif p == "A":
+        Autor = key_word
+        #a ser testado
+        if (ret := table_livro.read('autor', autor = Autor, search_type = 'autor')):
+
             print(f"\nLivros escritos por {Autor}:")
-            for row in tables['livro'].read('titulo', autor = Autor, search_type = 'autor'):
+            for row in ret:
                 print("  - " + row[0])
         else:
             print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'")
     
     else:
-        anoPublicacao = input("\nPor favor digite o ano de publicação do livro desejado:\n-> ")
-        if(tables['livro'].read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
+        anoPublicacao = key_word
+        #a ser testado
+        if (ret := table_livro.read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
             print(f"\nLivros publicados no ano de {anoPublicacao}:")
-            for row in tables['livro'].read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao'):
+            for row in ret:
                 print("  - " + row[0])
         else:
             print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}")
@@ -138,9 +163,25 @@ def pesquisa(p):
 
 
 def bookSearch():
-    p = input("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n* Pesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n\n-> ")
-    while(p.upper() != "T" and p.upper() != "A" and p.upper() != "P"):
-        p = input("\nDesculpe, tente novamente...\nPesquisa por título (T)\n* Pesquisa por autor (A)\n* Pesquisa por ano de publicação (P)\n\n-> ")
+    search_c = ["T", "A", "P"]
+
+    print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
+
+    while True:
+        p = input(  
+                "* (T) Pesquisa por título \n"
+                "* (A) Pesquisa por autor \n"
+                "* (P) Pesquisa por ano de publicação \n\n"
+                "-> "
+                )
+        p = p.upper()
+
+        if p not in search_c:
+            print("\nDesculpe, tente novamente...\n")
+            continue
+        else:
+            break
+
     pesquisa(p)
 
 
@@ -150,18 +191,41 @@ def quitLibrary():
 
 
 def main_menu():
-    choice = input("O que deseja fazer?\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n* Sair do sistema (Q)\n-> ")
-    while(choice.upper() != "L" and choice.upper() != "C" and choice.upper() != "P" and choice.upper() != "Q"):
-        choice = input("\nDesculpe, tente novamente...\n* Realizar login (L)\n* Realizar cadastro (C)\n* Pesquisar livro sem cadastro (P)\n\n-> ")
-    if choice.upper() == "L":
-        Login()
-    elif choice.upper() == "C":
-        Register()
-    elif choice.upper() == "P":
-        bookSearch()
-    else:
-        quitLibrary()
+    menu_c = ["L", "C", "P", "Q"]
+
+    print("O que deseja fazer?")
+    while True:
+        choice = input( 
+                "* (L) Realizar login \n"
+                "* (C) Realizar cadastro \n"
+                "* (P) Pesquisar livro sem cadastro \n"
+                "* (Q) Sair do sistema \n"
+                "-> "
+                )
+
+        choice = choice.upper()
+
+        if choice not in  menu_c:
+            print("\nDesculpe, tente novamente...\n")
+            continue
+        else:
+            break
+
     
+
+    if choice   == "L":
+        Login()
+    elif choice == "C":
+        Register()
+    elif choice == "P":
+        bookSearch()
+    elif choice == "Q":
+        quitLibrary()
+    else:
+        print("Deu ruim")
+        exit(-666)
+    
+
 
 
 
@@ -194,9 +258,9 @@ def get_users():
 # Testando o uso de dataFrames^^^^^^^^^^^^^
 
 def main():
-    print("""\n\t########################################################
-\t######## Olá seja bem vindo a livraria Tuko! ###########
-\t########################################################\n""")
+    print("\n\t########################################################\n"
+            "\t######## Olá seja bem vindo a livraria Tuko! ###########\n"
+            "\t########################################################\n")
     main_menu()
 
 if __name__ == "__main__":
