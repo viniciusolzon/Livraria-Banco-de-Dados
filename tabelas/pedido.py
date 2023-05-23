@@ -66,7 +66,7 @@ class PedidoTable(Connection):
             print("Error updating pedido", error)
 
     # INSERT
-    def insert(self, id_cliente, id_livro, custo):
+    def insert(self, id_cliente = 0, id_livro = 0, custo = 0):
         try:
             sql = f"INSERT INTO pedido (id_cliente, id_livro, custo) VALUES ({id_cliente}, {id_livro}, {custo})"
 

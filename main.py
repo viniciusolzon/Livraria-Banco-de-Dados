@@ -122,9 +122,18 @@ def Register():
     registered(name, usuario, email, senha)
 
 
-def compra():
-    print("Livro comprado!")
-    pass
+def compra(loggedIn):
+    livros= tables['livro']
+    clientes = tables['cliente']
+    pedidos = tables['pedido']
+    # pedidos.insert(id_cliente = 0, id_livro = 0, custo = 0)
+    # Falta arrumar aqui em cima no insert
+    print("\nProcessando compra...")
+    print("\nLivro comprado!")
+    print("Seu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
+    print("\nVoltando ao menu da sua conta...\n")
+    menuloggedIn(loggedIn)
+    
 
 
 def pesquisa(p, loggedIn):
@@ -146,7 +155,7 @@ def pesquisa(p, loggedIn):
                 print("\nLivro encontrado, deseja comprá-lo?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    compra()
+                    compra(loggedIn)
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
@@ -178,14 +187,21 @@ def pesquisa(p, loggedIn):
             print(f"\nLivros escritos por {Autor}:")
             i = 0
             for row in ret:
-                i +=1
-                print(f" {i} - {row[0]}")
+                if i <=50:
+                    i +=1
+                    print(f" {i} - {row[0]}")
+                else:
+                    print("...")
+                    break
 
             if loggedIn:
                 print("\nDeseja comprar algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    compra()
+                    index = int(input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> "))
+                    while index <= 0 or index >= i:
+                        index = int(input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> "))
+                    compra(loggedIn)
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
@@ -215,13 +231,21 @@ def pesquisa(p, loggedIn):
             print(f"\nLivros publicados no ano de {anoPublicacao}:")
             i = 0
             for row in ret:
-                i+=1
-                print(f" {i} - {row[0]}")
+                if i <=50: # pra mostrar só os 50 primeiros livros
+                    i+=1
+                    print(f" {i} - {row[0]}")
+                else:
+                    print("...")
+                    break
+
             if loggedIn:
                 print("\nDeseja comprar algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    compra()
+                    index = int(input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> "))
+                    while index <= 0 or index >= i:
+                        index = int(input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> "))
+                    compra(loggedIn)
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
