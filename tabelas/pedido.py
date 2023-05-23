@@ -19,7 +19,7 @@ class PedidoTable(Connection):
         self.commit()
 
     #READ/Search
-    def read(self, select, id_pedido = 0, id_cliente = 0, id_livro = 0, custo = 0, search_type = "id_cliente"):
+    def read(self, select = '*', id_pedido = 0, id_cliente = 0, id_livro = 0, custo = 0, search_type = "id_cliente"):
         try:
             sql = f'SELECT {select} FROM pedido WHERE id_cliente = {id_cliente}'
 

@@ -18,10 +18,9 @@ class LivroTable(Connection):
         self.commit()
 
     # READ/Search
-    def read(self, select, id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
+    def read(self, select = '*', id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
         try:
             sql = f"SELECT {select} FROM livro WHERE titulo = '{titulo}'"
-            # sql = f"SELECT titulo FROM livro WHERE titulo = 'Romeu e Julieta'"
 
             if search_type == "id":
                 sql = f"SELECT {select} FROM livro WHERE id_livro = {id_livro}"
@@ -40,6 +39,7 @@ class LivroTable(Connection):
             return False
         except Exception as error:
             print("Record not found in LivroTable", error)
+            
 
     def read_all(self, id_livro = 0):
         try:
