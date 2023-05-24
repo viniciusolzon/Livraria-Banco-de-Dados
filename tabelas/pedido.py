@@ -51,13 +51,12 @@ class PedidoTable(Connection):
             print("Record not found in PedidoTable", error)
 
     # UPDATE
-    def update(self, desconto, id_pedido = 0, id_cliente = 0, update_type = 'id_pedido'):
+    def update(self, desconto = 0.0, id_pedido = 0, id_cliente = 0, update_type = 'id_pedido'):
         try:
-            sql = f'UPDATE pedido SET custo = custo * {desconto} WHERE id_pedido = {id_pedido}' # desconto por pedido
+            sql = f'UPDATE pedido SET custo = custo * {1 - desconto} WHERE id_pedido = {id_pedido}' # desconto por pedido
 
-            if update_type == 'id_cliente':        
-                sql = f'UPDATE pedido SET custo = custo * {desconto} WHERE id_cliente = {id_cliente}' # desconto por cliente
-
+            if update_type == 'id_cliente':
+                sql = f'UPDATE pedido SET custo = custo * {1 - desconto} WHERE id_cliente = {id_cliente}' # desconto por cliente
 
             self.execute(sql)
             self.commit()

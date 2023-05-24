@@ -74,7 +74,7 @@ class LivroTable(Connection):
             print("Error updating livro", error)
 
     # INSERT
-    def insert(self, titulo, autor, ano_publicacao, preco):
+    def insert(self, titulo = '', autor = '', ano_publicacao = 0, preco = 0.0):
         try:
             sql = f"INSERT INTO livro (titulo, autor, ano_publicacao, preco) VALUES ('{titulo}', '{autor}', {ano_publicacao}, {preco})"
 

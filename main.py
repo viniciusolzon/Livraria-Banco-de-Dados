@@ -47,8 +47,8 @@ def checkPassword(Usuario, senha):
     return False
 
 
-def registered(name, usuario, email, senha):
-    tables['cliente'].insert(name, usuario, email, senha)
+def registered(Nome, Usuario, Email, Senha, flamengo):
+    tables['cliente'].insert(nome = Nome, usuario = Usuario, email = Email, senha = Senha, isFlamengo = flamengo)
     print("\n\tRegistro feito com sucesso!\n")
     main_menu()
     quit()
@@ -81,8 +81,9 @@ def Login():
             main_menu()
             quit()
 
+
     loggedIn = True
-    menuloggedIn(loggedIn)
+    menuloggedIn(loggedIn, usuario)
     quit()
 
 
@@ -119,24 +120,17 @@ def Register():
         main_menu()
         quit()
 
-    registered(name, usuario, email, senha)
+    print(("\n\tÉ flamenguista?: "))
+    isFlamengo = SimNao()
+    if isFlamengo == "S":
+        isFlamengo = True
+    else:
+        isFlamengo = False
+
+    registered(name, usuario, email, senha, isFlamengo)
 
 
-def compra(loggedIn):
-    livros= tables['livro']
-    clientes = tables['cliente']
-    pedidos = tables['pedido']
-    # pedidos.insert(id_cliente = 0, id_livro = 0, custo = 0)
-    # Falta arrumar aqui em cima no insert
-    print("\nProcessando compra...")
-    print("\nLivro comprado!")
-    print("Seu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
-    print("\nVoltando ao menu da sua conta...\n")
-    menuloggedIn(loggedIn)
-    
-
-
-def pesquisa(p, loggedIn):
+def pesquisa(p, loggedIn, usuario = ''):
 
     search_type = {
             "T" : "titulo",
@@ -155,11 +149,11 @@ def pesquisa(p, loggedIn):
                 print("\nLivro encontrado, deseja comprá-lo?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    compra(loggedIn)
+                    compra(loggedIn, usuario, Titulo)
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
-                    menuloggedIn(loggedIn)
+                    menuloggedIn(loggedIn, usuario)
             else:
                 print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
                 deseja = SimNao()
@@ -175,7 +169,7 @@ def pesquisa(p, loggedIn):
             print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn)
+                menuloggedIn(loggedIn, usuario)
             else:
                 print("\nVoltando ao menu principal...\n")
                 main_menu()
@@ -198,14 +192,16 @@ def pesquisa(p, loggedIn):
                 print("\nDeseja comprar algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    index = int(input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> "))
-                    while index <= 0 or index >= i:
-                        index = int(input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> "))
-                    compra(loggedIn)
+                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                    print(f"i = {i}")
+                    while not index.isnumeric() or int(index) <= 0 or int(index) > i:
+                        index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                    
+                    compra(loggedIn, usuario, ret[0][0])
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
-                    menuloggedIn(loggedIn)
+                    menuloggedIn(loggedIn, usuario)
             else:
                 print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                 deseja = SimNao()
@@ -218,7 +214,7 @@ def pesquisa(p, loggedIn):
             print(f"\nNenhum livro no estoque da livraria foi escrito por {Autor}")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn)
+                menuloggedIn(loggedIn, usuario)
             else:
                 print("\nVoltando ao menu principal...\n")
                 main_menu()
@@ -242,14 +238,14 @@ def pesquisa(p, loggedIn):
                 print("\nDeseja comprar algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S":
-                    index = int(input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> "))
-                    while index <= 0 or index >= i:
-                        index = int(input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> "))
-                    compra(loggedIn)
+                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                    while not index.isnumeric() or int(index) <= 0 or int(index) > i:
+                        index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                    compra(loggedIn, usuario, ret[0][0])
                 else:
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
-                    menuloggedIn(loggedIn)
+                    menuloggedIn(loggedIn, usuario)
             else:
                 print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                 deseja = SimNao()
@@ -262,14 +258,14 @@ def pesquisa(p, loggedIn):
             print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn)
+                menuloggedIn(loggedIn, usuario)
             else:
                 print("\nVoltando ao menu principal...\n")
                 main_menu()
     quit()
 
 
-def bookSearch(loggedIn):
+def bookSearch(loggedIn, usuario = ''):
     search_c = ["T", "A", "P"]
 
     print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
@@ -289,7 +285,7 @@ def bookSearch(loggedIn):
         else:
             break
 
-    pesquisa(p, loggedIn)
+    pesquisa(p, loggedIn, usuario)
 
 
 def quitLibrary():
@@ -297,8 +293,52 @@ def quitLibrary():
     print("\n\tObrigado por visitar a livraria Tuko!\n")
     quit()
 
+
+def compra(loggedIn, Usuario, Titulo):
+    livros = tables['livro']
+    clientes = tables['cliente']
+    pedidos = tables['pedido']
+
+    idCliente = clientes.read('id_cliente', usuario = Usuario, search_type = 'usuario')[0][0]
+    idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')[0][0]
+    preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')[0][0]
+
+    # print()
+    # print(f"Cliente = {Usuario}")
+    # print(f"idCliente = {idCliente}")
+    # print(f"idLivro = {idLivro}")
+    # print(f"preco = {preco}")
+
+    pedidos.insert(id_cliente = idCliente, id_livro = idLivro, custo = preco)
+    
+    print("\nProcessando compra...")
+    print("Pagemento autorizado.")
+    print("Livro comprado!")
+    print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
+    print("\nVoltando ao menu da sua conta...")
+    menuloggedIn(loggedIn, Usuario)
+
+
+# def verPedidos(usuario):
 def verPedidos():
-    print("\nAqui seus pedidos\n")
+    # livros = tables['livro']
+    # pedidos = tables['pedido']
+    # clientes = tables['cliente']
+
+    # idCliente = clientes.read('id_cliente', usuario = Usuario, search_type = 'usuario')
+    # idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')
+    # preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')
+
+    # print("\nAqui seus pedidos\n")
+    # if(ret := pedidos.read('id_livro, preco',  id_cliente = idCliente, search_type = 'id_cliente')):
+    #     i = 0
+    #     for row in ret:
+    #         if i <=50: # pra mostrar só os 50 primeiros livros
+    #             i+=1
+    #             print(f" {i} - {row[0]}")
+    #         else:
+    #             print("...")
+    #             break
     pass
 
 def menu(loggedIn):
@@ -334,7 +374,7 @@ def menu(loggedIn):
         exit(-666)
 
 
-def menuloggedIn(loggedIn):
+def menuloggedIn(loggedIn, usuario):
 
     print(f"\n\tOlá seja bem vindo de volta!\n")
     menu_c = ["C", "P", "S", "Q"]
@@ -357,7 +397,7 @@ def menuloggedIn(loggedIn):
             break
 
     if choice   == "C":
-        bookSearch(loggedIn)
+        bookSearch(loggedIn, usuario)
     elif choice == "P":
         verPedidos()
     elif choice == "S":
@@ -372,8 +412,9 @@ def menuloggedIn(loggedIn):
 
 def main_menu():
     loggedIn = False
+    usuario = "\nbugou!!!\n"
     if loggedIn:
-        menuloggedIn(loggedIn)
+        menuloggedIn(loggedIn, usuario)
     else:
         menu(loggedIn)
 
@@ -388,7 +429,7 @@ if __name__ == "__main__":
     main()
 
 
-# Testando o uso de dataFrames^^^^^^^^^^^^^
+# Testando o uso de dataFrames
 # def get_books():
 #     for row in tables['livro'].read_all():
 #         print(row)
@@ -413,4 +454,4 @@ if __name__ == "__main__":
     
 #     get_books()
 #     get_users()
-# Testando o uso de dataFrames^^^^^^^^^^^^^
+# Testando o uso de dataFrames

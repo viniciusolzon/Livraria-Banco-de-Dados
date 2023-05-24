@@ -11,14 +11,15 @@ class ClienteTable(Connection):
             nome VARCHAR(255) NOT NULL,
             usuario VARCHAR(255) NOT NULL,
             senha VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL
+            email VARCHAR(255) NOT NULL,
+            isFlamengo BOOLEAN NOT NULL
         );
         """
         self.execute(sql)
         self.commit()
 
     # READ/Search
-    def read(self, select = '*', id_cliente = 0, nome = '', usuario = '', email = '', senha = '', search_type = 'nome'):
+    def read(self, select = '*', id_cliente = 0, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, search_type = 'nome'):
         try:
             sql = f"SELECT {select} FROM cliente WHERE nome = '{nome}'"
 
@@ -30,6 +31,8 @@ class ClienteTable(Connection):
                 sql = f"SELECT {select} FROM cliente WHERE email = '{email}'"
             elif search_type ==  "senha":
                 sql = f"SELECT {select} FROM cliente WHERE senha = '{senha}'"
+            elif search_type ==  "isFlamengo":
+                sql = f"SELECT {select} FROM cliente WHERE isFlamengo = {isFlamengo}"
 
             data = self.query(sql)
             if data:
@@ -52,7 +55,7 @@ class ClienteTable(Connection):
             print("Record not found in ClienteTable", error)
 
     # UPDATE
-    def update(self, id_cliente, nome = '', usuario = '', email = '', senha = '', update_type="nome"):
+    def update(self, id_cliente, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, update_type="nome"):
         try:
             sql = f"UPDATE cliente SET nome = '{nome}' WHERE id_cliente = {id_cliente}"
             
@@ -70,9 +73,9 @@ class ClienteTable(Connection):
             print("Error updating cliente", error)
 
     # INSERT
-    def insert(self, nome, usuario, email, senha):
+    def insert(self, nome = '', usuario = '', email = '', senha = '', isFlamengo = False):
         try:
-            sql = f"INSERT INTO cliente (nome, usuario, email, senha) VALUES ('{nome}', '{usuario}', '{email}', '{senha}')"
+            sql = f"INSERT INTO cliente (nome, usuario, email, senha, isFlamengo) VALUES ('{nome}', '{usuario}', '{email}', '{senha}', {isFlamengo})"
 
             self.execute(sql)
             self.commit()
@@ -80,7 +83,7 @@ class ClienteTable(Connection):
             print("Error inserting record", error)
 
     # DELETE
-    def delete(self, id_cliente):
+    def delete(self, id_cliente = 0):
         try:
             sql_search = f"SELECT * FROM cliente WHERE id_cliente = {id_cliente}"
 
