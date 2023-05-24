@@ -7,13 +7,16 @@ class LivroTable(Connection):
         Connection.__init__(self)
         sql = """
         CREATE TABLE IF NOT EXISTS livro(
-            id_livro SERIAL PRIMARY KEY NOT NULL,
-            preco FLOAT NOT NULL,
+            id_livro INT NOT NULL,
             titulo VARCHAR(255) NOT NULL,
             autor VARCHAR(255) NOT NULL,
-            ano_publicacao INT NOT NULL
+            ano_publicacao INT NOT NULL,
+            PRIMARY KEY (id_livro)
+
         );
         """
+        #preco FLOAT NOT NULL,
+
         self.execute(sql)
         self.commit()
 
@@ -28,8 +31,8 @@ class LivroTable(Connection):
                 sql = f"SELECT {select} FROM livro WHERE ano_publicacao = {ano_publicacao}"
             elif search_type == "autor":
                 sql = f"SELECT {select} FROM livro WHERE autor = '{autor}'"
-            elif search_type == "preco":
-                sql = f"SELECT {select} FROM livro WHERE preco = {preco}"
+            #elif search_type == "preco":
+                #sql = f"SELECT {select} FROM livro WHERE preco = {preco}"
 
             data = self.query(sql)
 
@@ -56,14 +59,14 @@ class LivroTable(Connection):
     # UPDATE
     def update(self, id_livro=0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, update_type = 'titulo'):
         try:
-            sql = f"UPDATE livro SET preco = {preco} WHERE id_livro = {id_livro}"
+            #sql = f"UPDATE livro SET preco = {preco} WHERE id_livro = {id_livro}"
 
             if update_type == "ano_publicacao":
                 sql = f"UPDATE livro SET ano_publicacao = {ano_publicacao} WHERE id_livro = {id_livro}"
             elif update_type == "autor":
                 sql = f"UPDATE livro SET autor = '{autor}' WHERE id_livro = {id_livro}"
-            elif update_type == "preco":
-                sql = f"UPDATE livro SET preco = {preco} WHERE id_livro = {id_livro}"
+            #elif update_type == "preco":
+                #sql = f"UPDATE livro SET preco = {preco} WHERE id_livro = {id_livro}"
             elif update_type == "titulo":
                 sql = f"UPDATE livro SET titulo = '{titulo}' WHERE id_livro = {id_livro}"
                 
@@ -74,9 +77,9 @@ class LivroTable(Connection):
             print("Error updating livro", error)
 
     # INSERT
-    def insert(self, titulo = '', autor = '', ano_publicacao = 0, preco = 0.0):
+    def insert(self, id_, titulo = '', autor = '', ano_publicacao = 0):
         try:
-            sql = f"INSERT INTO livro (titulo, autor, ano_publicacao, preco) VALUES ('{titulo}', '{autor}', {ano_publicacao}, {preco})"
+            sql = f"INSERT INTO livro (id_livro, titulo, autor, ano_publicacao) VALUES ({id_}, '{titulo}', '{autor}', {ano_publicacao})"
 
             self.execute(sql)
             self.commit()

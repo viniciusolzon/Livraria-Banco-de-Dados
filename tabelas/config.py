@@ -34,9 +34,22 @@ class Connection():
 
     # executa o comando SQL
     def execute(self, sql, params=None):
-        self.cur.execute(sql, params or ())
+        print(sql)
+        try:
+            self.cur.execute(sql, params or ())
+        except Exception as error:
+            print(error)
+            self.conn.rollback()
 
     # executa o comando SQL e dá o fetchall pra pegar os resultados desse comando
     def query(self, sql, params=None):
-        self.cur.execute(str(sql), params or ())
-        return self.fetchall()
+        print(sql)
+        ret = None
+        try:
+            self.cur.execute(str(sql), params or ())
+            ret = self.fetchall()
+        except Exception as error:
+            print(error)
+            self.conn.rollback()
+
+        return ret
