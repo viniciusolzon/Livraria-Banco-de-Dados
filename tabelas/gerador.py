@@ -10,7 +10,7 @@ tables['cliente'] = ClienteTable()
 tables['pedido'] = PedidoTable()
 tables['estoque'] = EstoqueTable()
 
-# Preenchendo a tabela de livros (rode o código uma vez com isso debaixo descomentado)
+# Preenchendo a tabela de livros (rode o código uma vez com isso debaixo descomentado para preencher as tableas)
 # tables['livro'].insert(titulo = "Codigo Limpo", autor = "Robert Cecil Martin", ano_publicacao = 2008, preco = 69.99)
 # tables['livro'].insert(titulo = "Romeu e Julieta", autor = "William Shakespeare", ano_publicacao = 1595,preco =  59.99)
 # tables['livro'].insert(titulo = "Contos De Voltaire", autor = "Voltaire", ano_publicacao = 1972,preco =  84.99)
@@ -19,6 +19,6 @@ tables['estoque'] = EstoqueTable()
 # tables['livro'].insert(titulo = "O Cortiço", autor = "Aluísio Azevedo", ano_publicacao = 1890, preco = 27.99)
 
 
-# Preenchendo a tabela de cliente (rode o código uma vez com isso debaixo descomentado)
+# Preenchendo a tabela de cliente (rode o código uma vez com isso debaixo descomentado para preencher as tableas)
 # tables['cliente'].insert(nome = "Vinicius Freitas", usuario = "viniciusolzon", email = "vinicius@fake.com", senha = "1234", isFlamengo = False)
 # tables['cliente'].insert(nome = "Victor Mororo", usuario = "mororo", email = "victor@fake.com", senha = "4321",  isFlamengo = True)

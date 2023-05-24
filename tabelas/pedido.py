@@ -38,9 +38,9 @@ class PedidoTable(Connection):
         except Exception as error:
             print("Record not found in PedidoTable", error)
 
-    def read_all(self, id_pedido = 0):
+    def read_all(self, select = '*'):
         try:
-            sql = f'SELECT * FROM pedido WHERE id_pedido = {id_pedido}'
+            sql = f'SELECT {select} FROM pedido'
 
             data = self.query(sql)
             if data:

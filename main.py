@@ -320,7 +320,7 @@ def compra(loggedIn, Usuario, Titulo):
 
 
 # def verPedidos(usuario):
-def verPedidos():
+def verPedidos(loggedIn, Usuario):
     # livros = tables['livro']
     # pedidos = tables['pedido']
     # clientes = tables['cliente']
@@ -329,26 +329,63 @@ def verPedidos():
     # idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')
     # preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')
 
-    # print("\nAqui seus pedidos\n")
+    print("\nAqui seus pedidos\n")
     # if(ret := pedidos.read('id_livro, preco',  id_cliente = idCliente, search_type = 'id_cliente')):
     #     i = 0
     #     for row in ret:
-    #         if i <=50: # pra mostrar só os 50 primeiros livros
+    #         if i <=50: # pra mostrar só os 50 primeiros pedidos
     #             i+=1
     #             print(f" {i} - {row[0]}")
     #         else:
     #             print("...")
     #             break
-    pass
+
+    print("\nVoltando ao menu da sua conta...")
+    menuloggedIn(loggedIn, Usuario)
+
+
+def mostra_clientes():
+    clientes = tables['cliente']
+    nomes = clientes.read_all('nome')
+    print("\nClientes cadastrados na livraria:")
+    i = 0
+    for row in nomes:
+        if i <=50: # pra mostrar só os 50 primeiros clientes
+            i+=1
+            print(f"Cliente {i} - {row[0]}")
+        else:
+            print("...")
+            break
+    print("\nVoltando ao menu principal...\n")
+    main_menu()
+
+
+def mostra_vendas():
+    pedidos = tables['pedido']
+    vendas = pedidos.read_all('id_pedido, custo')
+    print("\nVendas registradas na livraria:")
+    i = 0
+    for row in vendas:
+        if i <=50: # pra mostrar só as 50 primeiras vendas
+            i+=1
+            print(f"Venda {row[0]} - R$ {row[1]}")
+        else:
+            print("...")
+            break
+    print("\nVoltando ao menu principal...\n")
+    main_menu()
+
 
 def menu(loggedIn):
-    menu_c = ["L", "C", "P", "Q"]
+    menu_c = ["L", "C", "P", "U", "V", "Q"]
     print("O que deseja fazer?")
     while True:
         choice = input( 
                 "* (L) Realizar login \n"
                 "* (C) Realizar cadastro \n"
                 "* (P) Pesquisar livro \n"
+                "* (U) Ver clientes cadastrados \n"
+                "* (V) Ver vendas da livraria \n"
                 "* (Q) Sair do sistema \n"
                 "-> "
                 )
@@ -367,6 +404,10 @@ def menu(loggedIn):
         Register()
     elif choice == "P":
         bookSearch(loggedIn)
+    elif choice == "U":
+        mostra_clientes()
+    elif choice == "V":
+        mostra_vendas()
     elif choice == "Q":
         quitLibrary()
     else:
@@ -399,7 +440,7 @@ def menuloggedIn(loggedIn, usuario):
     if choice   == "C":
         bookSearch(loggedIn, usuario)
     elif choice == "P":
-        verPedidos()
+        verPedidos(loggedIn, usuario)
     elif choice == "S":
         print("\nVoltando ao menu principal...\n")
         menu(loggedIn)

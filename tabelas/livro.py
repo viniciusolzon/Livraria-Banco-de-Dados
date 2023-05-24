@@ -41,9 +41,9 @@ class LivroTable(Connection):
             print("Record not found in LivroTable", error)
             
 
-    def read_all(self, id_livro = 0):
+    def read_all(self, select = '*'):
         try:
-            sql = f"SELECT * FROM livro WHERE id_livro = {id_livro}"
+            sql = f"SELECT {select} FROM livro"
 
             data = self.query(sql)
             if data:

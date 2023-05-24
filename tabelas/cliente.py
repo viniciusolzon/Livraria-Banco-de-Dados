@@ -42,9 +42,9 @@ class ClienteTable(Connection):
         except Exception as error:
             print("Record not found in ClienteTable", error)
 
-    def read_all(self, id_cliente = 0):
+    def read_all(self, select = '*'):
         try:
-            sql = f"SELECT * FROM cliente WHERE id_cliente = {id_cliente}"
+            sql = f"SELECT {select} FROM cliente"
 
             data = self.query(sql)
             if data:

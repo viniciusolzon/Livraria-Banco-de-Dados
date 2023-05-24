@@ -28,9 +28,9 @@ class EstoqueTable(Connection):
         except Exception as error:
             print("Record not found in EstoqueTable", error)
 
-    def read_all(self):
+    def read_all(self, select = "*"):
         try:
-            sql = 'SELECT * FROM estoque'
+            sql = f'SELECT {select} FROM estoque'
             
             data = self.query(sql)
             if data:
