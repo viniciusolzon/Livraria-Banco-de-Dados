@@ -22,5 +22,3 @@ tables['estoque'] = EstoqueTable()
 # Preenchendo a tabela de cliente (rode o código uma vez com isso debaixo descomentado)
 # tables['cliente'].insert(nome = "Vinicius Freitas", usuario = "viniciusolzon", email = "vinicius@fake.com", senha = "1234", isFlamengo = False)
 # tables['cliente'].insert(nome = "Victor Mororo", usuario = "mororo", email = "victor@fake.com", senha = "4321",  isFlamengo = True)
-
-# Preenchendo a tabela de vendas
