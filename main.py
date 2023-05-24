@@ -120,7 +120,7 @@ def Register():
         main_menu()
         quit()
 
-    print(("\n\tÉ flamenguista?: "))
+    print(("\tÉ flamenguista?"))
     isFlamengo = SimNao()
     if isFlamengo == "S":
         isFlamengo = True
@@ -166,7 +166,7 @@ def pesquisa(p, loggedIn, usuario = ''):
 
 
         else:
-            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'")
+            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'.")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
                 menuloggedIn(loggedIn, usuario)
@@ -193,7 +193,6 @@ def pesquisa(p, loggedIn, usuario = ''):
                 comprar = SimNao()
                 if comprar == "S":
                     index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
-                    print(f"i = {i}")
                     while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                     
@@ -211,7 +210,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                     print("\nVoltando ao menu principal...\n")
                     main_menu()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi escrito por {Autor}")
+            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'.")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
                 menuloggedIn(loggedIn, usuario)
@@ -255,7 +254,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                     print("\nVoltando ao menu principal...\n")
                     main_menu()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}")
+            print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}.")
             if loggedIn:
                 print("\nVoltando ao menu da sua conta...\n")
                 menuloggedIn(loggedIn, usuario)
@@ -293,7 +292,6 @@ def quitLibrary():
     print("\n\tObrigado por visitar a livraria Tuko!\n")
     quit()
 
-
 def compra(loggedIn, Usuario, Titulo):
     livros = tables['livro']
     clientes = tables['cliente']
@@ -303,42 +301,55 @@ def compra(loggedIn, Usuario, Titulo):
     idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')[0][0]
     preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')[0][0]
 
-    # print()
-    # print(f"Cliente = {Usuario}")
-    # print(f"idCliente = {idCliente}")
-    # print(f"idLivro = {idLivro}")
-    # print(f"preco = {preco}")
-
-    pedidos.insert(id_cliente = idCliente, id_livro = idLivro, custo = preco)
+    print(f"\nConfirmar compra do livro '{Titulo}' no valor {preco:.2f}?")
+    deseja = SimNao()
     
-    print("\nProcessando compra...")
-    print("Pagemento autorizado.")
-    print("Livro comprado!")
-    print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
-    print("\nVoltando ao menu da sua conta...")
-    menuloggedIn(loggedIn, Usuario)
+    flamenguista = clientes.read('isFlamengo', usuario = Usuario, search_type = 'usuario')[0][0]
+    
+    if deseja == "S":
+        if flamenguista:
+            print("\nParabéns, você acaba de ganhar um desconto de 15% nessa compra por ser flamenguista.")
+            preco = preco * (1 - 0.15)
+        print(f"Processando pagamento...")
+        print(f"Compra autorizada no valor de R$ {preco:.2f}.")
+        pedidos.insert(id_cliente = idCliente, id_livro = idLivro, custo = preco)
+        print("Livro comprado!")
+        print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
+        print("\nVoltando ao menu da sua conta...")
+        menuloggedIn(loggedIn, Usuario)
+    else:      
+        print("\nVoltando ao menu da sua conta...")
+        menuloggedIn(loggedIn, Usuario)
 
 
-# def verPedidos(usuario):
 def verPedidos(loggedIn, Usuario):
-    # livros = tables['livro']
-    # pedidos = tables['pedido']
-    # clientes = tables['cliente']
+    clientes = tables['cliente']
 
-    # idCliente = clientes.read('id_cliente', usuario = Usuario, search_type = 'usuario')
-    # idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')
-    # preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')
+    idCliente = clientes.read('id_cliente', usuario = Usuario, search_type='usuario')[0][0]
+    if(idLivro := clientes.query(f"SELECT id_livro FROM pedido WHERE {idCliente} = pedido.id_cliente")):
+        print("\nHistórico dos seus pedidos:\n")
+        qtd_pedidos = clientes.query(f"SELECT COUNT (id_livro) FROM pedido WHERE {idCliente} = pedido.id_cliente")[0][0]
+        i = 0
+        for i in range (qtd_pedidos):
+            titulo = clientes.query(f"SELECT titulo FROM livro WHERE {idLivro[i][0]} = livro.id_livro")[0][0]
+            # print(titulo)
+            preco = clientes.query(f"SELECT custo FROM pedido WHERE {idCliente} = pedido.id_cliente")[i][0]
+            # print(preco)
+            print(f" {i+1} - {titulo} | R$ {preco:.2f}")    
+        if i>=50:
+            print("...")
+        
+        # i = 0
+        # for row in titulo, preco:
+        #     if i <=50: # pra mostrar só os 50 primeiros pedidos
+        #         i+=1
+        #         print(f" {i} - {row[0]} | R$ {row[1]}")
+        #     else:
+        #         print("...")
+        #         break
+    else:
+        print("\nVocê ainda não fez nenhum pedido.")
 
-    print("\nAqui seus pedidos\n")
-    # if(ret := pedidos.read('id_livro, preco',  id_cliente = idCliente, search_type = 'id_cliente')):
-    #     i = 0
-    #     for row in ret:
-    #         if i <=50: # pra mostrar só os 50 primeiros pedidos
-    #             i+=1
-    #             print(f" {i} - {row[0]}")
-    #         else:
-    #             print("...")
-    #             break
 
     print("\nVoltando ao menu da sua conta...")
     menuloggedIn(loggedIn, Usuario)
@@ -347,15 +358,19 @@ def verPedidos(loggedIn, Usuario):
 def mostra_clientes():
     clientes = tables['cliente']
     nomes = clientes.read_all('nome')
-    print("\nClientes cadastrados na livraria:")
-    i = 0
-    for row in nomes:
-        if i <=50: # pra mostrar só os 50 primeiros clientes
-            i+=1
-            print(f"Cliente {i} - {row[0]}")
-        else:
-            print("...")
-            break
+    if nomes:
+        print("\nClientes cadastrados na livraria:\n")
+        i = 0
+        for row in nomes:
+            if i <=50: # pra mostrar só os 50 primeiros clientes
+                i+=1
+                print(f"Cliente {i} - {row[0]}")
+            else:
+                print("...")
+                break
+    else:
+        print("\nNão há nenhum cliente cadastrado ainda.")
+
     print("\nVoltando ao menu principal...\n")
     main_menu()
 
@@ -363,15 +378,19 @@ def mostra_clientes():
 def mostra_vendas():
     pedidos = tables['pedido']
     vendas = pedidos.read_all('id_pedido, custo')
-    print("\nVendas registradas na livraria:")
-    i = 0
-    for row in vendas:
-        if i <=50: # pra mostrar só as 50 primeiras vendas
-            i+=1
-            print(f"Venda {row[0]} - R$ {row[1]}")
-        else:
-            print("...")
-            break
+    if vendas:
+        print("\nVendas registradas na livraria:\n")
+        i = 0
+        for row in vendas:
+            if i <=50: # pra mostrar só as 50 primeiras vendas
+                i+=1
+                print(f"Venda {row[0]} - R$ {row[1]:.2f}")
+            else:
+                print("...")
+                break
+    else:
+        print("\nNão há nenhuma venda registrada ainda.")
+        
     print("\nVoltando ao menu principal...\n")
     main_menu()
 
