@@ -339,14 +339,6 @@ def verPedidos(loggedIn, Usuario):
         if i>=50:
             print("...")
         
-        # i = 0
-        # for row in titulo, preco:
-        #     if i <=50: # pra mostrar só os 50 primeiros pedidos
-        #         i+=1
-        #         print(f" {i} - {row[0]} | R$ {row[1]}")
-        #     else:
-        #         print("...")
-        #         break
     else:
         print("\nVocê ainda não fez nenhum pedido.")
 
@@ -461,7 +453,8 @@ def menuloggedIn(loggedIn, usuario):
     elif choice == "P":
         verPedidos(loggedIn, usuario)
     elif choice == "S":
-        print("\nVoltando ao menu principal...\n")
+        print("\nCliente deslogado.")
+        print("Voltando ao menu principal...\n")
         menu(loggedIn)
     elif choice == "Q":
         quitLibrary()
