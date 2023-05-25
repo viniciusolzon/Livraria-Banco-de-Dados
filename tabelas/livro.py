@@ -20,6 +20,11 @@ class LivroTable(Connection):
         self.execute(sql)
         self.commit()
 
+        self.columns = ['id_livro', 'titulo', 'autor', 'ano_publicacao']
+
+    def getCols(self):
+        return self.columns
+
     # READ/Search
     def read(self, select = '*', id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
         try:
@@ -77,9 +82,9 @@ class LivroTable(Connection):
             print("Error updating livro", error)
 
     # INSERT
-    def insert(self, id_, titulo = '', autor = '', ano_publicacao = 0):
+    def insert(self, id_livro, titulo = '', autor = '', ano_publicacao = 0):
         try:
-            sql = f"INSERT INTO livro (id_livro, titulo, autor, ano_publicacao) VALUES ({id_}, '{titulo}', '{autor}', {ano_publicacao})"
+            sql = f"INSERT INTO livro (id_livro, titulo, autor, ano_publicacao) VALUES ({id_livro}, '{titulo}', '{autor}', {ano_publicacao})"
 
             self.execute(sql)
             self.commit()
@@ -87,7 +92,7 @@ class LivroTable(Connection):
             print("Error inserting record", error)
 
     # DELETE
-    def delete(self, id_livro = 0):
+    def delete(self, id_livro):
         try:
             sql_search = f"SELECT * FROM livro WHERE id_livro = {id_livro}"
 

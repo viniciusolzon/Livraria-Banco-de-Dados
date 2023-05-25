@@ -18,6 +18,11 @@ class ClienteTable(Connection):
         self.execute(sql)
         self.commit()
 
+        self.columns = ['usuario', 'nome', 'senha', 'email', 'isFlamengo']
+
+    def getCols(self):
+        return self.columns
+
     # READ/Search
     def read(self, select = '*', id_cliente = 0, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, search_type = 'nome'):
         try:
@@ -83,14 +88,14 @@ class ClienteTable(Connection):
             print("Error inserting record", error)
 
     # DELETE
-    def delete(self, id_cliente = 0):
+    def delete(self, usuario):
         try:
-            sql_search = f"SELECT * FROM cliente WHERE id_cliente = {id_cliente}"
+            sql_search = f"SELECT * FROM cliente WHERE usuario = '{usuario}'"
 
             if not self.query(sql_search):
                 return False
             
-            sql_delete = f"DELETE FROM cliente WHERE id_cliente = {id_cliente}"
+            sql_delete = f"DELETE FROM cliente WHERE usuario = '{usuario}'"
 
             self.execute(sql_delete)
             self.commit()

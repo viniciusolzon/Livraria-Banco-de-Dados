@@ -18,10 +18,15 @@ class PedidoTable(Connection):
         self.execute(sql)
         self.commit()
 
+        self.columns = ['id_pedido', 'custo', 'usuario']
+
+    def getCols(self):
+        return self.columns
+
     #READ/Search
     def read(self, usuario, select = '*', id_pedido = 0, id_livro = 0, custo = 0, search_type = "usuario"):
         try:
-            sql = f'SELECT {select} FROM pedido WHERE usuario = {usuario}'
+            sql = f"SELECT {select} FROM pedido WHERE usuario = '{usuario}'"
 
             if search_type == "id_pedido":
                 sql = f'SELECT {select} FROM pedido WHERE id_pedido = {id_pedido}'
@@ -51,12 +56,16 @@ class PedidoTable(Connection):
             print("Record not found in PedidoTable", error)
 
     # UPDATE
-    def update(self, desconto = 0.0, id_pedido = 0, id_cliente = 0, update_type = 'id_pedido'):
+    def update(self, id_pedido, usuario = None, custo = None, update_type = 'custo'):
         try:
-            sql = f'UPDATE pedido SET custo = custo * {1 - desconto} WHERE id_pedido = {id_pedido}' # desconto por pedido
+            #sql = f'UPDATE pedido SET custo = custo * {1 - desconto} WHERE id_pedido = {id_pedido}' # desconto por pedido
 
-            if update_type == 'id_cliente':
-                sql = f'UPDATE pedido SET custo = custo * {1 - desconto} WHERE id_cliente = {id_cliente}' # desconto por cliente
+            if update_type == 'usuario':
+                sql = f"UPDATE pedido SET usuario = '{usuario}' WHERE id_pedido = {id_pedido}"
+            elif update_type == 'custo':
+                sql = f"UPDATE pedido SET custo = {custo} WHERE id_pedido = {id_pedido}" # desconto por cliente
+            else:
+                print("lascou")
 
             self.execute(sql)
             self.commit()
@@ -65,17 +74,18 @@ class PedidoTable(Connection):
             print("Error updating pedido", error)
 
     # INSERT
-    def insert(self, id_cliente = 0, id_livro = 0, custo = 0):
+    def insert(self, usuario, custo):
         try:
-            sql = f"INSERT INTO pedido (id_cliente, id_livro, custo) VALUES ({id_cliente}, {id_livro}, {custo})"
+            sql = f"INSERT INTO pedido (usuario, custo) VALUES ('{usuario}', {custo}); SELECT CURRVAL('pedido_id_pedido_seq');"
 
             self.execute(sql)
             self.commit()
+            return self.fetchall()[0][0]
         except Exception as error:
             print("Error inserting record", error)
 
     # DELETE
-    def delete(self, id_pedido = 0):
+    def delete(self, id_pedido):
         try:
             sql_search = f"SELECT * FROM pedido WHERE id_pedido = {id_pedido}"
 

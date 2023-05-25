@@ -14,6 +14,7 @@ class Connection():
         try:
             self.conn = db.connect(**self.config["postgres"])
             self.cur = self.conn.cursor()
+            self.cur.execute("CREATE EXTENSION IF NOT EXISTS unaccent;")
         except Exception as error:
             print("Error connecting to postgres database", error)
             exit(1)
@@ -30,7 +31,11 @@ class Connection():
         return self.conn.commit()
     
     def fetchall(self):
-        return self.cur.fetchall()
+        try:
+            return self.cur.fetchall()
+        except Exception as error:
+            print(error)
+            self.conn.rollback()
 
     # executa o comando SQL
     def execute(self, sql, params=None):
