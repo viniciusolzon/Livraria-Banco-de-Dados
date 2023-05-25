@@ -1,11 +1,11 @@
-# import os
 # import pandas as pd
 # from sqlalchemy import create_engine
 from tabelas.gerador import tables
+import os
 
 # Limpa o terminal
-# def clear_terminal():
-#     os.system('cls' if os.name == 'nt' else 'clear')
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 loggedIn = False
 
@@ -49,6 +49,7 @@ def checkPassword(Usuario, senha):
 
 def registered(Nome, Usuario, Email, Senha, flamengo):
     tables['cliente'].insert(nome = Nome, usuario = Usuario, email = Email, senha = Senha, isFlamengo = flamengo)
+    clear_terminal()
     print("\n\tRegistro feito com sucesso!\n")
     main_menu()
     quit()
@@ -81,7 +82,7 @@ def Login():
             main_menu()
             quit()
 
-
+    clear_terminal()
     loggedIn = True
     menuloggedIn(loggedIn, usuario)
     quit()
@@ -133,17 +134,28 @@ def Register():
 def pesquisa(p, loggedIn, usuario = ''):
 
     search_type = {
-            "V" : "amostra",
+            "D" : "amostra",
             "T" : "titulo",
             "A" : "autor",
-            "P" : "ano de publicacao"
+            "P" : "ano de publicacao",
+            "V" : "Voltar"
             }[p]
 
     table_livro = tables['livro']
 
     if p == "V":
+        clear_terminal()
+        if loggedIn:
+            print("\nVoltando ao menu da sua conta...\n")
+            menuloggedIn(loggedIn, usuario)
+        print("\nVoltando ao menu principal...\n")
+        main_menu()
+            
+
+    if p == "D":
         if (ret := table_livro.read_all('titulo')):
 
+            clear_terminal()
             print(f"\nAlguns livros contidos no estoque da nossa livraria:")
             i = 0
             for row in ret:
@@ -163,6 +175,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                     compra(loggedIn, usuario, ret[int(index) - 1][0])
                 else:
+                    clear_terminal()
                     print("\nCompra cancelada")
                     print("\nVoltando ao menu da sua conta...\n")
                     menuloggedIn(loggedIn, usuario)
@@ -170,12 +183,15 @@ def pesquisa(p, loggedIn, usuario = ''):
                 print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                 deseja = SimNao()
                 if deseja == "S" or deseja == "SIM":
+                    clear_terminal()
                     Login()
                 else:
+                    clear_terminal()
                     print("\nVoltando ao menu principal...\n")
                     main_menu()
                     
     else:
+        clear_terminal()
         key_word = input(f"\nPor favor informe o {search_type} do livro desejado:\n-> ")
         
         if p == "T":
@@ -188,6 +204,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                     if comprar == "S" or comprar == "SIM":
                         compra(loggedIn, usuario, Titulo)
                     else:
+                        clear_terminal()
                         print("\nCompra cancelada")
                         print("\nVoltando ao menu da sua conta...\n")
                         menuloggedIn(loggedIn, usuario)
@@ -195,8 +212,10 @@ def pesquisa(p, loggedIn, usuario = ''):
                     print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
                     deseja = SimNao()
                     if deseja == "S" or deseja == "SIM":
+                        clear_terminal()
                         Login()
                     else:
+                        clear_terminal()
                         print("\nVoltando ao menu principal...\n")
                         main_menu()
                         
@@ -215,6 +234,7 @@ def pesquisa(p, loggedIn, usuario = ''):
             Autor = key_word
             if (ret := table_livro.read('titulo', autor = Autor, search_type = 'autor')):
 
+                clear_terminal()
                 print(f"\nLivros escritos por {Autor}:")
                 i = 0
                 for row in ret:
@@ -235,6 +255,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                         
                         compra(loggedIn, usuario, ret[int(index) - 1][0])
                     else:
+                        clear_terminal()
                         print("\nCompra cancelada")
                         print("\nVoltando ao menu da sua conta...\n")
                         menuloggedIn(loggedIn, usuario)
@@ -242,8 +263,10 @@ def pesquisa(p, loggedIn, usuario = ''):
                     print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                     deseja = SimNao()
                     if deseja == "S" or deseja == "SIM":
+                        clear_terminal()
                         Login()
                     else:
+                        clear_terminal()
                         print("\nVoltando ao menu principal...\n")
                         main_menu()
             else:
@@ -260,6 +283,7 @@ def pesquisa(p, loggedIn, usuario = ''):
             anoPublicacao = key_word
             if (ret := table_livro.read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
 
+                clear_terminal()
                 print(f"\nLivros publicados no ano de {anoPublicacao}:")
                 i = 0
                 for row in ret:
@@ -279,6 +303,7 @@ def pesquisa(p, loggedIn, usuario = ''):
                             index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                         compra(loggedIn, usuario, ret[int(index) - 1][0])
                     else:
+                        clear_terminal()
                         print("\nCompra cancelada")
                         print("\nVoltando ao menu da sua conta...\n")
                         menuloggedIn(loggedIn, usuario)
@@ -286,8 +311,10 @@ def pesquisa(p, loggedIn, usuario = ''):
                     print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                     deseja = SimNao()
                     if deseja == "S" or deseja == "SIM":
+                        clear_terminal()
                         Login()
                     else:
+                        clear_terminal()
                         print("\nVoltando ao menu principal...\n")
                         main_menu()
             else:
@@ -302,16 +329,18 @@ def pesquisa(p, loggedIn, usuario = ''):
 
 
 def bookSearch(loggedIn, usuario = ''):
-    search_c = ["V", "T", "A", "P"]
-
+    clear_terminal()
+    
+    search_c = ["D", "T", "A", "P", "V"]
     print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
 
     while True:
         p = input(
-                "* (V) Ver alguns títulos disponíveis \n"
+                "* (D) Ver alguns títulos disponíveis \n"
                 "* (T) Pesquisa por título \n"
                 "* (A) Pesquisa por autor \n"
                 "* (P) Pesquisa por ano de publicação \n\n"
+                "* (V) Voltar \n\n"
                 "-> "
                 )
         p = p.upper()
@@ -339,6 +368,7 @@ def compra(loggedIn, Usuario, Titulo):
     idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')[0][0]
     preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')[0][0]
 
+    clear_terminal()
     print(f"\nConfirmar compra do livro '{Titulo}' no valor {preco:.2f}?")
     deseja = SimNao()
     
@@ -348,20 +378,26 @@ def compra(loggedIn, Usuario, Titulo):
         if flamenguista:
             print("\nParabéns, você acaba de ganhar um desconto de 15% nessa compra por ser flamenguista.")
             preco = preco * (1 - 0.15)
-        print(f"Processando pagamento...")
+        
+        print(f"\nProcessando pagamento...")
         print(f"Compra autorizada no valor de R$ {preco:.2f}.")
+        
         pedidos.insert(id_cliente = idCliente, id_livro = idLivro, custo = preco)
+        
         print("Livro comprado!")
-        print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.\n")
+        print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.")
         print("\nVoltando ao menu da sua conta...")
+        
         menuloggedIn(loggedIn, Usuario)
-    else:      
+    else:
+        clear_terminal()
         print("\nCompra cancelada")
         print("\nVoltando ao menu da sua conta...")
         menuloggedIn(loggedIn, Usuario)
 
 
 def verPedidos(loggedIn, Usuario):
+    clear_terminal()
     clientes = tables['cliente']
 
     idCliente = clientes.read('id_cliente', usuario = Usuario, search_type='usuario')[0][0]
@@ -387,6 +423,7 @@ def verPedidos(loggedIn, Usuario):
 
 
 def mostra_clientes():
+    clear_terminal()
     clientes = tables['cliente']
     nomes = clientes.read_all('nome')
     if nomes:
@@ -407,6 +444,7 @@ def mostra_clientes():
 
 
 def mostra_vendas():
+    clear_terminal()
     pedidos = tables['pedido']
     vendas = pedidos.read_all('id_pedido, custo')
     if vendas:
@@ -492,6 +530,7 @@ def menuloggedIn(loggedIn, usuario):
     elif choice == "P":
         verPedidos(loggedIn, usuario)
     elif choice == "S":
+        clear_terminal()
         print("\nCliente deslogado.")
         print("Voltando ao menu principal...\n")
         menu(loggedIn)
