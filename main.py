@@ -17,7 +17,7 @@ def SimNao():
                 "-> "
                 ).upper()
 
-        if escolha not in ["N", "S"]:
+        if escolha not in ["N", "S", "SIM", "NAO"]:
             print("\nResposta inválida, tente novamente...")
             continue
         else:
@@ -65,7 +65,7 @@ def Login():
         print("\n\tEsse nome de usuário ainda não possui cadastro na livraria, deseja fazer o cadastro?\n")
         deseja = SimNao()
 
-        if deseja == "S":
+        if deseja == "S" or deseja == "SIM":
             Register()
         else:
             print("\nVoltando ao menu principal...\n")
@@ -122,7 +122,7 @@ def Register():
 
     print(("\tÉ flamenguista?"))
     isFlamengo = SimNao()
-    if isFlamengo == "S":
+    if isFlamengo == "S" or isFlamengo == "SIM":
         isFlamengo = True
     else:
         isFlamengo = False
@@ -133,52 +133,18 @@ def Register():
 def pesquisa(p, loggedIn, usuario = ''):
 
     search_type = {
+            "V" : "amostra",
             "T" : "titulo",
             "A" : "autor",
             "P" : "ano de publicacao"
             }[p]
 
-    key_word = input(f"\nPor favor informe o {search_type} do livro desejado:\n-> ")
     table_livro = tables['livro']
 
-    if p == "T":
-        Titulo = key_word
-        if (table_livro.read('titulo', titulo = Titulo, search_type = 'titulo')):
+    if p == "V":
+        if (ret := table_livro.read_all('titulo')):
 
-            if loggedIn:
-                print("\nLivro encontrado, deseja comprá-lo?\n")
-                comprar = SimNao()
-                if comprar == "S":
-                    compra(loggedIn, usuario, Titulo)
-                else:
-                    print("\nCompra cancelada")
-                    print("\nVoltando ao menu da sua conta...\n")
-                    menuloggedIn(loggedIn, usuario)
-            else:
-                print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
-                deseja = SimNao()
-                if deseja == "S":
-                    Login()
-                else:
-                    print("\nVoltando ao menu principal...\n")
-                    main_menu()
-                    
-
-
-        else:
-            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'.")
-            if loggedIn:
-                print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn, usuario)
-            else:
-                print("\nVoltando ao menu principal...\n")
-                main_menu()
-
-    elif p == "A":
-        Autor = key_word
-        if (ret := table_livro.read('titulo', autor = Autor, search_type = 'autor')):
-
-            print(f"\nLivros escritos por {Autor}:")
+            print(f"\nAlguns livros contidos no estoque da nossa livraria:")
             i = 0
             for row in ret:
                 if i <=50:
@@ -191,86 +157,158 @@ def pesquisa(p, loggedIn, usuario = ''):
             if loggedIn:
                 print("\nDeseja comprar algum livro destacado acima?\n")
                 comprar = SimNao()
-                if comprar == "S":
+                if comprar == "S" or comprar == "SIM":
                     index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
                     while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                    compra(loggedIn, usuario, ret[int(index) - 1][0])
+                else:
+                    print("\nCompra cancelada")
+                    print("\nVoltando ao menu da sua conta...\n")
+                    menuloggedIn(loggedIn, usuario)
+            else:
+                print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
+                deseja = SimNao()
+                if deseja == "S" or deseja == "SIM":
+                    Login()
+                else:
+                    print("\nVoltando ao menu principal...\n")
+                    main_menu()
                     
-                    compra(loggedIn, usuario, ret[0][0])
-                else:
-                    print("\nCompra cancelada")
-                    print("\nVoltando ao menu da sua conta...\n")
-                    menuloggedIn(loggedIn, usuario)
-            else:
-                print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
-                deseja = SimNao()
-                if deseja == "S":
-                    Login()
-                else:
-                    print("\nVoltando ao menu principal...\n")
-                    main_menu()
-        else:
-            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'.")
-            if loggedIn:
-                print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn, usuario)
-            else:
-                print("\nVoltando ao menu principal...\n")
-                main_menu()
     else:
-        while not (key_word.isnumeric()) or int(key_word) >= 10000 or int(key_word) <= 0:
-            key_word = input("\nPor favor informe um número válido para o ano de publicação do livro:\n-> ")
-        anoPublicacao = key_word
-        if (ret := table_livro.read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
+        key_word = input(f"\nPor favor informe o {search_type} do livro desejado:\n-> ")
+        
+        if p == "T":
+            Titulo = key_word
+            if (table_livro.read('titulo', titulo = Titulo, search_type = 'titulo')):
 
-            print(f"\nLivros publicados no ano de {anoPublicacao}:")
-            i = 0
-            for row in ret:
-                if i <=50: # pra mostrar só os 50 primeiros livros
-                    i+=1
-                    print(f" {i} - {row[0]}")
+                if loggedIn:
+                    print("\nLivro encontrado, deseja comprá-lo?\n")
+                    comprar = SimNao()
+                    if comprar == "S" or comprar == "SIM":
+                        compra(loggedIn, usuario, Titulo)
+                    else:
+                        print("\nCompra cancelada")
+                        print("\nVoltando ao menu da sua conta...\n")
+                        menuloggedIn(loggedIn, usuario)
                 else:
-                    print("...")
-                    break
+                    print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
+                    deseja = SimNao()
+                    if deseja == "S" or deseja == "SIM":
+                        Login()
+                    else:
+                        print("\nVoltando ao menu principal...\n")
+                        main_menu()
+                        
 
-            if loggedIn:
-                print("\nDeseja comprar algum livro destacado acima?\n")
-                comprar = SimNao()
-                if comprar == "S":
-                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
-                    while not index.isnumeric() or int(index) <= 0 or int(index) > i:
-                        index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
-                    compra(loggedIn, usuario, ret[0][0])
-                else:
-                    print("\nCompra cancelada")
+
+            else:
+                print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'.")
+                if loggedIn:
                     print("\nVoltando ao menu da sua conta...\n")
                     menuloggedIn(loggedIn, usuario)
+                else:
+                    print("\nVoltando ao menu principal...\n")
+                    main_menu()
+
+        elif p == "A":
+            Autor = key_word
+            if (ret := table_livro.read('titulo', autor = Autor, search_type = 'autor')):
+
+                print(f"\nLivros escritos por {Autor}:")
+                i = 0
+                for row in ret:
+                    if i <=50:
+                        i +=1
+                        print(f" {i} - {row[0]}")
+                    else:
+                        print("...")
+                        break
+
+                if loggedIn:
+                    print("\nDeseja comprar algum livro destacado acima?\n")
+                    comprar = SimNao()
+                    if comprar == "S" or comprar == "SIM":
+                        index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                        while not index.isnumeric() or int(index) <= 0 or int(index) > i:
+                            index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                        
+                        compra(loggedIn, usuario, ret[int(index) - 1][0])
+                    else:
+                        print("\nCompra cancelada")
+                        print("\nVoltando ao menu da sua conta...\n")
+                        menuloggedIn(loggedIn, usuario)
+                else:
+                    print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
+                    deseja = SimNao()
+                    if deseja == "S" or deseja == "SIM":
+                        Login()
+                    else:
+                        print("\nVoltando ao menu principal...\n")
+                        main_menu()
             else:
-                print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
-                deseja = SimNao()
-                if deseja == "S":
-                    Login()
+                print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'.")
+                if loggedIn:
+                    print("\nVoltando ao menu da sua conta...\n")
+                    menuloggedIn(loggedIn, usuario)
                 else:
                     print("\nVoltando ao menu principal...\n")
                     main_menu()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}.")
-            if loggedIn:
-                print("\nVoltando ao menu da sua conta...\n")
-                menuloggedIn(loggedIn, usuario)
+            while not (key_word.isnumeric()) or int(key_word) >= 10000 or int(key_word) <= 0:
+                key_word = input("\nPor favor informe um número válido para o ano de publicação do livro:\n-> ")
+            anoPublicacao = key_word
+            if (ret := table_livro.read('titulo', ano_publicacao = anoPublicacao, search_type = 'ano_publicacao')):
+
+                print(f"\nLivros publicados no ano de {anoPublicacao}:")
+                i = 0
+                for row in ret:
+                    if i <=50: # pra mostrar só os 50 primeiros livros
+                        i+=1
+                        print(f" {i} - {row[0]}")
+                    else:
+                        print("...")
+                        break
+
+                if loggedIn:
+                    print("\nDeseja comprar algum livro destacado acima?\n")
+                    comprar = SimNao()
+                    if comprar == "S" or comprar == "SIM":
+                        index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                        while not index.isnumeric() or int(index) <= 0 or int(index) > i:
+                            index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                        compra(loggedIn, usuario, ret[int(index) - 1][0])
+                    else:
+                        print("\nCompra cancelada")
+                        print("\nVoltando ao menu da sua conta...\n")
+                        menuloggedIn(loggedIn, usuario)
+                else:
+                    print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
+                    deseja = SimNao()
+                    if deseja == "S" or deseja == "SIM":
+                        Login()
+                    else:
+                        print("\nVoltando ao menu principal...\n")
+                        main_menu()
             else:
-                print("\nVoltando ao menu principal...\n")
-                main_menu()
+                print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}.")
+                if loggedIn:
+                    print("\nVoltando ao menu da sua conta...\n")
+                    menuloggedIn(loggedIn, usuario)
+                else:
+                    print("\nVoltando ao menu principal...\n")
+                    main_menu()
     quit()
 
 
 def bookSearch(loggedIn, usuario = ''):
-    search_c = ["T", "A", "P"]
+    search_c = ["V", "T", "A", "P"]
 
     print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
 
     while True:
-        p = input(  
+        p = input(
+                "* (V) Ver alguns títulos disponíveis \n"
                 "* (T) Pesquisa por título \n"
                 "* (A) Pesquisa por autor \n"
                 "* (P) Pesquisa por ano de publicação \n\n"
@@ -306,7 +344,7 @@ def compra(loggedIn, Usuario, Titulo):
     
     flamenguista = clientes.read('isFlamengo', usuario = Usuario, search_type = 'usuario')[0][0]
     
-    if deseja == "S":
+    if deseja == "S" or deseja == "SIM":
         if flamenguista:
             print("\nParabéns, você acaba de ganhar um desconto de 15% nessa compra por ser flamenguista.")
             preco = preco * (1 - 0.15)
@@ -318,6 +356,7 @@ def compra(loggedIn, Usuario, Titulo):
         print("\nVoltando ao menu da sua conta...")
         menuloggedIn(loggedIn, Usuario)
     else:      
+        print("\nCompra cancelada")
         print("\nVoltando ao menu da sua conta...")
         menuloggedIn(loggedIn, Usuario)
 
