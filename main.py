@@ -417,6 +417,23 @@ def verPedidos(loggedIn, Usuario):
     else:
         print("\nVocê ainda não fez nenhum pedido.")
 
+    opcoes = ["V", "VOLTAR"]
+
+    while True:
+        voltar = input(
+                "\n* (V) Voltar\n"
+                "-> "
+                )
+
+        voltar = voltar.upper()
+
+        if voltar not in opcoes:
+            print("\nDesculpe, tente novamente...\n")
+            continue
+        else:
+            clear_terminal()
+            break
+
 
     print("\nVoltando ao menu da sua conta...")
     menuloggedIn(loggedIn, Usuario)
@@ -531,6 +548,7 @@ def menuloggedIn(loggedIn, usuario):
         verPedidos(loggedIn, usuario)
     elif choice == "S":
         clear_terminal()
+        loggedIn = False
         print("\nCliente deslogado.")
         print("Voltando ao menu principal...\n")
         menu(loggedIn)
