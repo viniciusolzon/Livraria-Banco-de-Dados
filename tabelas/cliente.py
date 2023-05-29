@@ -114,4 +114,4 @@ class ClienteTable(Connection):
 
 # tables['clientes'].insert("Victor Mororo", "mororo", 'mororo@fake.com', '1234')
 
-# tables['clientes'].delete(id_cliente = 5)
+# tables['clientes'].delete(id_cliente = 1)

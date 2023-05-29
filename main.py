@@ -69,6 +69,7 @@ def Login():
         if deseja == "S" or deseja == "SIM":
             Register()
         else:
+            clear_terminal()
             print("\nVoltando ao menu principal...\n")
             main_menu()
             quit()
@@ -138,12 +139,13 @@ def pesquisa(p, loggedIn, usuario = ''):
             "T" : "titulo",
             "A" : "autor",
             "P" : "ano de publicacao",
-            "V" : "Voltar"
+            "V" : "Voltar",
+            "VOLTAR" : "Voltar"
             }[p]
 
     table_livro = tables['livro']
 
-    if p == "V":
+    if p == "V" or p == "VOLTAR":
         clear_terminal()
         if loggedIn:
             print("\nVoltando ao menu da sua conta...\n")
@@ -189,7 +191,30 @@ def pesquisa(p, loggedIn, usuario = ''):
                     clear_terminal()
                     print("\nVoltando ao menu principal...\n")
                     main_menu()
-                    
+        else:
+            clear_terminal()
+            print("\nO estoque da livraria está vazio. Peça para algum administrador atualizar o estoque.\n")
+            
+            opcoes = ["V", "VOLTAR"]
+
+            while True:
+                voltar = input(
+                        "\n* (V) Voltar\n"
+                        "-> "
+                        )
+
+                voltar = voltar.upper()
+
+                if voltar not in opcoes:
+                    print("\nDesculpe, tente novamente...\n")
+                    continue
+                else:
+                    clear_terminal()
+                    break
+            
+            bookSearch(loggedIn)
+
+
     else:
         clear_terminal()
         key_word = input(f"\nPor favor informe o {search_type} do livro desejado:\n-> ")
@@ -329,9 +354,9 @@ def pesquisa(p, loggedIn, usuario = ''):
 
 
 def bookSearch(loggedIn, usuario = ''):
-    clear_terminal()
+    # clear_terminal()
     
-    search_c = ["D", "T", "A", "P", "V"]
+    search_c = ["D", "T", "A", "P", "V", "VOLTAR"]
     print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
 
     while True:
@@ -386,6 +411,24 @@ def compra(loggedIn, Usuario, Titulo):
         
         print("Livro comprado!")
         print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.")
+        
+        opcoes = ["V", "VOLTAR"]
+
+        while True:
+            voltar = input(
+                    "\n* (V) Voltar\n"
+                    "-> "
+                    )
+
+            voltar = voltar.upper()
+
+            if voltar not in opcoes:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                clear_terminal()
+                break
+            
         print("\nVoltando ao menu da sua conta...")
         
         menuloggedIn(loggedIn, Usuario)
@@ -455,6 +498,23 @@ def mostra_clientes():
                 break
     else:
         print("\nNão há nenhum cliente cadastrado ainda.")
+        
+        opcoes = ["V", "VOLTAR"]
+
+        while True:
+            voltar = input(
+                    "\n* (V) Voltar\n"
+                    "-> "
+                    )
+
+            voltar = voltar.upper()
+
+            if voltar not in opcoes:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                clear_terminal()
+                break
 
     print("\nVoltando ao menu principal...\n")
     main_menu()
@@ -476,7 +536,23 @@ def mostra_vendas():
                 break
     else:
         print("\nNão há nenhuma venda registrada ainda.")
-        
+        opcoes = ["V", "VOLTAR"]
+
+        while True:
+            voltar = input(
+                    "\n* (V) Voltar\n"
+                    "-> "
+                    )
+
+            voltar = voltar.upper()
+
+            if voltar not in opcoes:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                clear_terminal()
+                break
+            
     print("\nVoltando ao menu principal...\n")
     main_menu()
 
@@ -508,6 +584,7 @@ def menu(loggedIn):
     elif choice == "C":
         Register()
     elif choice == "P":
+        clear_terminal()
         bookSearch(loggedIn)
     elif choice == "U":
         mostra_clientes()
@@ -543,6 +620,7 @@ def menuloggedIn(loggedIn, usuario):
             break
 
     if choice   == "C":
+        clear_terminal()
         bookSearch(loggedIn, usuario)
     elif choice == "P":
         verPedidos(loggedIn, usuario)
