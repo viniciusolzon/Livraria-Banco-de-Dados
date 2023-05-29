@@ -20,14 +20,14 @@ class LivroTable(Connection):
     # READ/Search
     def read(self, select = '*', id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):
         try:
-            sql = f"SELECT {select} FROM livro WHERE titulo = '{titulo}'"
+            sql = f"SELECT {select} FROM livro WHERE titulo = lower(unaccent('{titulo}'))"
 
             if search_type == "id":
                 sql = f"SELECT {select} FROM livro WHERE id_livro = {id_livro}"
             elif search_type == "ano_publicacao":
                 sql = f"SELECT {select} FROM livro WHERE ano_publicacao = {ano_publicacao}"
             elif search_type == "autor":
-                sql = f"SELECT {select} FROM livro WHERE autor = '{autor}'"
+                sql = f"SELECT {select} FROM livro WHERE autor = lower(unaccent('{autor}'))"
             elif search_type == "preco":
                 sql = f"SELECT {select} FROM livro WHERE preco = {preco}"
 
@@ -61,11 +61,11 @@ class LivroTable(Connection):
             if update_type == "ano_publicacao":
                 sql = f"UPDATE livro SET ano_publicacao = {ano_publicacao} WHERE id_livro = {id_livro}"
             elif update_type == "autor":
-                sql = f"UPDATE livro SET autor = '{autor}' WHERE id_livro = {id_livro}"
+                sql = f"UPDATE livro SET autor = lower(unaccent('{autor}')) WHERE id_livro = {id_livro}"
             elif update_type == "preco":
                 sql = f"UPDATE livro SET preco = {preco} WHERE id_livro = {id_livro}"
             elif update_type == "titulo":
-                sql = f"UPDATE livro SET titulo = '{titulo}' WHERE id_livro = {id_livro}"
+                sql = f"UPDATE livro SET titulo = lower(unaccent('{titulo}')) WHERE id_livro = {id_livro}"
                 
             self.execute(sql)
             self.commit()
@@ -76,7 +76,7 @@ class LivroTable(Connection):
     # INSERT
     def insert(self, titulo = '', autor = '', ano_publicacao = 0, preco = 0.0):
         try:
-            sql = f"INSERT INTO livro (titulo, autor, ano_publicacao, preco) VALUES ('{titulo}', '{autor}', {ano_publicacao}, {preco})"
+            sql = f"INSERT INTO livro (titulo, autor, ano_publicacao, preco) VALUES (lower(unaccent('{titulo}')), lower(unaccent('{autor}')), {ano_publicacao}, {preco})"
 
             self.execute(sql)
             self.commit()
