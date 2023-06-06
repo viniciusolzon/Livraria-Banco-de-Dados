@@ -9,7 +9,7 @@ class Livraria():
     def Initialize(self):
         print(f"\n\tOlá seja bem vindo a livraria {self.nome}!\n")
         if self.logado:
-            self.menuUsuario(self.usuario_logado)
+            self.menuUsuario()
         else:
             self.menuPrincipal()
     
@@ -52,8 +52,8 @@ class Livraria():
             print("Deu ruim")
             exit(-666)
 
-    def menuUsuario(self, usuario):
-        print(f"\n\tOlá seja bem vindo de volta {usuario}!\n")
+    def menuUsuario(self):
+        print(f"\n\tOlá seja bem vindo de volta {self.usuario_logado}!\n")
         menu_c = ["C", "P", "S", "Q"]
         print("O que deseja fazer?")
         while True:
@@ -75,12 +75,13 @@ class Livraria():
 
         if choice   == "C":
             clear_terminal()
-            self.bookSearch(usuario)
+            self.bookSearch()
         elif choice == "P":
-            self.verPedidos(usuario)
+            self.verPedidos()
         elif choice == "S":
             clear_terminal()
             self.logado = False
+            self.usuario_logado = "Desconhecido"
             print("\nCliente deslogado.")
             print("Voltando ao menu principal...\n")
             self.menuPrincipal()
@@ -97,7 +98,7 @@ class Livraria():
         self.menuPrincipal()
         quit()
 
-    def Login(self, ):
+    def Login(self):
         print("\n\t#####################"
                 "\t### Tela de Login ###"
                 "\t#####################")
@@ -127,7 +128,8 @@ class Livraria():
 
         clear_terminal()
         self.logado = True
-        self.menuUsuario(usuario)
+        self.usuario_logado = usuario
+        self.menuUsuario()
         quit()
 
 
@@ -190,7 +192,7 @@ class Livraria():
             clear_terminal()
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
-                self.menuUsuario(usuario)
+                self.menuUsuario()
             print("\nVoltando ao menu principal...\n")
             self.menuPrincipal()
                 
@@ -216,12 +218,12 @@ class Livraria():
                         index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
                         while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                             index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
-                        self.compra(usuario, ret[int(index) - 1][0])
+                        self.compra(ret[int(index) - 1][0])
                     else:
                         clear_terminal()
                         print("\nCompra cancelada")
                         print("\nVoltando ao menu da sua conta...\n")
-                        self.menuUsuario(usuario)
+                        self.menuUsuario()
                 else:
                     print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                     deseja = SimNao()
@@ -253,12 +255,12 @@ class Livraria():
                         print("\nLivro encontrado, deseja comprá-lo?\n")
                         comprar = SimNao()
                         if comprar == "S" or comprar == "SIM":
-                            self.compra(usuario, Titulo)
+                            self.compra(Titulo)
                         else:
                             clear_terminal()
                             print("\nCompra cancelada")
                             print("\nVoltando ao menu da sua conta...\n")
-                            self.menuUsuario(usuario)
+                            self.menuUsuario()
                     else:
                         print("\nLivro encontrado, deseja fazer login para comprá-lo?\n")
                         deseja = SimNao()
@@ -276,7 +278,7 @@ class Livraria():
                     print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'.")
                     if self.logado:
                         print("\nVoltando ao menu da sua conta...\n")
-                        self.menuUsuario(usuario)
+                        self.menuUsuario()
                     else:
                         print("\nVoltando ao menu principal...\n")
                         self.menuPrincipal()
@@ -304,12 +306,12 @@ class Livraria():
                             while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                                 index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                             
-                            self.compra(usuario, ret[int(index) - 1][0])
+                            self.compra(ret[int(index) - 1][0])
                         else:
                             clear_terminal()
                             print("\nCompra cancelada")
                             print("\nVoltando ao menu da sua conta...\n")
-                            self.menuUsuario(usuario)
+                            self.menuUsuario()
                     else:
                         print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                         deseja = SimNao()
@@ -324,7 +326,7 @@ class Livraria():
                     print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'.")
                     if self.logado:
                         print("\nVoltando ao menu da sua conta...\n")
-                        self.menuUsuario(usuario)
+                        self.menuUsuario()
                     else:
                         print("\nVoltando ao menu principal...\n")
                         self.menuPrincipal()
@@ -352,12 +354,12 @@ class Livraria():
                             index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
                             while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                                 index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
-                            self.compra(usuario, ret[int(index) - 1][0])
+                            self.compra(ret[int(index) - 1][0])
                         else:
                             clear_terminal()
                             print("\nCompra cancelada")
                             print("\nVoltando ao menu da sua conta...\n")
-                            self.menuUsuario(usuario)
+                            self.menuUsuario()
                     else:
                         print("\nDeseja fazer login para comprar algum livro destacado acima?\n")
                         deseja = SimNao()
@@ -372,7 +374,7 @@ class Livraria():
                     print(f"\nNenhum livro no estoque da livraria foi publicado no ano de {anoPublicacao}.")
                     if self.logado:
                         print("\nVoltando ao menu da sua conta...\n")
-                        self.menuUsuario(usuario)
+                        self.menuUsuario()
                     else:
                         print("\nVoltando ao menu principal...\n")
                         self.menuPrincipal()
@@ -401,12 +403,12 @@ class Livraria():
 
         self.pesquisa(p, usuario)
         
-    def compra(self, Usuario, Titulo):
+    def compra(self, Titulo):
         livros = tables['livro']
         clientes = tables['cliente']
         pedidos = tables['pedido']
 
-        idCliente = clientes.read('id_cliente', usuario = Usuario, search_type = 'usuario')[0][0]
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
         idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')[0][0]
         preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')[0][0]
 
@@ -414,7 +416,7 @@ class Livraria():
         print(f"\nConfirmar compra do livro '{Titulo}' no valor {preco:.2f}?")
         deseja = SimNao()
         
-        flamenguista = clientes.read('isFlamengo', usuario = Usuario, search_type = 'usuario')[0][0]
+        flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
         
         if deseja == "S" or deseja == "SIM":
             if flamenguista:
@@ -433,21 +435,21 @@ class Livraria():
                 
             print("\nVoltando ao menu da sua conta...")
             
-            self.menuUsuario(Usuario)
+            self.menuUsuario()
         else:
             clear_terminal()
             print("\nCompra cancelada")
             print("\nVoltando ao menu da sua conta...")
-            self.menuUsuario(Usuario)
+            self.menuUsuario()
 
 
-    def verPedidos(self, Usuario):
+    def verPedidos(self):
         clear_terminal()
         clientes = tables['cliente']
 
-        idCliente = clientes.read('id_cliente', usuario = Usuario, search_type='usuario')[0][0]
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type='usuario')[0][0]
         if(idLivro := clientes.query(f"SELECT id_livro FROM pedido WHERE {idCliente} = pedido.id_cliente")):
-            print(f"\nHistórico dos pedidos de {Usuario}:\n")
+            print(f"\nHistórico dos pedidos de {self.usuario_logado}:\n")
             qtd_pedidos = clientes.query(f"SELECT COUNT (id_livro) FROM pedido WHERE {idCliente} = pedido.id_cliente")[0][0]
             i = 0
             for i in range (qtd_pedidos):
@@ -464,7 +466,7 @@ class Livraria():
             Voltar()
 
         print("\nVoltando ao menu da sua conta...")
-        self.menuUsuario(Usuario)
+        self.menuUsuario()
 
     def mostra_clientes(self):
         clear_terminal()
