@@ -45,24 +45,24 @@ def Voltar():
             clear_terminal()
             break
 
+# checa se o email existe na tabela "cliente", se existe fala "O email inserido já possui cadastro na livraria"
 def checkEmail(Email):
-    # checa se o email existe na tabela "cliente", se existe fala "O email inserido já possui cadastro na livraria"
     if tables['cliente'].read('email', email = Email, search_type = "email"):
         return False
     # se não, ele vai pra próxima etapa de registro
     return True
 
 
+# checa se o nome do usuário existe na tabela "cliente", se não, para e fala: "Usuário não encontrado no registro"
 def checkUsername(Usuario):
-    # checa se o nome do usuário existe na tabela "cliente", se não, para e fala: "Usuário não encontrado no registro"
     if tables['cliente'].read('usuario', usuario = Usuario, search_type = "usuario"):
         return False
     # se não, ele vai pra próxima etapa de registro
     return True
 
 
+# checa se a senha do usuário coincide com a senha registrada desse usuaŕio na tabela "cliente"
 def checkPassword(Usuario, senha):
-    # checa se a senha do usuário coincide com a senha registrada desse usuaŕio na tabela "cliente"
     if tables['cliente'].read('senha', usuario = Usuario, search_type = "usuario")[0][0] == senha:
         return True
     # se digitada corretamente, libera o login
