@@ -1,12 +1,12 @@
 from tabelas.cliente import ClienteTable
 from tabelas.livro import LivroTable
-from tabelas.pedido import PedidoTable
+from tabelas.carrinho import CarrinhoTable
 
 tables = {}
 
 tables['livro'] = LivroTable()
 tables['cliente'] = ClienteTable()
-tables['pedido'] = PedidoTable()
+tables['carrinho'] = CarrinhoTable()
 
 # Preenchendo a tabela de livros (rode o código uma vez com isso debaixo descomentado para preencher as tableas)
 # tables['livro'].insert(titulo = "Codigo Limpo", autor = "Robert Cecil Martin", ano_publicacao = 2008, preco = 49.99)

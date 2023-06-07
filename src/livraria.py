@@ -54,12 +54,13 @@ class Livraria():
 
     def menuUsuario(self):
         print(f"\n\tOlá seja bem vindo de volta {self.usuario_logado}!\n")
-        menu_c = ["C", "P", "D", "S", "Q"]
+        menu_c = ["C", "P", "E", "D", "S", "Q"]
         print("O que deseja fazer?")
         while True:
             choice = input(
-                    "* (C) Realizar compra\n"
+                    "* (C) Realizar pedido\n"
                     "* (P) Ver todos seus pedidos\n"
+                    "* (E) Carrinho de compras\n"
                     "* (D) Ver seus dados cadastrais\n"
                     "* (S) Sair da conta\n"
                     "* (Q) Sair do sistema\n"
@@ -77,10 +78,12 @@ class Livraria():
         if choice   == "C":
             clear_terminal()
             self.bookSearch()
-        elif choice == "D":
-            self.verDadosCadastrais()
         elif choice == "P":
             self.verPedidos()
+        elif choice == "E":
+            self.carrinho()
+        elif choice == "D":
+            self.verDadosCadastrais()
         elif choice == "S":
             clear_terminal()
             self.logado = False
@@ -178,6 +181,29 @@ class Livraria():
             isFlamengo = False
 
         self.registered(name, usuario, email, senha, isFlamengo)
+
+    def bookSearch(self):
+        search_c = ["D", "T", "A", "P", "V", "VOLTAR"]
+        print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
+
+        while True:
+            p = input(
+                    "* (D) Títulos disponíveis \n"
+                    "* (T) Pesquisa por título \n"
+                    "* (A) Pesquisa por autor \n"
+                    "* (P) Pesquisa por ano de publicação \n\n"
+                    "* (V) Voltar \n\n"
+                    "-> "
+                    )
+            p = p.upper()
+
+            if p not in search_c:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                break
+
+        self.pesquisa(p)
 
     def pesquisaAmostra(self):
         table_livro = tables['livro']
@@ -384,17 +410,19 @@ class Livraria():
 
         print("\n\nERRO!\n\n")
         quit()
-
-    def bookSearch(self):
-        search_c = ["D", "T", "A", "P", "V", "VOLTAR"]
-        print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
+        
+    def carrinho(self):
+        clear_terminal()
+        search_c = ["A", "R", "F", "E", "V", "VOLTAR"]
+        print("\n\tCarrinho de compras\n")
 
         while True:
             p = input(
-                    "* (D) Ver alguns títulos disponíveis \n"
-                    "* (T) Pesquisa por título \n"
-                    "* (A) Pesquisa por autor \n"
-                    "* (P) Pesquisa por ano de publicação \n\n"
+                    "* (A) Adicionar livro \n"
+                    "* (R) Remover livro \n"
+                    "* (L) Ver livros no carrinho \n"
+                    "* (F) Finalizar compra \n"
+                    "* (E) Esvaziar carrinho de compras \n\n"
                     "* (V) Voltar \n\n"
                     "-> "
                     )
@@ -406,9 +434,36 @@ class Livraria():
             else:
                 break
 
-        self.pesquisa(p)
-        
+        if p == "A":
+            clear_terminal()
+            self.bookSearch()
+
+        elif p == "R":
+            self.pesquisaTitulo()
+
+        elif p == "L":
+            self.pesquisaTitulo()
+
+        elif p == "F":
+            self.pesquisaAutor()
+
+        elif p == "E":
+            self.pesquisaAnoPublicacao()
+
+        elif p == "V" or p == "VOLTAR":
+            clear_terminal()
+            if self.logado:
+                print("\nVoltando ao menu da sua conta...\n")
+                self.menuUsuario()
+            print("\nVoltando ao menu principal...\n")
+            self.menuPrincipal()
+
+        print("\n\nERRO!\n\n")
+        quit()
+
     def compra(self, Titulo):
+        # self.carrinho(Titulo)
+        
         livros = tables['livro']
         clientes = tables['cliente']
         pedidos = tables['pedido']
