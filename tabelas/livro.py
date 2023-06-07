@@ -22,7 +22,7 @@ class LivroTable(Connection):
         try:
             sql = f"SELECT {select} FROM livro WHERE titulo = lower(unaccent('{titulo}'))"
 
-            if search_type == "id":
+            if search_type == "id_livro":
                 sql = f"SELECT {select} FROM livro WHERE id_livro = {id_livro}"
             elif search_type == "ano_publicacao":
                 sql = f"SELECT {select} FROM livro WHERE ano_publicacao = {ano_publicacao}"

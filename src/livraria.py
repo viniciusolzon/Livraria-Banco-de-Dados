@@ -1,5 +1,6 @@
 from src.help import *
 
+
 class Livraria():
     def __init__(self, nome = "Tuko"):
         self.nome = nome
@@ -81,7 +82,8 @@ class Livraria():
         elif choice == "P":
             self.verPedidos()
         elif choice == "E":
-            self.carrinho()
+            clear_terminal()
+            self.menuCarrinho()
         elif choice == "D":
             self.verDadosCadastrais()
         elif choice == "S":
@@ -99,15 +101,18 @@ class Livraria():
     
     def registered(self, Nome, Usuario, Email, Senha, flamengo):
         tables['cliente'].insert(nome = Nome, usuario = Usuario, email = Email, senha = Senha, isFlamengo = flamengo)
+        
+        idCliente = tables['cliente'].read('id_cliente', usuario = Usuario, search_type = 'usuario')[0][0]
+        tables['carrinho'].insert(id_cliente = idCliente)
+        
         clear_terminal()
         print("\n\tRegistro feito com sucesso!\n")
         self.menuPrincipal()
         quit()
 
     def Login(self):
-        print("\n\t#####################"
-                "\t### Tela de Login ###"
-                "\t#####################")
+        clear_terminal()
+        print("\n\tTela de Login\n")
             
         usuario = input("\n\tNome de usuário: ")
         if (checkUsername(usuario)):
@@ -140,9 +145,8 @@ class Livraria():
 
 
     def Register(self):
-        print("\n\t######################"
-                "  ### Tela de Cadastro ###  "
-                "######################")
+        clear_terminal()
+        print("\n\tTela de Cadastro\n")
             
         # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
         name = input("\n\tNome completo: ")
@@ -215,19 +219,19 @@ class Livraria():
             for row in ret:
                 if i <=50:
                     i +=1
-                    print(f" {i} - {row[0]}")
+                    print(f" {i} - {row[0].capitalize()}")
                 else:
                     print("...")
                     break
 
             if self.logado:
-                print("\nDeseja comprar algum livro destacado acima?\n")
+                print("\nDeseja adicionar ao seu carrinho de compras algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S" or comprar == "SIM":
-                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                    index = input("\nInforme o índice do livro que deseja:\n-> ")
                     while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
-                    self.compra(ret[int(index) - 1][0])
+                    self.adicionaLivro(ret[int(index) - 1][0])
                 else:
                     clear_terminal()
                     print("\nCompra cancelada")
@@ -258,10 +262,10 @@ class Livraria():
         table_livro = tables['livro']
         if (table_livro.read('titulo', titulo = Titulo, search_type = 'titulo')):
             if self.logado: # achou o livro e ta logado
-                print("\nLivro encontrado, deseja comprá-lo?\n")
+                print("\nLivro encontrado, deseja adicioná-lo ao carrinho de compras?\n")
                 comprar = SimNao()
                 if comprar == "S" or comprar == "SIM":
-                    self.compra(Titulo)
+                    self.adicionaLivro(Titulo)
                 else:
                     clear_terminal()
                     print("\nCompra cancelada")
@@ -278,7 +282,7 @@ class Livraria():
                     print("\nVoltando ao menu principal...\n")
                     self.menuPrincipal()
         else: # nao achou o livro
-            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo}'.")
+            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo.capitalize()}'.")
             if self.logado: # e ta logado
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
@@ -304,14 +308,14 @@ class Livraria():
                     break
 
             if self.logado:
-                print("\nDeseja comprar algum livro destacado acima?\n")
+                print("\nDeseja adicionar ao seu carrinho de compras algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S" or comprar == "SIM":
-                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                    index = input("\nInforme o índice do livro que deseja:\n-> ")
                     while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                     
-                    self.compra(ret[int(index) - 1][0])
+                    self.adicionaLivro(ret[int(index) - 1][0])
                 else:
                     clear_terminal()
                     print("\nCompra cancelada")
@@ -328,7 +332,7 @@ class Livraria():
                     print("\nVoltando ao menu principal...\n")
                     self.menuPrincipal()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor}'.")
+            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor.capitalize}'.")
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
@@ -356,13 +360,13 @@ class Livraria():
                     break
 
             if self.logado:
-                print("\nDeseja comprar algum livro destacado acima?\n")
+                print("\nDeseja adicionar ao seu carrinho de compras algum livro destacado acima?\n")
                 comprar = SimNao()
                 if comprar == "S" or comprar == "SIM":
-                    index = input("\nInforme o índice do livro que deseja comprar dentre os que estão destacado acima:\n-> ")
+                    index = input("\nInforme o índice do livro que deseja:\n-> ")
                     while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                         index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
-                    self.compra(ret[int(index) - 1][0])
+                    self.adicionaLivro(ret[int(index) - 1][0])
                 else:
                     clear_terminal()
                     print("\nCompra cancelada")
@@ -405,23 +409,23 @@ class Livraria():
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
-            print("\nVoltando ao menu principal...\n")
-            self.menuPrincipal()
+            else:
+                print("\nVoltando ao menu principal...\n")
+                self.menuPrincipal()
 
-        print("\n\nERRO!\n\n")
-        quit()
+        # print("\n\nERRO!\n\n")
+        # quit()
         
-    def carrinho(self):
-        clear_terminal()
-        search_c = ["A", "R", "F", "E", "V", "VOLTAR"]
+    def menuCarrinho(self):
+        search_c = ["A", "R", "C", "F", "E", "V", "VOLTAR"]
         print("\n\tCarrinho de compras\n")
 
         while True:
             p = input(
                     "* (A) Adicionar livro \n"
                     "* (R) Remover livro \n"
-                    "* (L) Ver livros no carrinho \n"
-                    "* (F) Finalizar compra \n"
+                    "* (C) Ver livros no carrinho \n"
+                    "* (F) Continuar para o pagamento \n"
                     "* (E) Esvaziar carrinho de compras \n\n"
                     "* (V) Voltar \n\n"
                     "-> "
@@ -439,76 +443,222 @@ class Livraria():
             self.bookSearch()
 
         elif p == "R":
-            self.pesquisaTitulo()
+            self.removeLivro()
 
-        elif p == "L":
-            self.pesquisaTitulo()
+        elif p == "C":
+            self.verCarrinho()
 
         elif p == "F":
-            self.pesquisaAutor()
+            self.compra()
 
         elif p == "E":
-            self.pesquisaAnoPublicacao()
+            self.esvaziaCarrinho()
 
         elif p == "V" or p == "VOLTAR":
             clear_terminal()
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
-            print("\nVoltando ao menu principal...\n")
-            self.menuPrincipal()
+            else:
+                print("\nVoltando ao menu principal...\n")
+                self.menuPrincipal()
 
         print("\n\nERRO!\n\n")
         quit()
 
-    def compra(self, Titulo):
-        # self.carrinho(Titulo)
-        
+    def adicionaLivro(self, titulo_a_adicionar):
         livros = tables['livro']
         clientes = tables['cliente']
-        pedidos = tables['pedido']
-
+        carrinho = tables['carrinho']
+        itens_carrinho = tables['item_carrinho']
+        
         idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
-        idLivro = livros.read('id_livro', titulo = Titulo, search_type = 'titulo')[0][0]
-        preco = livros.read('preco', titulo = Titulo, search_type = 'titulo')[0][0]
-
-        clear_terminal()
-        print(f"\nConfirmar compra do livro '{Titulo}' no valor {preco:.2f}?")
-        deseja = SimNao()
+        idCarrinho = carrinho.read('id_carrinho', id_cliente = idCliente, search_type = 'id_cliente')[0][0]
+        idLivro = livros.read('id_livro', titulo = titulo_a_adicionar, search_type = 'titulo')[0][0]
         
-        flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        itens_carrinho.insert(id_carrinho = idCarrinho, id_livro = idLivro)
         
-        if deseja == "S" or deseja == "SIM":
-            if flamenguista:
-                print("\nParabéns, você acaba de ganhar um desconto de 15% nessa compra por ser flamenguista.")
-                preco = preco * (1 - 0.15)
-            
-            print(f"\nProcessando pagamento...")
-            print(f"Compra autorizada no valor de R$ {preco:.2f}.")
-            
-            pedidos.insert(id_cliente = idCliente, id_livro = idLivro, custo = preco)
-            
-            print("Livro comprado!")
-            print("\nSeu livro agora pode ser visualizado na aba de pedidos no menu de sua conta.")
-
-            Voltar()
-                
-            print("\nVoltando ao menu da sua conta...")
-            
-            self.menuUsuario()
+        print("\nLivro adicionado ao seu carrinho de compras.")
+        
+        print("\nDeseja ir para o pagamento?\n-> ")
+        escolha = SimNao()
+        if escolha == "S" or escolha == "SIM":
+            self.compra()
         else:
             clear_terminal()
-            print("\nCompra cancelada")
-            print("\nVoltando ao menu da sua conta...")
+            print("\nVoltando ao menu da sua conta...\n")
             self.menuUsuario()
+
+    def removeLivro(self):
+        clear_terminal()
+        livros = tables['livro']
+        clientes = tables['cliente']
+        carrinho = tables['carrinho']
+        itens_carrinho = tables['item_carrinho']
+        
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        id_carrinho_do_cliente = carrinho.read('id_carrinho', id_cliente = idCliente, search_type = 'id_cliente')[0][0]
+        id_livros_carrinho = itens_carrinho.read('id_livro', id_carrinho = id_carrinho_do_cliente, search_type = 'id_carrinho')
+
+        if not (itens_carrinho.read('*', id_carrinho = id_carrinho_do_cliente, search_type = 'id_cliente')):
+            clear_terminal()
+            print("\nSeu carrinho de compras está vazio.")
+            print("\nVoltando...")
+            self.menuCarrinho()
+        
+        print(f"\n\tLivros no seu carrinho de compras:\n")
+        for i in range(len(id_livros_carrinho)):
+            titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
+            if i <=50:
+                print(f" {i + 1} - {titulo_no_carrinho.capitalize()}")
+            else:
+                print("...")
+                break
+
+        index = input("\nInforme o índice do livro que deseja remover:\n-> ")
+        while not index.isnumeric() or int(index) <= 0 or int(index) > i + 1:
+            index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+
+        idLivroRemover = id_livros_carrinho[int(index)-1][0]
+        idItemRemover = itens_carrinho.read('id_item_carrinho', id_livro = idLivroRemover, search_type = 'id_livro')
+        itens_carrinho.deleteItem(id_item_carrinho = idItemRemover[0][0], delete_type = 'id_item_carrinho')
+
+        print("\nLivro removido do carrinho de compras.")
+        
+        print("\nDeseja remover outro livro?")
+        escolha = SimNao()
+        if escolha == "S" or escolha == "SIM":
+            self.removeLivro()
+        else:
+            clear_terminal()
+            print("\nVoltando...")
+            self.menuCarrinho()
+    
+    def verCarrinho(self):
+        clear_terminal()
+        livros = tables['livro']
+        clientes = tables['cliente']
+        carrinho = tables['carrinho']
+        itens_carrinho = tables['item_carrinho']
+        
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        id_carrinho_do_cliente = carrinho.read('id_carrinho', id_cliente = idCliente, search_type = 'id_cliente')[0][0]
+
+        if not (itens_carrinho.read('*', id_carrinho = id_carrinho_do_cliente, search_type = 'id_cliente')):
+            clear_terminal()
+            print("\nSeu carrinho de compras está vazio.")
+            print("\nVoltando...")
+            self.menuCarrinho()
+        else:
+            clear_terminal()
+            id_livros_carrinho = itens_carrinho.read('id_livro', id_carrinho = id_carrinho_do_cliente, search_type = 'id_carrinho')
+            
+            print(f"\n\tLivros no seu carrinho de compras:\n")
+            for i in range(len(id_livros_carrinho)):
+                titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
+                if i <=50:
+                    print(f" {i + 1} - {titulo_no_carrinho.capitalize()}")
+                else:
+                    print("...")
+                    break
+            
+            Voltar()
+            print("\nVoltando...")
+            self.menuCarrinho()
+    
+    def compra(self):
+        clear_terminal()
+        livros = tables['livro']
+        clientes = tables['cliente']
+        carrinho = tables['carrinho']
+        itens_carrinho = tables['item_carrinho']
+        
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        id_carrinho_do_cliente = carrinho.read('id_carrinho', id_cliente = idCliente, search_type = 'id_cliente')[0][0]
+        id_livros_carrinho = itens_carrinho.read('id_livro', id_carrinho = id_carrinho_do_cliente, search_type = 'id_carrinho')
+        
+        if not (itens_carrinho.read('*', id_carrinho = id_carrinho_do_cliente, search_type = 'id_cliente')):
+            print("\nSeu carrinho de compras já está vazio.")
+            print("\nVoltando...")
+            self.menuCarrinho()
+        else:
+            print(f"\n\tLivros no seu carrinho de compras:\n")
+            custo_total = 0
+            for i in range(len(id_livros_carrinho)):
+                titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
+                preco_no_carrinho = livros.read('preco', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
+                custo_total+=preco_no_carrinho
+                if i <=50:
+                    print(f" R${preco_no_carrinho} - {titulo_no_carrinho.capitalize()}")
+                else:
+                    print("...")
+                    break
+            
+            print(f"\nConfirmar compra no valor total de R${custo_total:.2f}?")
+            deseja = SimNao()
+            
+            if deseja == "S" or deseja == "SIM":
+                flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+                if flamenguista:
+                    valor_original = custo_total
+                    print("\nVocê ganhou um desconto de 15% na compra por torcer para o time do Flamengo.")
+                    custo_total = custo_total * (1 - 0.15)
+                    print(f"Valor após o desconto -> R${custo_total:.2f}")
+                    
+                print(f"\nProcessando pagamento...")
+                
+                pedidos = tables['pedido']
+                pedidos.insert(id_cliente = idCliente, custo = round(custo_total, 2))
+                
+                idPedidoCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'usuario')[-1][0]
+                itens_pedidos = tables['item_pedido']
+                for i in range(len(id_livros_carrinho)):
+                    itens_pedidos.insert(id_pedido = idPedidoCliente, id_livro = id_livros_carrinho[i][0])
+
+                print(f"Compra autorizada no valor de R$ {custo_total:.2f}.")
+                print("\nSeus livros podem ser visualizados na aba de pedidos no menu de sua conta.")
+                
+                print(f"\nAperte enter para continuar.")
+                input()
+                self.esvaziaCarrinho()
+
+                Voltar()                
+                print("\nVoltando ao menu da sua conta...")
+                self.menuUsuario()
+            else:
+                clear_terminal()
+                print("\nCompra cancelada")
+                print("\nVoltando ao menu da sua conta...")
+                self.menuUsuario()
+
+    def esvaziaCarrinho(self):
+        clear_terminal()
+        clientes = tables['cliente']
+        carrinho = tables['carrinho']
+        itens_carrinho = tables['item_carrinho']
+
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        id_carrinho_do_cliente = carrinho.read('id_carrinho', id_cliente = idCliente, search_type = 'id_cliente')[0][0]
+
+        if (itens_carrinho.read('*', id_carrinho = id_carrinho_do_cliente, search_type = 'id_cliente')):
+            itens_carrinho.deleteAll(id_carrinho = id_carrinho_do_cliente)
+
+            clear_terminal()
+            print("\n\tCarrinho de compras esvaziado.")
+            print("\nVoltando...")
+            self.menuCarrinho()
+        else:
+            print("\nSeu carrinho de compras já está vazio.")
+            print("\nVoltando...")
+            self.menuCarrinho()
 
     def verDadosCadastrais(self):
         clear_terminal()
         clientes = tables['cliente']
         
-        nomeCliente = clientes.read('nome', usuario = self.usuario_logado, search_type='usuario')[0][0]
-        usuarioCliente = clientes.read('usuario', usuario = self.usuario_logado, search_type='usuario')[0][0]
-        emailCliente = clientes.read('email', usuario = self.usuario_logado, search_type='usuario')[0][0]
+        nomeCliente = clientes.read('nome', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+        usuarioCliente = clientes.read('usuario', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+        emailCliente = clientes.read('email', usuario = self.usuario_logado, search_type ='usuario')[0][0]
 
         print("\nAqui estão as informações da sua conta:\n")
         print(f"- Nome: {nomeCliente}")
@@ -522,25 +672,33 @@ class Livraria():
 
     def verPedidos(self):
         clear_terminal()
+        livros = tables['livro']
         clientes = tables['cliente']
+        pedidos = tables['pedido']
+        itens_pedido = tables['item_pedido']
 
-        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type='usuario')[0][0]
-        if(idLivro := clientes.query(f"SELECT id_livro FROM pedido WHERE {idCliente} = pedido.id_cliente")):
-            print(f"\nHistórico dos pedidos de {self.usuario_logado}:\n")
-            qtd_pedidos = clientes.query(f"SELECT COUNT (id_livro) FROM pedido WHERE {idCliente} = pedido.id_cliente")[0][0]
-            i = 0
-            for i in range (qtd_pedidos):
-                titulo = clientes.query(f"SELECT titulo FROM livro WHERE {idLivro[i][0]} = livro.id_livro")[0][0]
-                # print(titulo)
-                preco = clientes.query(f"SELECT custo FROM pedido WHERE {idCliente} = pedido.id_cliente")[i][0]
-                # print(preco)
-                print(f" {i+1} - {titulo} | R$ {preco:.2f}")    
-            if i>=50:
-                print("...")
+        print(f"\n\tHistórico de pedidos:\n")
+        
+        idCliente = clientes.read('id_cliente', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        idPedidosCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'id_cliente')
+        if (idPedidosCliente):
             
+            for i in range(len(idPedidosCliente)):
+                idItensPedidos = itens_pedido.read('id_livro', id_pedido = idPedidosCliente[i][0], search_type = 'id_pedido')
+                print(f"ID do pedido: {idPedidosCliente[i][0]}")
+                
+                total_pedido = 0
+                for j in range(len(idItensPedidos)):
+                    titulo = livros.read('titulo', id_livro = idItensPedidos[j][0], search_type = 'id_livro')[0][0]
+                    preco = livros.read('preco', id_livro = idItensPedidos[j][0], search_type = 'id_livro')[0][0]
+                    total_pedido+=preco
+                    print(f"\tR${preco:.2f} - {titulo.capitalize()}")
+                    
+                print("-----------------------------------")
+                print(f"\tPreço total: R${total_pedido:.2f}\n\n")
+
         else:
-            print("\nVocê ainda não fez nenhum pedido.")
-            Voltar()
+            print("\nVocê ainda não tem nenhum pedido registrado.")
 
         Voltar()
         print("\nVoltando ao menu da sua conta...")
@@ -562,7 +720,6 @@ class Livraria():
                     break
         else:
             print("\nNão há nenhum cliente cadastrado ainda.")
-            Voltar()
 
         Voltar()
         print("\nVoltando ao menu principal...\n")
@@ -570,21 +727,22 @@ class Livraria():
 
     def mostra_vendas(self):
         clear_terminal()
+        clientes = tables['cliente']
         pedidos = tables['pedido']
-        vendas = pedidos.read_all('id_pedido, custo')
+        vendas = pedidos.read_all('id_pedido, custo, id_cliente')
         if vendas:
             print("\nVendas registradas na livraria:\n")
             i = 0
             for row in vendas:
                 if i <=50: # pra mostrar só as 50 primeiras vendas
                     i+=1
-                    print(f"Venda {row[0]} - R$ {row[1]:.2f}")
+                    nomeCliente = clientes.read('nome', id_cliente = row[3], search_type = 'id_cliente')
+                    print(f"Venda {row[0]} - R${row[1]:.2f}  - {nomeCliente}")
                 else:
                     print("...")
                     break
         else:
             print("\nNão há nenhuma venda registrada ainda.")
-            Voltar()
 
         Voltar()
         print("\nVoltando ao menu principal...\n")
