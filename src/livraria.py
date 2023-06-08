@@ -798,7 +798,7 @@ class Livraria():
             for row in vendas:
                 if i <=50: # pra mostrar só as 50 primeiras vendas
                     i+=1
-                    nomeCliente = clientes.read('nome', id_cliente = row[3], search_type = 'id_cliente')
+                    nomeCliente = clientes.read('nome', id_cliente = row[2], search_type = 'id_cliente')[0][0]
                     print(f"Venda {row[0]} - R${row[1]:.2f}  - {nomeCliente}")
                 else:
                     print("...")
