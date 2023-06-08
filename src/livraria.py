@@ -149,27 +149,27 @@ class Livraria():
         print("\n\tTela de Cadastro\n")
             
         # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
-        name = input("\n\tNome completo: ")
+        name = input("\nNome completo: ")
 
-        email = input("\tEmail: ")
+        email = input("Email: ")
         if(not checkEmail(email)):
             print("\n\tO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
             self.menuPrincipal()
             quit()
 
-        usuario = input("\tNome de usuário: ")
+        usuario = input("Nome de usuário: ")
         if(not checkUsername(usuario)):
             print("\n\tEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
             self.menuPrincipal()
             quit()
 
-        senha = input("\tSenha: ")
-        senha_verificacao = input("\tVerificação da senha: ")
+        senha = input("Senha: ")
+        senha_verificacao = input("Verificação da senha: ")
         
         if senha != senha_verificacao:
-            print("\n\tAs senhas digitadas não coincidem, por favor tente novamente:")
-            senha = input("\tSenha: ")
-            senha_verificacao = input("\tVerificação da senha: ")
+            print("\nAs senhas digitadas não coincidem, por favor tente novamente:")
+            senha = input("Senha: ")
+            senha_verificacao = input("Verificação da senha: ")
             
         if senha != senha_verificacao:
             clear_terminal()
@@ -177,7 +177,7 @@ class Livraria():
             self.menuPrincipal()
             quit()
 
-        print(("\tÉ flamenguista?"))
+        print(("Torce para o time do flamengo?"))
         isFlamengo = SimNao()
         if isFlamengo == "S" or isFlamengo == "SIM":
             isFlamengo = True
@@ -187,7 +187,7 @@ class Livraria():
         self.registered(name, usuario, email, senha, isFlamengo)
 
     def bookSearch(self):
-        search_c = ["D", "T", "A", "P", "V", "VOLTAR"]
+        search_c = ["D", "T", "A", "P", "F", "V", "VOLTAR"]
         print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
 
         while True:
@@ -195,7 +195,8 @@ class Livraria():
                     "* (D) Títulos disponíveis \n"
                     "* (T) Pesquisa por título \n"
                     "* (A) Pesquisa por autor \n"
-                    "* (P) Pesquisa por ano de publicação \n\n"
+                    "* (P) Pesquisa por ano de publicação \n"
+                    "* (F) Pesquisa por faixa de preço \n\n"
                     "* (V) Voltar \n\n"
                     "-> "
                     )
@@ -208,6 +209,34 @@ class Livraria():
                 break
 
         self.pesquisa(p)
+
+    def pesquisa(self, p):         
+        if p == "D":
+            self.pesquisaAmostra()
+
+        elif p == "T":
+            self.pesquisaTitulo()
+
+        elif p == "A":
+            self.pesquisaAutor()
+
+        elif p == "P":
+            self.pesquisaAnoPublicacao()
+
+        elif p == "F":
+            self.pesquisaFaixaPreco()
+
+        elif p == "V" or p == "VOLTAR":
+            clear_terminal()
+            if self.logado:
+                print("\nVoltando ao menu da sua conta...\n")
+                self.menuUsuario()
+            else:
+                print("\nVoltando ao menu principal...\n")
+                self.menuPrincipal()
+
+        print("\n\nERRO!\n\n")
+        quit()
 
     def pesquisaAmostra(self):
         table_livro = tables['livro']
@@ -302,7 +331,7 @@ class Livraria():
             for row in ret:
                 if i <=50:
                     i +=1
-                    print(f" {i} - {row[0]}")
+                    print(f" {i} - {row[0].capitalize()}")
                 else:
                     print("...")
                     break
@@ -332,7 +361,7 @@ class Livraria():
                     print("\nVoltando ao menu principal...\n")
                     self.menuPrincipal()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor.capitalize}'.")
+            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor.capitalize()}'.")
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
@@ -354,7 +383,7 @@ class Livraria():
             for row in ret:
                 if i <=50: # pra mostrar só os 50 primeiros livros
                     i+=1
-                    print(f" {i} - {row[0]}")
+                    print(f" {i} - {row[0].capitalize()}")
                 else:
                     print("...")
                     break
@@ -391,30 +420,61 @@ class Livraria():
                 print("\nVoltando ao menu principal...\n")
                 self.menuPrincipal()
 
-    def pesquisa(self, p):         
-        if p == "D":
-            self.pesquisaAmostra()
+    def pesquisaFaixaPreco(self):
+        min_value = input("\nBuscar livros acima de R$")
+        while not (min_value.isnumeric()) or int(min_value) >= 10000 or int(min_value) < 0:
+            min_value = input("\nPor favor informe um valor válido para a busca:\n-> R$ ")
 
-        elif p == "T":
-            self.pesquisaTitulo()
+        max_value = input("\nBuscar livros abaixo de R$")
+        while not (max_value.isnumeric()) or int(min_value) >= 10000 or int(min_value) < 0:
+            max_value = input("\nPor favor informe um valor válido para a busca:\n-> R$ ")
 
-        elif p == "A":
-            self.pesquisaAutor()
+        table_livro = tables['livro']
+        if (ret := table_livro.query(f'SELECT titulo FROM livro WHERE preco >= {min_value} and preco <= {max_value}')):
 
-        elif p == "P":
-            self.pesquisaAnoPublicacao()
-
-        elif p == "V" or p == "VOLTAR":
             clear_terminal()
+            print(f"\nLivros com preço entre R${min_value} e R${max_value}:")
+            i = 0
+            for row in ret:
+                if i <=50: # pra mostrar só os 50 primeiros livros
+                    i+=1
+                    print(f" {i} - {row[0].capitalize()}")
+                else:
+                    print("...")
+                    break
+
+            if self.logado:
+                print("\nDeseja adicionar ao seu carrinho de compras algum livro destacado acima?\n")
+                comprar = SimNao()
+                if comprar == "S" or comprar == "SIM":
+                    index = input("\nInforme o índice do livro que deseja:\n-> ")
+                    while not index.isnumeric() or int(index) <= 0 or int(index) > i:
+                        index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
+                    self.adicionaLivro(ret[int(index) - 1][0])
+                else:
+                    clear_terminal()
+                    print("\nCompra cancelada")
+                    print("\nVoltando ao menu da sua conta...\n")
+                    self.menuUsuario()
+            else:
+                print("\nDeseja fazer login e comprar algum livro destacado acima?\n")
+                deseja = SimNao()
+                if deseja == "S" or deseja == "SIM":
+                    clear_terminal()
+                    self.Login()
+                else:
+                    clear_terminal()
+                    print("\nVoltando ao menu principal...\n")
+                    self.menuPrincipal()
+        else:
+            clear_terminal()
+            print(f"\nNenhum livro no estoque da livraria está entre nessa faixa de preço mencionada.")
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
             else:
                 print("\nVoltando ao menu principal...\n")
                 self.menuPrincipal()
-
-        # print("\n\nERRO!\n\n")
-        # quit()
         
     def menuCarrinho(self):
         search_c = ["A", "R", "C", "F", "E", "V", "VOLTAR"]
@@ -507,6 +567,7 @@ class Livraria():
             self.menuCarrinho()
         
         print(f"\n\tLivros no seu carrinho de compras:\n")
+        i = 0
         for i in range(len(id_livros_carrinho)):
             titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
             if i <=50:
@@ -600,7 +661,6 @@ class Livraria():
             if deseja == "S" or deseja == "SIM":
                 flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
                 if flamenguista:
-                    valor_original = custo_total
                     print("\nVocê ganhou um desconto de 15% na compra por torcer para o time do Flamengo.")
                     custo_total = custo_total * (1 - 0.15)
                     print(f"Valor após o desconto -> R${custo_total:.2f}")
@@ -687,14 +747,16 @@ class Livraria():
                 idItensPedidos = itens_pedido.read('id_livro', id_pedido = idPedidosCliente[i][0], search_type = 'id_pedido')
                 print(f"ID do pedido: {idPedidosCliente[i][0]}")
                 
-                total_pedido = 0
                 for j in range(len(idItensPedidos)):
                     titulo = livros.read('titulo', id_livro = idItensPedidos[j][0], search_type = 'id_livro')[0][0]
                     preco = livros.read('preco', id_livro = idItensPedidos[j][0], search_type = 'id_livro')[0][0]
-                    total_pedido+=preco
+                    flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+                    if flamenguista:
+                        preco = preco * (1 - 0.15)
                     print(f"\tR${preco:.2f} - {titulo.capitalize()}")
                     
                 print("-----------------------------------")
+                total_pedido = pedidos.read('custo', id_pedido = idPedidosCliente[i][0], search_type = 'id_pedido')[0][0]
                 print(f"\tPreço total: R${total_pedido:.2f}\n\n")
 
         else:
