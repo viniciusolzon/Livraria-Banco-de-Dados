@@ -55,7 +55,7 @@ class ClienteTable(Connection):
             print("Record not found in ClienteTable", error)
 
     # UPDATE
-    def update(self, id_cliente, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, update_type="nome"):
+    def update(self, id_cliente = 0, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, update_type="nome"):
         try:
             sql = f"UPDATE cliente SET nome = '{nome}' WHERE id_cliente = {id_cliente}"
             
@@ -65,6 +65,8 @@ class ClienteTable(Connection):
                 sql = f"UPDATE cliente SET email = '{email}' WHERE id_cliente = {id_cliente}"
             elif update_type == "senha":
                 sql = f"UPDATE cliente SET senha = '{senha}' WHERE id_cliente = {id_cliente}"
+            elif update_type == "isFlamengo":
+                sql = f"UPDATE cliente SET isFlamengo = '{isFlamengo}' WHERE id_cliente = {id_cliente}"
 
             self.execute(sql)
             self.commit()

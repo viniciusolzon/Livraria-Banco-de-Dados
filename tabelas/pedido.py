@@ -9,20 +9,24 @@ class PedidoTable(Connection):
         CREATE TABLE IF NOT EXISTS pedido(
             id_pedido SERIAL PRIMARY KEY NOT NULL,
             id_cliente INT NOT NULL,
+            id_vendedor INT NOT NULL,
             custo FLOAT NOT NULL,
-            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente)
+            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
+            FOREIGN KEY (id_vendedor) REFERENCES vendedor (id_vendedor)
         );
         """
         self.execute(sql)
         self.commit()
 
     #READ/Search
-    def read(self, select = '*', id_pedido = 0, id_cliente = 0, custo = 0, search_type = "id_cliente"):
+    def read(self, select = '*', id_pedido = 0, id_cliente = 0, id_vendedor = 0, custo = 0, search_type = "id_cliente"):
         try:
             sql = f'SELECT {select} FROM pedido WHERE id_cliente = {id_cliente}'
 
             if search_type == "id_pedido":
                 sql = f'SELECT {select} FROM pedido WHERE id_pedido = {id_pedido}'
+            elif search_type == "id_vendedor":
+                sql = f'SELECT {select} FROM pedido WHERE id_vendedor = {id_vendedor}'
             elif search_type == "custo":
                 sql = f'SELECT {select} FROM pedido WHERE custo = {custo}'
 
@@ -61,9 +65,9 @@ class PedidoTable(Connection):
             print("Error updating pedido", error)
 
     # INSERT
-    def insert(self, id_cliente = 0, custo = 0):
+    def insert(self, id_cliente = 0, id_vendedor = 0, custo = 0):
         try:
-            sql = f"INSERT INTO pedido (id_cliente, custo) VALUES ({id_cliente}, {custo})"
+            sql = f"INSERT INTO pedido (id_cliente, id_vendedor, custo) VALUES ({id_cliente}, {id_vendedor}, {custo})"
 
             self.execute(sql)
             self.commit()

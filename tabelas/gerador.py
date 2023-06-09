@@ -1,5 +1,6 @@
-from tabelas.cliente import ClienteTable
 from tabelas.livro import LivroTable
+from tabelas.cliente import ClienteTable
+from tabelas.vendedor import VendedorTable
 from tabelas.carrinho import CarrinhoTable
 from tabelas.pedido import PedidoTable
 from tabelas.item_carrinho import ItemCarrinhoTable
@@ -9,6 +10,7 @@ tables = {}
 
 tables['livro'] = LivroTable()
 tables['cliente'] = ClienteTable()
+tables['vendedor'] = VendedorTable()
 tables['carrinho'] = CarrinhoTable()
 tables['pedido'] = PedidoTable()
 tables['item_carrinho'] = ItemCarrinhoTable()

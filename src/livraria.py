@@ -1,6 +1,5 @@
 from src.help import *
 
-
 class Livraria():
     def __init__(self, nome = "Tuko"):
         self.nome = nome
@@ -15,15 +14,13 @@ class Livraria():
             self.menuPrincipal()
     
     def menuPrincipal(self):
-        menu_c = ["L", "C", "P", "U", "V", "Q"]
+        menu_c = ["L", "C", "P", "Q"]
         print("O que deseja fazer?")
         while True:
             choice = input( 
-                    "* (L) Realizar login \n"
-                    "* (C) Realizar cadastro \n"
-                    "* (P) Pesquisar livro \n"
-                    "* (U) Ver clientes cadastrados \n"
-                    "* (V) Ver vendas da livraria \n"
+                    "* (L) Login \n"
+                    "* (C) Cadastro\n"
+                    "* (P) Buscar livro \n"
                     "* (Q) Sair do sistema \n"
                     "-> "
                     )
@@ -43,10 +40,6 @@ class Livraria():
         elif choice == "P":
             clear_terminal()
             self.bookSearch()
-        elif choice == "U":
-            self.mostra_clientes()
-        elif choice == "V":
-            self.mostra_vendas()
         elif choice == "Q":
             quitLibrary()
         else:
@@ -99,16 +92,51 @@ class Livraria():
             print("Deu ruim")
             exit(-666)
     
-    def registered(self, Nome, Usuario, Email, Senha, flamengo):
-        tables['cliente'].insert(nome = Nome, usuario = Usuario, email = Email, senha = Senha, isFlamengo = flamengo)
-        
-        idCliente = tables['cliente'].read('id_cliente', usuario = Usuario, search_type = 'usuario')[0][0]
-        tables['carrinho'].insert(id_cliente = idCliente)
-        
-        clear_terminal()
-        print("\n\tRegistro feito com sucesso!\n")
-        self.menuPrincipal()
-        quit()
+    def menuVendedor(self):
+        print(f"\n\tOlá seja bem vindo de volta {self.usuario_logado}!\n")
+        menu_c = ["A", "B", "C", "D", "E", "X"]
+        print("O que deseja fazer?")
+        while True:
+            choice = input(
+                    "* (A) Ver todas suas vendas\n"
+                    "* (B) Ver clientes cadastrados \n"
+                    "* (C) Ver vendas da livraria \n"
+                    "* (D) Ver seus dados cadastrais\n"
+                    "* (E) Sair da conta\n"
+                    "* (X) Sair do sistema\n"
+                    "-> "
+                    )
+
+            choice = choice.upper()
+
+            if choice not in  menu_c:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                break
+
+        if choice   == "A":
+            clear_terminal()
+            self.vendasVendedor()
+        elif choice == "B":
+            self.mostraClientes()
+        elif choice == "C":
+            clear_terminal()
+            self.vendasLivraria()
+        elif choice == "D":
+            self.verDadosCadastrais()
+        elif choice == "E":
+            clear_terminal()
+            self.logado = False
+            self.usuario_logado = "Desconhecido"
+            print("\nCliente deslogado.")
+            print("Voltando ao menu principal...\n")
+            self.menuPrincipal()
+        elif choice == "X":
+            quitLibrary()
+        else:
+            print("Deu ruim")
+            exit(-666)
 
     def Login(self):
         clear_terminal()
@@ -129,10 +157,10 @@ class Livraria():
                 quit()
 
         senha = input("\tSenha: ")
-        if (not checkPassword(usuario, senha)):
+        if not (checkPassword(usuario, senha)):
             print("\n\tA senha inserida não coincide com o usuário cadastrado, tente novamente:\n")
             senha = input("\tSenha: ")
-            if (not checkPassword(usuario, senha)):
+            if not (checkPassword(usuario, senha)):
                 print("\n\tA senha inserida não coincide com o usuário cadastrado, voltando ao menu principal...\n")
                 self.menuPrincipal()
                 quit()
@@ -140,51 +168,96 @@ class Livraria():
         clear_terminal()
         self.logado = True
         self.usuario_logado = usuario
-        self.menuUsuario()
-        quit()
 
+        cliente = tables['cliente'].read('*', usuario = usuario, search_type = "usuario")
+        funcionario = tables['vendedor'].read('*', usuario = usuario, search_type = "usuario")
+        if cliente:
+            self.menuUsuario()
+        elif funcionario:
+            self.menuVendedor()
+        quit()
 
     def Register(self):
         clear_terminal()
-        print("\n\tTela de Cadastro\n")
-            
-        # aqui não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
-        name = input("\nNome completo: ")
+        menu_c = ["A", "B", "V", "VOLTAR"]
+        print("\tTela de Cadastro\n")
+        while True:
+            choice = input(
+                    "* (A) Cadastro de cliente\n"
+                    "* (B) Cadastro de funcionário\n\n"
+                    "* (V) Voltar \n\n"
+                    "-> "
+                    )
 
-        email = input("Email: ")
-        if(not checkEmail(email)):
-            print("\n\tO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
-            self.menuPrincipal()
-            quit()
+            choice = choice.upper()
 
-        usuario = input("Nome de usuário: ")
-        if(not checkUsername(usuario)):
-            print("\n\tEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
-            self.menuPrincipal()
-            quit()
-
-        senha = input("Senha: ")
-        senha_verificacao = input("Verificação da senha: ")
+            if choice not in  menu_c:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                break
         
-        if senha != senha_verificacao:
-            print("\nAs senhas digitadas não coincidem, por favor tente novamente:")
+        if choice == "V" or choice == "VOLTAR":
+            clear_terminal()
+            print("\nVoltando ao menu principal...\n")
+            self.menuPrincipal()
+        else:
+
+            # aqui' não precisa de verificação nenhuma pq podem existir vários usuários com o mesmo nome
+            name = input("\nNome completo: ")
+
+            email = input("Email: ")
+            if(not checkEmail(email)):
+                print("\n\tO email inserido já possui cadastro na livraria, voltando ao menu principal...\n")
+                self.menuPrincipal()
+                quit()
+
+            usuario = input("Nome de usuário: ")
+            if(not checkUsername(usuario)):
+                print("\n\tEsse nome de usuário já possui cadastro na livraria, voltando ao menu principal...\n")
+                self.menuPrincipal()
+                quit()
+
             senha = input("Senha: ")
             senha_verificacao = input("Verificação da senha: ")
             
-        if senha != senha_verificacao:
-            clear_terminal()
-            print("\n\tAs senhas digitadas não coincidem, voltando ao menu principal...\n")
-            self.menuPrincipal()
-            quit()
+            if senha != senha_verificacao:
+                print("\nAs senhas digitadas não coincidem, por favor tente novamente:")
+                senha = input("Senha: ")
+                senha_verificacao = input("Verificação da senha: ")
+                
+            if senha != senha_verificacao:
+                clear_terminal()
+                print("\n\tAs senhas digitadas não coincidem, voltando ao menu principal...\n")
+                self.menuPrincipal()
+                quit()
 
-        print(("Torce para o time do flamengo?"))
-        isFlamengo = SimNao()
-        if isFlamengo == "S" or isFlamengo == "SIM":
-            isFlamengo = True
-        else:
-            isFlamengo = False
+            if choice == "A": # cliente
+                print(("Torce para o time do flamengo?"))
+                isFlamengo = SimNao()
+                if isFlamengo == "S" or isFlamengo == "SIM":
+                    isFlamengo = True
+                else:
+                    isFlamengo = False
 
-        self.registered(name, usuario, email, senha, isFlamengo)
+                tables['cliente'].insert(nome = name, usuario = usuario, email = email, senha = senha, isFlamengo = isFlamengo)
+        
+                idCliente = tables['cliente'].read('id_cliente', usuario = usuario, search_type = 'usuario')[0][0]
+                tables['carrinho'].insert(id_cliente = idCliente)
+                
+                clear_terminal()
+                print("\n\tRegistro feito com sucesso!\n")
+                self.menuPrincipal()
+                quit()
+
+            else: # funcionário
+                tables['vendedor'].insert(nome = name, usuario = usuario, email = email, senha = senha)
+
+                clear_terminal()
+                print("\n\tRegistro feito com sucesso!\n")
+                self.menuPrincipal()
+                quit()
+                pass
 
     def bookSearch(self):
         search_c = ["D", "T", "A", "P", "F", "V", "VOLTAR"]
@@ -664,13 +737,27 @@ class Livraria():
                     print("\nVocê ganhou um desconto de 15% na compra por torcer para o time do Flamengo.")
                     custo_total = custo_total * (1 - 0.15)
                     print(f"Valor após o desconto -> R${custo_total:.2f}")
-                    
+
+                vendedor = tables['vendedor']
+                vendedores = vendedor.read_all('nome')
+                # print(vendedores)
+                vendedores = [x[0].upper() for x in vendedores]
+                # print(vendedores)
+
+                nomeVendedor = input(f"\nInforme o nome do funcionário que fez a venda:\n-> ")
+                while nomeVendedor.upper() not in vendedores:
+                    print(f"\nFuncionário inexistente. Tente novamente:\n-> ")
+                    nomeVendedor = input()
+
+                idVendedor = vendedor.read('id_vendedor', nome = nomeVendedor, search_type = 'nome')[0][0]
+                # print(f"ID DO VENDEDOR {idVendedor}")
+
+                pedidos = tables['pedido']
+                pedidos.insert(id_cliente = idCliente, id_vendedor = idVendedor, custo = round(custo_total, 2))                
+                
                 print(f"\nProcessando pagamento...")
                 
-                pedidos = tables['pedido']
-                pedidos.insert(id_cliente = idCliente, custo = round(custo_total, 2))
-                
-                idPedidoCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'usuario')[-1][0]
+                idPedidoCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'id_cliente')[-1][0]
                 itens_pedidos = tables['item_pedido']
                 for i in range(len(id_livros_carrinho)):
                     itens_pedidos.insert(id_pedido = idPedidoCliente, id_livro = id_livros_carrinho[i][0])
@@ -715,20 +802,39 @@ class Livraria():
     def verDadosCadastrais(self):
         clear_terminal()
         clientes = tables['cliente']
+        vendedor = tables['vendedor']
         
-        nomeCliente = clientes.read('nome', usuario = self.usuario_logado, search_type ='usuario')[0][0]
-        usuarioCliente = clientes.read('usuario', usuario = self.usuario_logado, search_type ='usuario')[0][0]
-        emailCliente = clientes.read('email', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+        usuario_vendedor = vendedor.read('usuario', usuario = self.usuario_logado, search_type = "usuario")
+        usuario_cliente = clientes.read('usuario', usuario = self.usuario_logado, search_type = 'usuario')
+
+        nome = ''
+        usuario = ''
+        email = ''
+
+        if usuario_vendedor:
+            nome = vendedor.read('nome', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+            usuario = vendedor.read('usuario', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+            email = vendedor.read('email', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+                
+        elif usuario_cliente:
+            nome = clientes.read('nome', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+            usuario = clientes.read('usuario', usuario = self.usuario_logado, search_type ='usuario')[0][0]
+            email = clientes.read('email', usuario = self.usuario_logado, search_type ='usuario')[0][0]
 
         print("\nAqui estão as informações da sua conta:\n")
-        print(f"- Nome: {nomeCliente}")
-        print(f"- Usuário: {usuarioCliente}")
-        print(f"- Email: {emailCliente}")
+        print(f"- Nome: {nome}")
+        print(f"- Usuário: {usuario}")
+        print(f"- Email: {email}")
 
-            
-        Voltar()
-        print("\nVoltando ao menu da sua conta...")
-        self.menuUsuario()
+        if usuario_vendedor:
+            Voltar()
+            print("\nVoltando ao menu da sua conta...")
+            self.menuVendedor()
+        elif usuario_cliente:
+            Voltar()
+            print("\nVoltando ao menu da sua conta...")
+            self.menuUsuario()
+        quit()
 
     def verPedidos(self):
         clear_terminal()
@@ -766,7 +872,7 @@ class Livraria():
         print("\nVoltando ao menu da sua conta...")
         self.menuUsuario()
 
-    def mostra_clientes(self):
+    def mostraClientes(self):
         clear_terminal()
         clientes = tables['cliente']
         nomes = clientes.read_all('nome')
@@ -784,10 +890,10 @@ class Livraria():
             print("\nNão há nenhum cliente cadastrado ainda.")
 
         Voltar()
-        print("\nVoltando ao menu principal...\n")
-        self.menuPrincipal()
+        print("\nVoltando ao menuda sua conta...\n")
+        self.menuVendedor()
 
-    def mostra_vendas(self):
+    def vendasLivraria(self):
         clear_terminal()
         clientes = tables['cliente']
         pedidos = tables['pedido']
@@ -807,5 +913,29 @@ class Livraria():
             print("\nNão há nenhuma venda registrada ainda.")
 
         Voltar()
-        print("\nVoltando ao menu principal...\n")
-        self.menuPrincipal()
+        print("\nVoltando ao menuda sua conta...\n")
+        self.menuVendedor()
+
+    def vendasVendedor(self):
+        clear_terminal()
+        vendedor = tables['vendedor']
+        pedidos = tables['pedido']
+
+        idVendedor = vendedor.read('id_vendedor', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
+        vendasVendedor = pedidos.read('id_pedido, custo', id_vendedor = idVendedor, search_type = 'id_vendedor')
+        if vendasVendedor:
+            print("\nVendas registradas na livraria:\n")
+            i = 0
+            for row in vendasVendedor:
+                if i <=50: # pra mostrar só as 50 primeiras vendas
+                    i+=1
+                    print(f"Venda {row[0]} - R${row[1]:.2f}")
+                else:
+                    print("...")
+                    break
+        else:
+            print("\nVocê ainda não efetuou nenhuma venda.")
+
+        Voltar()
+        print("\nVoltando ao menuda sua conta...\n")
+        self.menuVendedor()
