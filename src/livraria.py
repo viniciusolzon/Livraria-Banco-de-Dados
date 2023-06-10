@@ -775,6 +775,17 @@ class Livraria():
                 while not pagamento.isnumeric() or int(pagamento) <= 0 or int(pagamento) >= 5:
                     pagamento = input("\nPor favor informe um índice válido (número destacado a esquerda da forma de pagamento):\n-> ")
 
+                pagamento = int(pagamento)
+                forma_pagamento = 'pix'
+                if pagamento == 1:
+                    forma_pagamento = 'pix'
+                elif pagamento == 2:
+                    forma_pagamento = 'boleto'
+                elif pagamento == 3:
+                    forma_pagamento = 'cartao'
+                elif pagamento == 4:
+                    forma_pagamento = 'berries'
+
                 vendedor = tables['vendedor']
                 vendedores = vendedor.read_all('nome')
                 vendedores = [x[0] for x in vendedores]
@@ -786,7 +797,7 @@ class Livraria():
                     self.menuUsuario()
 
                 else:
-                    print("\n\tVendedores da livravria")
+                    print("\n\tVendedores da livraria:\n")
                     i = 0
                     for i in range(len(vendedores)):
                         print(f"({i+1}) -> {vendedores[i]}")
@@ -800,7 +811,7 @@ class Livraria():
                     print("\nMuito obrigado!")
 
                     pedidos = tables['pedido']
-                    pedidos.insert(id_cliente = idCliente, id_vendedor = idVendedor, custo = round(custo_total, 2))                
+                    pedidos.insert(id_cliente = idCliente, id_vendedor = idVendedor, custo = round(custo_total, 2), forma_pagamento = forma_pagamento)                
                     
                     print(f"\nProcessando pagamento...")
                     

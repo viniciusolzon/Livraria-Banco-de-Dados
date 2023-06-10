@@ -12,6 +12,7 @@ class PedidoTable(Connection):
             id_vendedor INT NOT NULL,
             custo FLOAT NOT NULL,
             data DATE NOT NULL DEFAULT CURRENT_DATE,
+            forma_pagamento VARCHAR(255) NOT NULL,
             FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
             FOREIGN KEY (id_vendedor) REFERENCES vendedor (id_vendedor)
         );
@@ -66,9 +67,9 @@ class PedidoTable(Connection):
             print("Error updating pedido", error)
 
     # INSERT
-    def insert(self, id_cliente = 0, id_vendedor = 0, custo = 0):
+    def insert(self, id_cliente = 0, id_vendedor = 0, custo = 0, forma_pagamento = 'pix'):
         try:
-            sql = f"INSERT INTO pedido (id_cliente, id_vendedor, custo) VALUES ({id_cliente}, {id_vendedor}, {custo})"
+            sql = f"INSERT INTO pedido (id_cliente, id_vendedor, custo, forma_pagamento) VALUES ({id_cliente}, {id_vendedor}, {custo}, '{forma_pagamento}')"
 
             self.execute(sql)
             self.commit()
