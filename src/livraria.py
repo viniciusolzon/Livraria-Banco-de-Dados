@@ -18,10 +18,10 @@ class Livraria():
         print("O que deseja fazer?")
         while True:
             choice = input( 
-                    "* (L) Login \n"
+                    "* (L) Login\n"
                     "* (C) Cadastro\n"
-                    "* (P) Buscar livro \n"
-                    "* (Q) Sair do sistema \n"
+                    "* (P) Buscar livro\n"
+                    "* (Q) Sair do sistema\n"
                     "-> "
                     )
             
@@ -94,15 +94,17 @@ class Livraria():
     
     def menuVendedor(self):
         print(f"\n\tOlá seja bem vindo de volta {self.usuario_logado}!\n")
-        menu_c = ["A", "B", "C", "D", "E", "X"]
+        menu_c = ["A", "B", "C", "D", "E", "F", "G", "X"]
         print("O que deseja fazer?")
         while True:
             choice = input(
-                    "* (A) Ver todas suas vendas\n"
-                    "* (B) Ver clientes cadastrados \n"
-                    "* (C) Ver vendas da livraria \n"
-                    "* (D) Ver seus dados cadastrais\n"
-                    "* (E) Sair da conta\n"
+                    "* (A) Buscar livro\n"
+                    "* (B) Ver todas suas vendas\n"
+                    "* (C) Ver clientes cadastrados\n"
+                    "* (D) Relatório mensal de cada vendedor\n"
+                    "* (E) Ver vendas da livraria\n"
+                    "* (F) Ver seus dados cadastrais\n"
+                    "* (G) Sair da conta\n"
                     "* (X) Sair do sistema\n"
                     "-> "
                     )
@@ -117,15 +119,20 @@ class Livraria():
 
         if choice   == "A":
             clear_terminal()
-            self.vendasVendedor()
+            self.bookSearch()
         elif choice == "B":
-            self.mostraClientes()
+            clear_terminal()
+            self.vendasVendedor()
         elif choice == "C":
+            self.mostraClientes()
+        elif choice == "D":
+            self.relatorioMensal()
+        elif choice == "E":
             clear_terminal()
             self.vendasLivraria()
-        elif choice == "D":
+        elif choice == "F":
             self.verDadosCadastrais()
-        elif choice == "E":
+        elif choice == "G":
             clear_terminal()
             self.logado = False
             self.usuario_logado = "Desconhecido"
@@ -260,19 +267,33 @@ class Livraria():
                 pass
 
     def bookSearch(self):
-        search_c = ["D", "T", "A", "P", "F", "V", "VOLTAR"]
+        search_c = ["D", "T", "A", "P", "F", "G", "V", "VOLTAR"]
         print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
 
+        funcionario = tables['vendedor'].read('*', usuario = self.usuario_logado, search_type = "usuario")
+
         while True:
-            p = input(
-                    "* (D) Títulos disponíveis \n"
-                    "* (T) Pesquisa por título \n"
-                    "* (A) Pesquisa por autor \n"
-                    "* (P) Pesquisa por ano de publicação \n"
-                    "* (F) Pesquisa por faixa de preço \n\n"
-                    "* (V) Voltar \n\n"
-                    "-> "
-                    )
+            if funcionario:
+                p = input(
+                        "* (D) Títulos disponíveis\n"
+                        "* (T) Pesquisa por título\n"
+                        "* (A) Pesquisa por autor\n"
+                        "* (P) Pesquisa por ano de publicação\n"
+                        "* (F) Pesquisa por faixa de preço\n"
+                        "* (G) Ver livros com menos de 5 unidades no estoque\n\n"
+                        "* (V) Voltar \n\n"
+                        "-> "
+                        )
+            else:
+                p = input(
+                        "* (D) Títulos disponíveis\n"
+                        "* (T) Pesquisa por título\n"
+                        "* (A) Pesquisa por autor\n"
+                        "* (P) Pesquisa por ano de publicação\n"
+                        "* (F) Pesquisa por faixa de preço\n\n"
+                        "* (V) Voltar \n\n"
+                        "-> "
+                        )
             p = p.upper()
 
             if p not in search_c:
@@ -284,7 +305,7 @@ class Livraria():
         self.pesquisa(p)
 
     def pesquisa(self, p):         
-        if p == "D":
+        if p   == "D":
             self.pesquisaAmostra()
 
         elif p == "T":
@@ -298,6 +319,10 @@ class Livraria():
 
         elif p == "F":
             self.pesquisaFaixaPreco()
+
+        elif p == "G":
+            # self.verEstoqueBaixo()
+            pass
 
         elif p == "V" or p == "VOLTAR":
             clear_terminal()
@@ -727,7 +752,7 @@ class Livraria():
                 else:
                     print("...")
                     break
-            
+
             print(f"\nConfirmar compra no valor total de R${custo_total:.2f}?")
             deseja = SimNao()
             
@@ -736,42 +761,63 @@ class Livraria():
                 if flamenguista:
                     print("\nVocê ganhou um desconto de 15% na compra por torcer para o time do Flamengo.")
                     custo_total = custo_total * (1 - 0.15)
-                    print(f"Valor após o desconto -> R${custo_total:.2f}")
+                    print(f"Valor após o desconto -> R${custo_total:.2f}\n")
+
+                input("\nAperte enter para continuar.")
+                clear_terminal()
+                print(f"\n\tForma de pagamento:\n")
+                print("(1) -> Pix")
+                print("(2) -> Boleto")
+                print("(3) -> Cartão")
+                print("(4) -> Berries")
+                pagamento = input("-> ")
+
+                while not pagamento.isnumeric() or int(pagamento) <= 0 or int(pagamento) >= 5:
+                    pagamento = input("\nPor favor informe um índice válido (número destacado a esquerda da forma de pagamento):\n-> ")
 
                 vendedor = tables['vendedor']
                 vendedores = vendedor.read_all('nome')
-                # print(vendedores)
-                vendedores = [x[0].upper() for x in vendedores]
-                # print(vendedores)
+                vendedores = [x[0] for x in vendedores]
 
-                nomeVendedor = input(f"\nInforme o nome do funcionário que fez a venda:\n-> ")
-                while nomeVendedor.upper() not in vendedores:
-                    print(f"\nFuncionário inexistente. Tente novamente:\n-> ")
-                    nomeVendedor = input()
+                if not vendedores:
+                    print("\nDesculpe não temos vendedores disponíveis no momento.")
+                    print("\nCompra cancelada")
+                    print("\nVoltando ao menu da sua conta...")
+                    self.menuUsuario()
 
-                idVendedor = vendedor.read('id_vendedor', nome = nomeVendedor, search_type = 'nome')[0][0]
-                # print(f"ID DO VENDEDOR {idVendedor}")
+                else:
+                    print("\n\tVendedores da livravria")
+                    i = 0
+                    for i in range(len(vendedores)):
+                        print(f"({i+1}) -> {vendedores[i]}")
 
-                pedidos = tables['pedido']
-                pedidos.insert(id_cliente = idCliente, id_vendedor = idVendedor, custo = round(custo_total, 2))                
-                
-                print(f"\nProcessando pagamento...")
-                
-                idPedidoCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'id_cliente')[-1][0]
-                itens_pedidos = tables['item_pedido']
-                for i in range(len(id_livros_carrinho)):
-                    itens_pedidos.insert(id_pedido = idPedidoCliente, id_livro = id_livros_carrinho[i][0])
+                    indiceVendedor = input(f"\nInforme o índice do funcionário que fez a venda:\n-> ")
+                    while not indiceVendedor.isnumeric() or int(indiceVendedor) <= 0 or int(indiceVendedor) > i + 1:
+                        indiceVendedor = input("\nPor favor informe um índice válido (número destacado a esquerda do vendedor):\n-> ")
 
-                print(f"Compra autorizada no valor de R$ {custo_total:.2f}.")
-                print("\nSeus livros podem ser visualizados na aba de pedidos no menu de sua conta.")
-                
-                print(f"\nAperte enter para continuar.")
-                input()
-                self.esvaziaCarrinho()
+                    idVendedor = vendedor.read('id_vendedor', nome = vendedores[int(indiceVendedor) - 1], search_type = 'nome')[0][0]
 
-                Voltar()                
-                print("\nVoltando ao menu da sua conta...")
-                self.menuUsuario()
+                    print("\nMuito obrigado!")
+
+                    pedidos = tables['pedido']
+                    pedidos.insert(id_cliente = idCliente, id_vendedor = idVendedor, custo = round(custo_total, 2))                
+                    
+                    print(f"\nProcessando pagamento...")
+                    
+                    idPedidoCliente = pedidos.read('id_pedido', id_cliente = idCliente, search_type = 'id_cliente')[-1][0]
+                    itens_pedidos = tables['item_pedido']
+                    for i in range(len(id_livros_carrinho)):
+                        itens_pedidos.insert(id_pedido = idPedidoCliente, id_livro = id_livros_carrinho[i][0])
+
+                    print(f"Compra autorizada no valor de R$ {custo_total:.2f}.")
+                    print("\nSeus livros podem ser visualizados na aba de pedidos no menu de sua conta.")
+                    
+                    input("\nAperte enter para continuar.")
+                    self.esvaziaCarrinho()
+
+                    Voltar()
+                    print("\nVoltando ao menu da sua conta...")
+                    self.menuUsuario()
             else:
                 clear_terminal()
                 print("\nCompra cancelada")
@@ -821,7 +867,7 @@ class Livraria():
             usuario = clientes.read('usuario', usuario = self.usuario_logado, search_type ='usuario')[0][0]
             email = clientes.read('email', usuario = self.usuario_logado, search_type ='usuario')[0][0]
 
-        print("\nAqui estão as informações da sua conta:\n")
+        print("\n\tDados cadastrais:\n")
         print(f"- Nome: {nome}")
         print(f"- Usuário: {usuario}")
         print(f"- Email: {email}")
@@ -863,7 +909,7 @@ class Livraria():
                     
                 print("-----------------------------------")
                 total_pedido = pedidos.read('custo', id_pedido = idPedidosCliente[i][0], search_type = 'id_pedido')[0][0]
-                print(f"\tPreço total: R${total_pedido:.2f}\n\n")
+                print(f"\tTotal: R${total_pedido:.2f}\n\n")
 
         else:
             print("\nVocê ainda não tem nenhum pedido registrado.")
@@ -877,7 +923,7 @@ class Livraria():
         clientes = tables['cliente']
         nomes = clientes.read_all('nome')
         if nomes:
-            print("\nClientes cadastrados na livraria:\n")
+            print("\n\tClientes cadastrados:\n")
             i = 0
             for row in nomes:
                 if i <=50: # pra mostrar só os 50 primeiros clientes
@@ -890,22 +936,64 @@ class Livraria():
             print("\nNão há nenhum cliente cadastrado ainda.")
 
         Voltar()
-        print("\nVoltando ao menuda sua conta...\n")
+        print("\nVoltando ao menu da sua conta...\n")
+        self.menuVendedor()
+
+    def relatorioMensal(self):
+        clear_terminal()
+        vendedor = tables['vendedor']
+        pedido = tables['pedido']
+
+        vendas = pedido.read_all('id_pedido, id_cliente, id_vendedor, custo, data')
+        if vendas:
+            print("\n\tVendas registradas:\n")
+            # print(f"Quantidade de vendas: {len(vendas)}")
+            vendedores = vendedor.read_all()
+            # print(f"Quantidade de vendedores: {len(vendedores)}")
+            for i in range(len(vendedores)):
+                if i <=50: # pra mostrar só as 50 primeiras vendas
+                    nome_vendedor = vendedor.read_all('nome')
+                    print(f"Vendedor: {nome_vendedor[i][0]}")
+                    
+                    id_vendedor = vendedor.read_all('id_vendedor')
+                    vendas_vendedor = pedido.read('custo', id_vendedor = id_vendedor[i][0], search_type = 'id_vendedor')
+                    if vendas_vendedor:
+                        total = 0
+                        for j in range(len(vendas_vendedor)):
+                            print(f"\tVenda {j+1}: R${vendas_vendedor[j][0]}")
+                            total += vendas_vendedor[j][0]
+                        print("-----------------------------------")
+                        print(f"\tTotal: R${total:.2f}\n\n")
+                    else:
+                        print("-----------------------------------")
+                        print(f"\tTotal: R$0.00\n\n")
+                else:
+                    print("...")
+                    break
+        else:
+            print("\nNão há vendas registradas no sistema")
+
+        Voltar()
+        print("\nVoltando ao menu da sua conta...\n")
         self.menuVendedor()
 
     def vendasLivraria(self):
         clear_terminal()
         clientes = tables['cliente']
+        vendedores = tables['vendedor']
         pedidos = tables['pedido']
-        vendas = pedidos.read_all('id_pedido, custo, id_cliente')
+        vendas = pedidos.read_all('id_pedido, custo, id_cliente, id_vendedor, data')
+
         if vendas:
-            print("\nVendas registradas na livraria:\n")
+            print("\n\tVendas registradas na livraria:")
+            print("\nID venda - Valor - Cliente - Vendedor - Data\n")
             i = 0
             for row in vendas:
                 if i <=50: # pra mostrar só as 50 primeiras vendas
                     i+=1
                     nomeCliente = clientes.read('nome', id_cliente = row[2], search_type = 'id_cliente')[0][0]
-                    print(f"Venda {row[0]} - R${row[1]:.2f}  - {nomeCliente}")
+                    nomeVendedor = vendedores.read('nome', id_vendedor = row[3], search_type = 'id_vendedor')[0][0]
+                    print(f"Venda {row[0]} - R${row[1]:.2f} - {nomeCliente} - {nomeVendedor} - {row[4]}")
                 else:
                     print("...")
                     break
@@ -913,23 +1001,26 @@ class Livraria():
             print("\nNão há nenhuma venda registrada ainda.")
 
         Voltar()
-        print("\nVoltando ao menuda sua conta...\n")
+        print("\nVoltando ao menu da sua conta...\n")
         self.menuVendedor()
 
     def vendasVendedor(self):
         clear_terminal()
+        clientes = tables['cliente']
         vendedor = tables['vendedor']
         pedidos = tables['pedido']
 
         idVendedor = vendedor.read('id_vendedor', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
-        vendasVendedor = pedidos.read('id_pedido, custo', id_vendedor = idVendedor, search_type = 'id_vendedor')
+        vendasVendedor = pedidos.read('id_pedido, custo, id_cliente, data', id_vendedor = idVendedor, search_type = 'id_vendedor')
         if vendasVendedor:
-            print("\nVendas registradas na livraria:\n")
+            print("\n\tVendas registradas:")
+            print("\nID venda - Valor - Cliente - Data\n")
             i = 0
             for row in vendasVendedor:
                 if i <=50: # pra mostrar só as 50 primeiras vendas
                     i+=1
-                    print(f"Venda {row[0]} - R${row[1]:.2f}")
+                    nomeCliente = clientes.read('nome', id_cliente = row[2], search_type = 'id_cliente')[0][0]
+                    print(f"Venda {row[0]} - R${row[1]:.2f} - {nomeCliente} - {row[3]}")
                 else:
                     print("...")
                     break
@@ -937,5 +1028,5 @@ class Livraria():
             print("\nVocê ainda não efetuou nenhuma venda.")
 
         Voltar()
-        print("\nVoltando ao menuda sua conta...\n")
+        print("\nVoltando ao menu da sua conta...\n")
         self.menuVendedor()

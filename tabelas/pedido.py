@@ -11,6 +11,7 @@ class PedidoTable(Connection):
             id_cliente INT NOT NULL,
             id_vendedor INT NOT NULL,
             custo FLOAT NOT NULL,
+            data DATE NOT NULL DEFAULT CURRENT_DATE,
             FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
             FOREIGN KEY (id_vendedor) REFERENCES vendedor (id_vendedor)
         );
