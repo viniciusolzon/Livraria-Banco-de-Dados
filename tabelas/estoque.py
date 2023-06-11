@@ -7,9 +7,9 @@ class EstoqueTable(Connection):
         Connection.__init__(self)
         sql = """
         CREATE TABLE IF NOT EXISTS estoque(
-            titulo_livro INT NOT NULL,
+            id_livro INT NOT NULL,
             quantia INT NOT NULL,
-            FOREIGN KEY (titulo_livro) REFERENCES livro (titulo_livro)
+            FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
         );
         """
         self.execute(sql)

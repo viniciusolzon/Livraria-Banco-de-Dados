@@ -955,19 +955,17 @@ class Livraria():
         vendedor = tables['vendedor']
         pedido = tables['pedido']
 
-        vendas = pedido.read_all('id_pedido, id_cliente, id_vendedor, custo, data')
+        qtd_dias = 30
+        vendas = pedido.query(f"SELECT id_pedido, id_vendedor, custo FROM pedido WHERE data > current_date - interval '{qtd_dias}' day")
         if vendas:
-            print("\n\tVendas registradas:\n")
-            # print(f"Quantidade de vendas: {len(vendas)}")
-            vendedores = vendedor.read_all()
-            # print(f"Quantidade de vendedores: {len(vendedores)}")
+            print("\n\tRelatório mensal dos vendedores:\n")
+
+            vendedores = vendedor.read_all('nome, id_vendedor')
             for i in range(len(vendedores)):
                 if i <=50: # pra mostrar só as 50 primeiras vendas
-                    nome_vendedor = vendedor.read_all('nome')
-                    print(f"Vendedor: {nome_vendedor[i][0]}")
+                    print(f"Vendedor: {vendedores[i][0]}")
                     
-                    id_vendedor = vendedor.read_all('id_vendedor')
-                    vendas_vendedor = pedido.read('custo', id_vendedor = id_vendedor[i][0], search_type = 'id_vendedor')
+                    vendas_vendedor = pedido.query(f"SELECT custo FROM pedido WHERE id_vendedor = {vendedores[i][1]} and data > current_date - interval '{qtd_dias}' day")
                     if vendas_vendedor:
                         total = 0
                         for j in range(len(vendas_vendedor)):
@@ -975,6 +973,7 @@ class Livraria():
                             total += vendas_vendedor[j][0]
                         print("-----------------------------------")
                         print(f"\tTotal: R${total:.2f}\n\n")
+
                     else:
                         print("-----------------------------------")
                         print(f"\tTotal: R$0.00\n\n")
@@ -982,7 +981,7 @@ class Livraria():
                     print("...")
                     break
         else:
-            print("\nNão há vendas registradas no sistema")
+            print(f"\nNão há vendas registradas nos últimos {qtd_dias} dias.")
 
         Voltar()
         print("\nVoltando ao menu da sua conta...\n")
