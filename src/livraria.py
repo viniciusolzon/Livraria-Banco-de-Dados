@@ -99,7 +99,7 @@ class Livraria():
         print("O que deseja fazer?")
         while True:
             choice = input(
-                    "* (A) Buscar livro\n"
+                    "* (A) Ver estoque\n"
                     "* (B) Ver todas suas vendas\n"
                     "* (C) Ver clientes cadastrados\n"
                     "* (D) Relatório mensal de cada vendedor\n"
@@ -120,7 +120,7 @@ class Livraria():
 
         if choice   == "A":
             clear_terminal()
-            self.bookSearch()
+            self.verEstoque()
         elif choice == "B":
             clear_terminal()
             self.vendasVendedor()
@@ -267,6 +267,64 @@ class Livraria():
                 quit()
                 pass
 
+    def verEstoque(self):
+        table_livro = tables['livro']
+        estoque = tables['estoque']
+        if (ret := table_livro.read_all('titulo, id_livro')):
+            clear_terminal()
+            print(f"\n\tLivros no estoque:\n")
+            i = 0
+            for row in ret:
+                if i <=50:
+                    i +=1
+                    qtd = estoque.read(id_livro = row[1])[0][0]
+                    preco = table_livro.read('preco', id_livro = row[1], search_type = 'id_livro')[0][0]
+                    print(f" {i} - {row[0].title()} - R${preco} -> {qtd} no estoque")
+                else:
+                    print("...")
+                    break
+
+        options = ["E", "V", "VOLTAR"]
+        while True:
+            p = input(
+                    "\n* (E) Ver livros com menos de 5 unidades no estoque\n"
+                    "* (V) Voltar \n\n"
+                    "-> "
+                    )
+            p = p.upper()
+
+            if p not in options:
+                print("\nDesculpe, tente novamente...\n")
+                continue
+            else:
+                break
+
+        if p == "E":
+            self.verEstoqueBaixo()
+
+        elif p == "V" or p == "VOLTAR":
+            clear_terminal()
+            self.menuVendedor()
+
+    def verEstoqueBaixo(self):
+        table_livro = tables['livro']
+        if (ret := table_livro.query('SELECT id_livro, quantia FROM estoque WHERE quantia <= 5')):
+            clear_terminal()
+            print(f"\n\tLivros com menos de 5 unidades no estoque:\n")
+            i = 0
+            for row in ret:
+                if i <=50:
+                    i +=1
+                    titulo = table_livro.read('titulo', id_livro = row[0], search_type = 'id_livro')[0][0]
+                    preco = table_livro.read('preco', id_livro = row[0], search_type = 'id_livro')[0][0]
+                    qtd = row[1]
+                    print(f" {i} - {titulo.title()} - R${preco} -> {qtd} no estoque")
+                else:
+                    print("...")
+                    break
+        Voltar()
+        self.menuVendedor()
+
     def bookSearch(self):
         search_c = ["D", "T", "A", "P", "F", "V", "VOLTAR"]
         print("\nAqui você consegue consultar os livros contidos no estoque da nossa livraria:\n")
@@ -330,7 +388,7 @@ class Livraria():
                     i +=1
                     titulo = table_livro.read('titulo', id_livro = row[0], search_type = 'id_livro')[0][0]
                     preco = table_livro.read('preco', id_livro = row[0], search_type = 'id_livro')[0][0]
-                    print(f" {i} - {titulo.capitalize()} - R${preco}")
+                    print(f" {i} - {titulo.title()} - R${preco}")
                 else:
                     print("...")
                     break
@@ -407,7 +465,7 @@ class Livraria():
                     self.menuPrincipal()
 
         else: # nao achou o livro
-            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo.capitalize()}'.")
+            print(f"\nNenhum livro no estoque da livraria possui o título '{Titulo.title()}'.")
             if self.logado: # e ta logado
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
@@ -434,10 +492,10 @@ class Livraria():
                         possivel_compra = True
                         titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
                         preco = table_livro.read('preco', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} - R${preco}")
+                        print(f" {i+1} - {titulo.title()} - R${preco}")
                     else:
                         titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} -> Fora de estoque")
+                        print(f" {i+1} - {titulo.title()} -> Fora de estoque")
                 else:
                     print("...")
                     break
@@ -450,8 +508,6 @@ class Livraria():
                         while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                             index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                         titulo = table_livro.read('titulo', id_livro = idLivro[int(index) - 1][0], search_type = 'id_livro')[0][0]
-                        print(titulo)
-                        input()
                         self.adicionaLivro(titulo)
                     else:
                         clear_terminal()
@@ -476,7 +532,7 @@ class Livraria():
                     print("\nVoltando ao menu principal...\n")
                     self.menuPrincipal()
         else:
-            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor.capitalize()}'.")
+            print(f"\nNenhum livro no estoque da livraria foi escrito por '{Autor.title()}'.")
             if self.logado:
                 print("\nVoltando ao menu da sua conta...\n")
                 self.menuUsuario()
@@ -506,10 +562,10 @@ class Livraria():
                         possivel_compra = True
                         titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
                         preco = table_livro.read('preco', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} - R${preco}")
+                        print(f" {i+1} - {titulo.title()} - R${preco}")
                     else:
                         titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} -> Fora de estoque")
+                        print(f" {i+1} - {titulo.title()} -> Fora de estoque")
                 else:
                     print("...")
                     break
@@ -522,8 +578,6 @@ class Livraria():
                         while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                             index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                         titulo = table_livro.read('titulo', id_livro = idLivro[int(index) - 1][0], search_type = 'id_livro')[0][0]
-                        print(titulo)
-                        input()
                         self.adicionaLivro(titulo)
                     else:
                         clear_terminal()
@@ -581,10 +635,7 @@ class Livraria():
                         possivel_compra = True
                         titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
                         preco = table_livro.read('preco', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} - R${preco}")
-                    else:
-                        titulo = table_livro.read('titulo', id_livro = idLivro[i][0], search_type = 'id_livro')[0][0]
-                        print(f" {i+1} - {titulo.capitalize()} -> Fora de estoque")
+                        print(f" {i+1} - {titulo.title()} - R${preco}")
                 else:
                     print("...")
                     break
@@ -597,8 +648,6 @@ class Livraria():
                         while not index.isnumeric() or int(index) <= 0 or int(index) > i:
                             index = input("\nPor favor informe um índice válido (número destacado a esquerda do título do livro):\n-> ")
                         titulo = table_livro.read('titulo', id_livro = idLivro[int(index) - 1][0], search_type = 'id_livro')[0][0]
-                        print(titulo)
-                        input()
                         self.adicionaLivro(titulo)
                     else:
                         clear_terminal()
@@ -696,7 +745,7 @@ class Livraria():
         
         print("\nLivro adicionado ao seu carrinho de compras.")
         
-        print("\nDeseja ir para o pagamento?\n-> ")
+        print("\nDeseja ir para o pagamento?\n")
         escolha = SimNao()
         if escolha == "S" or escolha == "SIM":
             self.compra()
@@ -727,7 +776,7 @@ class Livraria():
         for i in range(len(id_livros_carrinho)):
             titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
             if i <=50:
-                print(f" {i + 1} - {titulo_no_carrinho.capitalize()}")
+                print(f" {i + 1} - {titulo_no_carrinho.title()}")
             else:
                 print("...")
                 break
@@ -774,7 +823,7 @@ class Livraria():
             for i in range(len(id_livros_carrinho)):
                 titulo_no_carrinho = livros.read('titulo', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
                 if i <=50:
-                    print(f" {i + 1} - {titulo_no_carrinho.capitalize()}")
+                    print(f" {i + 1} - {titulo_no_carrinho.title()}")
                 else:
                     print("...")
                     break
@@ -824,7 +873,7 @@ class Livraria():
                 preco_no_carrinho = livros.read('preco', id_livro = id_livros_carrinho[i][0], search_type = 'id_livro')[0][0]
                 custo_total += preco_no_carrinho
                 if i <=50:
-                    print(f" R${preco_no_carrinho} - {titulo_no_carrinho.capitalize()}")
+                    print(f" R${preco_no_carrinho} - {titulo_no_carrinho.title()}")
                 else:
                     print("...")
                     break
@@ -993,7 +1042,7 @@ class Livraria():
                     flamenguista = clientes.read('isFlamengo', usuario = self.usuario_logado, search_type = 'usuario')[0][0]
                     if flamenguista:
                         preco = preco * (1 - 0.15)
-                    print(f"\tR${preco:.2f} - {titulo.capitalize()}")
+                    print(f"\tR${preco:.2f} - {titulo.title()}")
                     
                 print("-----------------------------------")
                 total_pedido = pedidos.read('custo', id_pedido = idPedidosCliente[i][0], search_type = 'id_pedido')[0][0]
