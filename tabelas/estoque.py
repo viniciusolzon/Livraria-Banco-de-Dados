@@ -7,6 +7,7 @@ class EstoqueTable(Connection):
         Connection.__init__(self)
         sql = """
         CREATE TABLE IF NOT EXISTS estoque(
+            id_exemplar SERIAL PRIMARY KEY NOT NULL,
             id_livro INT NOT NULL,
             quantia INT NOT NULL,
             FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
@@ -16,9 +17,9 @@ class EstoqueTable(Connection):
         self.commit()
 
     # READ/Search
-    def read(self, titulo_livro = 0):
+    def read(self, id_livro = 0):
         try:
-            sql = f'SELECT quantia FROM estoque WHERE titulo_livro = {titulo_livro}'
+            sql = f'SELECT quantia FROM estoque WHERE id_livro = {id_livro}'
 
             data = self.query(sql)
             if data:
@@ -41,9 +42,9 @@ class EstoqueTable(Connection):
             print("Record not found in EstoqueTable", error)
 
     # UPDATE
-    def update(self, titulo_livro = 0, quantia = 0):
+    def update(self, id_livro = 0, quantia = 0):
         try:
-            sql = f"UPDATE estoque SET quantia = {quantia} WHERE titulo_livro = {titulo_livro}"
+            sql = f"UPDATE estoque SET quantia = {quantia} WHERE id_livro = {id_livro}"
 
             self.execute(sql)
             self.commit()
@@ -52,9 +53,9 @@ class EstoqueTable(Connection):
             print("Error updating estoque", error)
 
     # INSERT
-    def insert(self, titulo_livro = 0, quantia = 0):
+    def insert(self, id_livro = 0, quantia = 0):
         try:
-            sql = f"INSERT INTO estoque (titulo_livro, quantia) VALUES ({titulo_livro}, {quantia})"
+            sql = f"INSERT INTO estoque (id_livro, quantia) VALUES ({id_livro}, {quantia})"
 
             self.execute(sql)
             self.commit()
@@ -62,14 +63,14 @@ class EstoqueTable(Connection):
             print("Error inserting record", error)
 
     # DELETE
-    def delete(self, titulo_livro = 0):
+    def delete(self, id_livro = 0):
         try:
-            sql_search = f"SELECT * FROM estoque WHERE titulo_livro = {titulo_livro}"
+            sql_search = f"SELECT * FROM estoque WHERE id_livro = {id_livro}"
 
             if not self.query(sql_search):
                 return "Record not found on database"
             
-            sql_delete = f'DELETE FROM estoque WHERE titulo_livro = {titulo_livro}'
+            sql_delete = f"DELETE FROM estoque WHERE id_livro = {id_livro}"
             self.execute(sql_delete)
             self.commit()
             
@@ -77,9 +78,9 @@ class EstoqueTable(Connection):
             print("Error deleting record", error)
 
     # ADD
-    def add(self, titulo_livro = 0):
+    def add(self, id_livro = 0):
         try:
-            sql = f"UPDATE estoque SET quantia = quantia + 1 WHERE titulo_livro = {titulo_livro}"
+            sql = f"UPDATE estoque SET quantia = quantia + 1 WHERE id_livro = {id_livro}"
 
             self.execute(sql)
             self.commit()
@@ -88,9 +89,9 @@ class EstoqueTable(Connection):
             print("Error adding book to storage", error)
 
     # REMOVE
-    def remove(self, titulo_livro = 0):
+    def remove(self, id_livro = 0):
         try:
-            sql = f"UPDATE estoque SET quantia = quantia - 1 WHERE titulo_livro = {titulo_livro}"
+            sql = f"UPDATE estoque SET quantia = quantia - 1 WHERE id_livro = {id_livro}"
 
             self.execute(sql)
             self.commit()
@@ -98,3 +99,17 @@ class EstoqueTable(Connection):
         except Exception as error:
             print("Error removing book from storage", error)
 
+    def available(self, id_livro = 0, qtd = 0):
+        try:
+            if qtd == None:
+                qtd = 0
+
+            sql = f'SELECT quantia FROM estoque WHERE id_livro = {id_livro} and quantia - {qtd} >= 0'
+
+            data = self.query(sql)
+            if data:
+                return data
+            
+            return False
+        except Exception as error:
+            print("Record not found in EstoqueTable", error)
