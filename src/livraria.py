@@ -308,7 +308,7 @@ class Livraria():
 
     def verEstoqueBaixo(self):
         table_livro = tables['livro']
-        if (ret := table_livro.query('SELECT id_livro, quantia FROM estoque WHERE quantia <= 5')):
+        if (ret := table_livro.query('SELECT * FROM baixo_estoque')):
             clear_terminal()
             print(f"\n\tLivros com menos de 5 unidades no estoque:\n")
             i = 0
@@ -373,9 +373,6 @@ class Livraria():
             else:
                 print("\nVoltando ao menu principal...\n")
                 self.menuPrincipal()
-
-        print("\n\nERRO!\n\n")
-        quit()
 
     def pesquisaAmostra(self):
         table_livro = tables['livro']
@@ -728,9 +725,6 @@ class Livraria():
                 print("\nVoltando ao menu principal...\n")
                 self.menuPrincipal()
 
-        print("\n\nERRO!\n\n")
-        quit()
-
     def adicionaLivro(self, titulo_a_adicionar):
         livros = tables['livro']
         clientes = tables['cliente']
@@ -1082,7 +1076,7 @@ class Livraria():
         pedido = tables['pedido']
 
         qtd_dias = 30
-        vendas = pedido.query(f"SELECT id_pedido, id_vendedor, custo FROM pedido WHERE data > current_date - interval '{qtd_dias}' day")
+        vendas = pedido.query(f"SELECT * FROM relatorio_mensal")
         if vendas:
             print("\n\tRelatório mensal dos vendedores:\n")
 

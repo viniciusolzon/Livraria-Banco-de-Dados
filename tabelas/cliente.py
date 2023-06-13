@@ -5,18 +5,18 @@ class ClienteTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS cliente(
-            id_cliente SERIAL PRIMARY KEY NOT NULL,
-            nome VARCHAR(255) NOT NULL,
-            usuario VARCHAR(255) NOT NULL,
-            senha VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            isFlamengo BOOLEAN NOT NULL
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS cliente(
+        #     id_cliente SERIAL PRIMARY KEY NOT NULL,
+        #     nome VARCHAR(255) NOT NULL,
+        #     usuario VARCHAR(255) NOT NULL,
+        #     senha VARCHAR(255) NOT NULL,
+        #     email VARCHAR(255) NOT NULL,
+        #     isFlamengo BOOLEAN NOT NULL
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     # READ/Search
     def read(self, select = '*', id_cliente = 0, nome = '', usuario = '', email = '', senha = '', isFlamengo = False, search_type = 'nome'):

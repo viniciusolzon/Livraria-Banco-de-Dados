@@ -11,6 +11,7 @@ class Connection():
                 "database": "postgres"
             }
         }
+        
         try:
             self.conn = db.connect(**self.config["postgres"])
             self.cur = self.conn.cursor()

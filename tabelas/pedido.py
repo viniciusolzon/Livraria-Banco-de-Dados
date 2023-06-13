@@ -5,20 +5,20 @@ class PedidoTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS pedido(
-            id_pedido SERIAL PRIMARY KEY NOT NULL,
-            id_cliente INT NOT NULL,
-            id_vendedor INT NOT NULL,
-            custo FLOAT NOT NULL,
-            data DATE NOT NULL DEFAULT CURRENT_DATE,
-            forma_pagamento VARCHAR(255) NOT NULL,
-            FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
-            FOREIGN KEY (id_vendedor) REFERENCES vendedor (id_vendedor)
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS pedido(
+        #     id_pedido SERIAL PRIMARY KEY NOT NULL,
+        #     id_cliente INT NOT NULL,
+        #     id_vendedor INT NOT NULL,
+        #     custo FLOAT NOT NULL,
+        #     data DATE NOT NULL DEFAULT CURRENT_DATE,
+        #     forma_pagamento VARCHAR(255) NOT NULL,
+        #     FOREIGN KEY (id_cliente) REFERENCES cliente (id_cliente),
+        #     FOREIGN KEY (id_vendedor) REFERENCES vendedor (id_vendedor)
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     #READ/Search
     def read(self, select = '*', id_pedido = 0, id_cliente = 0, id_vendedor = 0, custo = 0, search_type = "id_cliente"):

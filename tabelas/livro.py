@@ -5,17 +5,17 @@ class LivroTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS livro(
-            id_livro SERIAL PRIMARY KEY NOT NULL,
-            preco FLOAT NOT NULL,
-            titulo VARCHAR(255) NOT NULL,
-            autor VARCHAR(255) NOT NULL,
-            ano_publicacao INT NOT NULL
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS livro(
+        #     id_livro SERIAL PRIMARY KEY NOT NULL,
+        #     preco FLOAT NOT NULL,
+        #     titulo VARCHAR(255) NOT NULL,
+        #     autor VARCHAR(255) NOT NULL,
+        #     ano_publicacao INT NOT NULL
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     # READ/Search
     def read(self, select = '*', id_livro = 0, titulo = '', ano_publicacao = 0, autor = '', preco = 0.0, search_type = 'titulo'):

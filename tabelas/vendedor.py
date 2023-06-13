@@ -5,17 +5,17 @@ class VendedorTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS vendedor(
-            id_vendedor SERIAL PRIMARY KEY NOT NULL,
-            nome VARCHAR(255) NOT NULL,
-            usuario VARCHAR(255) NOT NULL,
-            senha VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS vendedor(
+        #     id_vendedor SERIAL PRIMARY KEY NOT NULL,
+        #     nome VARCHAR(255) NOT NULL,
+        #     usuario VARCHAR(255) NOT NULL,
+        #     senha VARCHAR(255) NOT NULL,
+        #     email VARCHAR(255) NOT NULL
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     # READ/Search
     def read(self, select = '*', id_vendedor = 0, nome = '', usuario = '', email = '', senha = '', search_type = 'nome'):

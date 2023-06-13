@@ -5,17 +5,17 @@ class ItemCarrinhoTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS item_carrinho(
-            id_item_carrinho SERIAL PRIMARY KEY NOT NULL,
-            id_carrinho INT NOT NULL,
-            id_livro INT NOT NULL,
-            FOREIGN KEY (id_carrinho) REFERENCES carrinho (id_carrinho),
-            FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS item_carrinho(
+        #     id_item_carrinho SERIAL PRIMARY KEY NOT NULL,
+        #     id_carrinho INT NOT NULL,
+        #     id_livro INT NOT NULL,
+        #     FOREIGN KEY (id_carrinho) REFERENCES carrinho (id_carrinho),
+        #     FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     #READ/Search
     def read(self, select = '*', id_carrinho = 0, id_item_carrinho = 0, id_livro = 0, search_type = "id_carrinho"):

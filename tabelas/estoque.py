@@ -5,16 +5,16 @@ class EstoqueTable(Connection):
     # CREATE
     def __init__(self):
         Connection.__init__(self)
-        sql = """
-        CREATE TABLE IF NOT EXISTS estoque(
-            id_exemplar SERIAL PRIMARY KEY NOT NULL,
-            id_livro INT NOT NULL,
-            quantia INT NOT NULL,
-            FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
-        );
-        """
-        self.execute(sql)
-        self.commit()
+        # sql = """
+        # CREATE TABLE IF NOT EXISTS estoque(
+        #     id_exemplar SERIAL PRIMARY KEY NOT NULL,
+        #     id_livro INT NOT NULL,
+        #     quantia INT NOT NULL,
+        #     FOREIGN KEY (id_livro) REFERENCES livro (id_livro)
+        # );
+        # """
+        # self.execute(sql)
+        # self.commit()
 
     # READ/Search
     def read(self, id_livro = 0):
